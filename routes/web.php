@@ -43,7 +43,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
 Auth::routes();
-Route::view('admin', 'Admin');
+Route::get('/category', [App\Http\Controllers\ProductController::class, 'category'])->name('category');
+Route::get('/product', [App\Http\Controllers\ProductController::class, 'product'])->name('product');
+// Route::view('admin', 'Admin');
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');
 
 // Auth::routes();
