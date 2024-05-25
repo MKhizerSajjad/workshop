@@ -40,3 +40,12 @@ use Illuminate\Support\Facades\Route;
 //         return view('tools.index');
 //     })->name('tools');
 // });
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
+Auth::routes();
+Route::view('admin', 'Admin');
+Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');
+
+// Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
