@@ -17,37 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-// Route::view('admin', 'Admin');
-// Auth::routes();
-
-
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
-//     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-//     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
-//     Route::resource('vpn', VpnController::class)->names('vpn');
-//     Route::resource('suggestion', SuggestionController::class)->names('suggestion');
-//     Route::resource('notification', NotificationController::class)->names('notification');
-
-//     Route::get('/ai-tools', function () {
-//         return view('ai-tools');
-//     })->name('ai-tools');
-
-//     Route::get('/tools', function () {
-//         return view('tools.index');
-//     })->name('tools');
-// });
-
 Route::get('/', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
 Auth::routes();
-Route::get('/category', [App\Http\Controllers\ProductController::class, 'category'])->name('category');
-Route::get('/product', [App\Http\Controllers\ProductController::class, 'product'])->name('product');
-// Route::view('admin', 'Admin');
+Route::get('category/add', [App\Http\Controllers\CategoryController::class, 'category'])->name('category.add');
+Route::post('category/new', [App\Http\Controllers\CategoryController::class, 'new'])->name('category.new');
+Route::get('category/list', [App\Http\Controllers\CategoryController::class, 'list'])->name('category.list');
+Route::get('category/{categoryId}/delete', [App\Http\Controllers\CategoryController::class, 'delete'])->name('category.delete');
+Route::get('category/{categoryId}/edit', [App\Http\Controllers\CategoryController::class, 'edit'])->name('category.edit');
+Route::post('category/{categoryId}/update', [App\Http\Controllers\CategoryController::class, 'update'])->name('category.update');
+Route::get('product/add', [App\Http\Controllers\ProductController::class, 'add'])->name('product.add');
+Route::post('product/new', [App\Http\Controllers\ProductController::class, 'new'])->name('product.new');
+Route::get('product/list', [App\Http\Controllers\ProductController::class, 'list'])->name('product.list');
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');
-
-// Auth::routes();
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

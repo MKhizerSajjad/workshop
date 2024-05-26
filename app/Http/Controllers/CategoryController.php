@@ -7,12 +7,11 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-class ProductController extends Controller
+class CategoryController extends Controller
 {
-    public function add()
+    public function category()
     {
-        $categories = Category::get();
-        return view('product.add', ['categories' => $categories]);
+        return view('category.add');
     }
     public function product()
     {
@@ -22,29 +21,25 @@ class ProductController extends Controller
     public function new(Request $request)
     {
         $validatedData = $request->validate([
-            'manufacturer' => 'required|string|max:255',
-            'model' => 'required|string|max:255',
-            'color' => 'required|string|max:255',
-            'year' => 'required|string|max:255',
-            'category_id' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
         ]);
         if ($validatedData) {
-            Product::create($validatedData);
-            Session::flash('success', 'Product created successfully');
-            $products = Product::get();
-            return redirect()->route('product.list');
+            Category::create($validatedData);
+            Session::flash('success', 'Category created successfully');
+            $categories = Category::get();
+            return view('category.list', ['categories' => $categories]);
         } else {
             Session::flash('error', 'Something went wrong');
-            return redirect()->route('product.list');
+            return redirect()->route('category.add');
         }
     }
     public function list(Request $request)
     {
         Session::forget('success');
         Session::forget('error');
-        $products = Product::get();
+        $categories = Category::get();
         
-       return view('product.list', ['products' => $products]);
+       return view('category.list', ['categories' => $categories]);
     }
     public function delete($categoryId)
     {
