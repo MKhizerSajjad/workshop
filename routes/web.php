@@ -28,4 +28,5 @@ Route::post('category/{categoryId}/update', [App\Http\Controllers\CategoryContro
 Route::get('product/add', [App\Http\Controllers\ProductController::class, 'add'])->name('product.add');
 Route::post('product/new', [App\Http\Controllers\ProductController::class, 'new'])->name('product.new');
 Route::get('product/list', [App\Http\Controllers\ProductController::class, 'list'])->name('product.list');
+Route::get('product/{productId}/delete', [App\Http\Controllers\ProductController::class, 'delete'])->name('product.delete');
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');

@@ -29,6 +29,7 @@
                     <th style="">color</th>
                     <th style="">Model</th>
                     <th style="">Year</th>
+                    <th style="">category</th>
                     <th style="width: 30px"></th>
                     <th style="width: 30px">Action</th>
                   </tr>
@@ -41,11 +42,12 @@
                         <td>{{ $product->color }}</td>
                         <td>{{ $product->model }}</td>
                         <td>{{ $product->year }}</td>
+                        <td>{{ $product->category->name }}</td>
                         <td>
                             <a class="btn btn-md" href=""><span class="badge bg-success">Edit</span></a>
                         </td>
                         <td>
-                            <a class="btn btn-md" href=""><span class="badge bg-danger">Delete</span></a>
+                            <a class="btn btn-md" href="{{ route('product.delete',['productId' => $product->id]) }}"><span class="badge bg-danger">Delete</span></a>
                         </td>
                     </tr>
                     @endforeach

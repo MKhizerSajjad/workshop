@@ -31,7 +31,7 @@ class ProductController extends Controller
         if ($validatedData) {
             Product::create($validatedData);
             Session::flash('success', 'Product created successfully');
-            $products = Product::get();
+            $products = Product::with('category')->get();
             return redirect()->route('product.list');
         } else {
             Session::flash('error', 'Something went wrong');
@@ -42,16 +42,16 @@ class ProductController extends Controller
     {
         Session::forget('success');
         Session::forget('error');
-        $products = Product::get();
+        $products = Product::with('category')->get();
         
        return view('product.list', ['products' => $products]);
     }
-    public function delete($categoryId)
+    public function delete($productId)
     {
-        Category::where('id', $categoryId)->delete();
-        $categories = Category::get();
-        Session::flash('success', 'Category delete');
-        return view('category.list', ['categories' => $categories]);
+        Product::where('id', $productId)->delete();
+        $products = Product::with('category')->get();
+        Session::flash('success', 'Product delete');
+        return view('product.list', ['products' => $products]);
     }
     public function edit($categoryId)
     {

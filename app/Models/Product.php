@@ -21,4 +21,8 @@ class Product extends Model
         'color',
         'category_id'
     ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
