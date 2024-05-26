@@ -44,7 +44,7 @@
                         <td>{{ $product->year }}</td>
                         <td>{{ $product->category->name }}</td>
                         <td>
-                            <a class="btn btn-md" href=""><span class="badge bg-success">Edit</span></a>
+                            <a class="btn btn-md" href="{{ route('product.edit',['productId' => $product->id]) }}"><span class="badge bg-success">Edit</span></a>
                         </td>
                         <td>
                             <a class="btn btn-md" href="{{ route('product.delete',['productId' => $product->id]) }}"><span class="badge bg-danger">Delete</span></a>

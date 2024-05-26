@@ -30,3 +30,5 @@ Route::post('product/new', [App\Http\Controllers\ProductController::class, 'new'
 Route::get('product/list', [App\Http\Controllers\ProductController::class, 'list'])->name('product.list');
 Route::get('product/{productId}/delete', [App\Http\Controllers\ProductController::class, 'delete'])->name('product.delete');
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');
+Route::get('product/{productId}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('product.edit');
+Route::post('product/{productId}/update', [App\Http\Controllers\ProductController::class, 'update'])->name('product.update');

@@ -53,17 +53,18 @@ class ProductController extends Controller
         Session::flash('success', 'Product delete');
         return view('product.list', ['products' => $products]);
     }
-    public function edit($categoryId)
+    public function edit($productId)
     {
-        $category = Category::where('id', $categoryId)->first();
-        return view('category.edit', compact('category'));
-    }
-    public function update(Request $request, $categoryId)
-    {
-        $category = Category::find($categoryId);
-        $category->update(['name' => $request->name]);
+        $product = Product::where('id', $productId)->first();
         $categories = Category::get();
-        Session::flash('success', 'Category Update');
-        return view('category.list', ['categories' => $categories]);
+        return view('product.edit', ['product' => $product, 'categories' => $categories]);
+    }
+    public function update(Request $request, $productId)
+    {
+        // $product = Product::find($productId);
+        // $product->update(['name' => $request->name]);
+        // $products = Product::get();
+        // Session::flash('success', 'Category Update');
+        // return view('product.list', ['products' => $products]);
     }
 }
