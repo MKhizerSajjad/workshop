@@ -61,10 +61,22 @@ class ProductController extends Controller
     }
     public function update(Request $request, $productId)
     {
-        // $product = Product::find($productId);
-        // $product->update(['name' => $request->name]);
-        // $products = Product::get();
-        // Session::flash('success', 'Category Update');
-        // return view('product.list', ['products' => $products]);
+        Product::where('id',$productId)->delete();
+        $validatedData = $request->validate([
+            'manufacturer' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'color' => 'required|string|max:255',
+            'year' => 'required|string|max:255',
+            'category_id' => 'required|string|max:255',
+        ]);
+        if ($validatedData) {
+            Product::create($validatedData);
+            Session::flash('success', 'Product update successfully');
+            $products = Product::with('category')->get();
+            return redirect()->route('product.list');
+        } else {
+            Session::flash('error', 'Something went wrong');
+            return redirect()->route('product.list');
+        }
     }
 }
