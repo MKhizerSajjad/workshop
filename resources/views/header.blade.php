@@ -9,7 +9,10 @@
         <a href="#" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+          @csrf
+          <button type="submit" class="btn nav-link">Logout</button>
+      </form>
       </li>
     </ul>
 

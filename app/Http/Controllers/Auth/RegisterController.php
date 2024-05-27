@@ -53,6 +53,7 @@ class RegisterController extends Controller
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:150'],
+            'user_type' => 'required',
             'email' => ['required', 'string', 'email', 'max:245', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -68,6 +69,7 @@ class RegisterController extends Controller
     {
         $user = User::create([
             'picture' => '',
+            'user_type' => $data['user_type'],
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],

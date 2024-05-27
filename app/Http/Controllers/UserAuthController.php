@@ -12,10 +12,12 @@ class UserAuthController extends Controller
     public function register(Request $request) {
 
         $validator = Validator::make($request->all(), [
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'password'=>'required|min:8'
+            'password'=>'required|min:8',
+            'user_type' => 'required|min:1',
             // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 

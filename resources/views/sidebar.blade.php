@@ -22,16 +22,16 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-          <a href="#" class="nav-link active">
+          <a href="#" class="nav-link {{ Request::is('admin*', 'category*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>
+            <b>
               Categories
               <i class="right fas fa-angle-left"></i>
-            </p>
+            </b>
           </a>
-          <ul class="nav nav-treeview">
+          <ul class="nav nav-treeview" style="display: {{ Request::is('admin*', 'category*') ? 'block' : 'none' }}">
             <li class="nav-item">
-            <a href="{{ route('category.add')}}" class="nav-link">
+            <a href="{{ route('category.add')}}" class="nav-link {{ Request::is('category/add') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Add New
@@ -39,7 +39,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('category.list')}}" class="nav-link">
+            <a href="{{ route('category.list')}}" class="nav-link {{ Request::is('category/list') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Listing
@@ -49,16 +49,16 @@
           </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
+            <a href="#" class="nav-link {{ Request::is('product*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-table"></i>
+              <b>
                 Products
                 <i class="right fas fa-angle-left"></i>
-              </p>
+              </b>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-              <a href="{{ route('product.add')}}" class="nav-link">
+              <a href="{{ route('product.add')}}" class="nav-link {{ Request::is('product/add') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Add New
@@ -66,7 +66,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('product.list')}}" class="nav-link">
+              <a href="{{ route('product.list')}}" class="nav-link {{ Request::is('product/list') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Listing

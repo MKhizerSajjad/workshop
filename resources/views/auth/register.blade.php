@@ -65,7 +65,21 @@
                                 </span>
                             @enderror
                         </div>
-
+                        <div class="mb-3">
+                            <label for="category">Select Role</label>
+                            <select name="user_type" class="form-control" id="category" class="form-control @error('user_type') is-invalid @enderror">
+                                <option value="">Chose Role</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Manager</option>
+                                <option value="3">Technician</option>
+                                <option value="4">Customer</option>
+                            </select>
+                            @error('user_type')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        </div>
                         <div class="mb-3">
                             <label for="userpassword" class="form-label">Password</label>
                             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password" autocomplete="new-password">

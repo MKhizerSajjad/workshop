@@ -11,12 +11,14 @@ class ProductController extends Controller
 {
     public function add()
     {
+        session()->forget('success');
+        session()->forget('error');
         $categories = Category::get();
         return view('product.add', ['categories' => $categories]);
     }
     public function product()
     {
-        Session::forget('success');
+        session()->forget('success');
         return view('product');
     }
     public function new(Request $request)
@@ -40,8 +42,6 @@ class ProductController extends Controller
     }
     public function list(Request $request)
     {
-        Session::forget('success');
-        Session::forget('error');
         $products = Product::with('category')->get();
         
        return view('product.list', ['products' => $products]);

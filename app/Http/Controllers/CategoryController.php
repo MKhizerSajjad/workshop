@@ -11,6 +11,7 @@ class CategoryController extends Controller
 {
     public function category()
     {
+        session()->forget('success');
         return view('category.add');
     }
     public function product()
@@ -26,8 +27,7 @@ class CategoryController extends Controller
         if ($validatedData) {
             Category::create($validatedData);
             Session::flash('success', 'Category created successfully');
-            $categories = Category::get();
-            return view('category.list', ['categories' => $categories]);
+            return redirect()->route('category.list');
         } else {
             Session::flash('error', 'Something went wrong');
             return redirect()->route('category.add');
@@ -35,8 +35,6 @@ class CategoryController extends Controller
     }
     public function list(Request $request)
     {
-        Session::forget('success');
-        Session::forget('error');
         $categories = Category::get();
         
        return view('category.list', ['categories' => $categories]);
@@ -59,6 +57,6 @@ class CategoryController extends Controller
         $category->update(['name' => $request->name]);
         $categories = Category::get();
         Session::flash('success', 'Category Update');
-        return view('category.list', ['categories' => $categories]);
+        return redirect()->route('category.list');
     }
 }
