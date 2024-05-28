@@ -34,6 +34,67 @@
                 <input type="text" name="year" class="form-control" id="exampleInputEmail1" placeholder="Enter year">
               </div>
               <div class="form-group">
+                <label for="exampleInputEmail1">Additional Information</label>
+                <input type="text" name="year" class="form-control" id="exampleInputEmail1" placeholder="Enter Additional Information">
+              </div>
+              <div class="form-group">
+                <label for="additionalInformation">Description of the problem</label>
+                <textarea name="additional_information" class="form-control" id="additionalInformation" placeholder="Enter describe your problem" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>D you have more parts</label><br>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="option1" name="option1" value="option1">
+                  <label class="form-check-label" for="option1">Battery</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="option2" name="option2" value="option2">
+                  <label class="form-check-label" for="option2">Charger</label>
+              </div>
+            </div> 
+            <div class="form-group">
+              <label for="additionalInformation">Other Parts</label>
+              <input type="text" name="year" class="form-control" id="exampleInputEmail1" placeholder="Enter Other">
+            </div>
+            <div class="form-group">
+              <label>Select Service</label><br>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="option1" name="Diagnostics" value="Diagnostics">
+                  <label class="form-check-label" for="option1">Inspection and Diagnostics(35 Eur)</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="option2" name="option2" value="option2">
+                  <label class="form-check-label" for="option2">Without Diagnostics</label>
+              </div>
+            </div> 
+            <div class="form-group">
+              <label>Other Service</label><br>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="option1" name="Diagnostics" value="Diagnostics">
+                  <label class="form-check-label" for="option1">Tyre change (20)</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="option2" name="option2" value="option2">
+                  <label class="form-check-label" for="option2">Tyre change (on motor) (25)</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="option2" name="option2" value="option2">
+                <label class="form-check-label" for="option2">Battery balacing and restoreing (45 to 150)</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="option2" name="option2" value="option2">
+                  <label class="form-check-label" for="option2">Break Change (10)</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="option2" name="option2" value="option2">
+                <label class="form-check-label" for="option2">Speed limit remove (35)</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="option2" name="option2" value="option2">
+              <label class="form-check-label" for="option2">New battery Manufacture (75)</label>
+          </div>
+            </div>
+              <div class="form-group">
                 <label for="category">Select Category</label>
                 <select name="category_id" class="form-control" id="category">
                     <option value="">Select a category</option>
