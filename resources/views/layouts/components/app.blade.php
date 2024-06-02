@@ -19,24 +19,22 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     </head>
 
-    <body data-sidebar="dark">
-    {{-- <body data-topbar="dark" data-layout="horizontal"> --}}
+    <body data-topbar="dark" data-layout="horizontal">
 
             @guest
+
                 {{-- Not loggedIn then here --}}
                 @yield('content');
+
             @else
                 <div id="layout-wrapper">
 
-                    @include('layouts.components.nav-header')
+                    {{-- @include('layouts.components.nav-header') --}}
                     {{-- @include('layouts.components.top-nav') --}}
                     @include('layouts.components.left-sidebar')
 
                     <div class="main-content">
-                        <div class="page-content">
-                            @yield('content');
-                        </div>
-
+                        @yield('content');
 
                         @include('layouts.components.footer')
                     </div>
