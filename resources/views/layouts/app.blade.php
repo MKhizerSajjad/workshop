@@ -33,7 +33,7 @@
                     @include('layouts.components.left-sidebar')
 
                     <div class="main-content">
-                        <div class="page-content">
+                        <div class="page-content p-0">
                             @yield('content');
                         </div>
 
