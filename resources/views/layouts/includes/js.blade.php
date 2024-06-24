@@ -13,6 +13,8 @@
 
  <script src="{{ asset('libs/jquery/jquery.min.js')}}"></script>
  <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{ asset('js/pages/form-wizard.init.js')}}"></script>
+ <script src="{{ asset('libs/jquery-steps/build/jquery.steps.min.js')}}"></script>
  <script src="{{ asset('libs/simplebar/simplebar.min.js')}}"></script>
  <script src="{{ asset('libs/metismenu/metisMenu.min.js')}}"></script>
  <script src="{{ asset('libs/node-waves/waves.min.js')}}"></script>
