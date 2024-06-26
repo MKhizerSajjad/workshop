@@ -34,9 +34,9 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Products List</h4>
-                            <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
+                            {{-- <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
                                 <a href="{{ route('product.create') }}" class="btn btn-primary waves-effect waves-light"> <i class="bx bx-plus me-1"></i> Add New</a>
-                            </div>
+                            </div> --}}
                             {{-- <div class="card-title-desc card-subtitle" bis_skin_checked="1">Create responsive tables by wrapping any <code>.table</code> in <code>.table-responsive</code>to make them scroll horizontally on small devices (under 768px).</div> --}}
                             @if (count($data) > 0)
                                 <div class="table-responsive" bis_skin_checked="1">
@@ -44,6 +44,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">#</th>
+                                                <th>Picture</th>
                                                 <th>Name</th>
                                                 <th>Price</th>
                                                 <th>Tax</th>
@@ -55,6 +56,7 @@
                                             @foreach ($data as $key => $product)
                                                 <tr>
                                                     <td  class="text-center">{{ ++$key }}</td>
+                                                    <td><img src=" {{ $product->img_url }}" alt="image" width="50px" height="50px" onerror="this.onerror=null;this.src='{{ asset('images/brands/bitbucket.png') }}'"></td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->price }}</td>
                                                     <td>{{ $product->tax }}</td>
