@@ -42,7 +42,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="mb-3">
                                             <label for="price">Price <span class="text text-danger"> *</span></label>
                                             <input id="price" name="price" type="number" class="form-control @error('price') is-invalid @enderror" placeholder="Price" value="{{ $service->price }}">
@@ -53,11 +53,22 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="mb-3">
                                             <label for="tax">Tax <span class="text text-danger"> *</span></label>
                                             <input id="tax" name="tax" type="number" class="form-control @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ $service->tax }}">
                                             @error('tax')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label for="time">Time <span class="text text-danger"> *</span></label>
+                                            <input id="time" name="time" type="text" class="form-control @error('tax') is-invalid @enderror" placeholder="Time" value="{{ service->time }}">
+                                            @error('time')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>

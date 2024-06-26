@@ -47,6 +47,7 @@
                                                 <th>Name</th>
                                                 <th>Price</th>
                                                 <th>Tax</th>
+                                                <th>Time</th>
                                                 <th>Status</th>
                                                 <th class="text-center">Options</th>
                                             </tr>
@@ -58,6 +59,7 @@
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->price }}</td>
                                                     <td>{{ $product->tax }}</td>
+                                                    <td>{{ $product->time }}</td>
                                                     <td>{!! $product->status == 1 ? '<span class="badge bg-primary">Active</span>' : '<span class="badge bg-warning">Inactive</span' !!}</td>
                                                     <td class="text-center"> <a href="{{ route('service.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>

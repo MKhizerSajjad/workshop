@@ -35,6 +35,7 @@ class ServiceController extends Controller
             'name' => 'required|max:200',
             'price' => 'required',
             'tax' => 'required',
+            'time' => 'required',
         ]);
 
         $data = [
@@ -42,6 +43,7 @@ class ServiceController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'tax' => $request->tax,
+            'time' => $request->time,
             'detail' => $request->detail,
         ];
 
@@ -84,6 +86,7 @@ class ServiceController extends Controller
             'name' => 'required|max:200',
             'price' => 'required',
             'tax' => 'required',
+            'time' => 'required',
         ]);
 
         $data = [
@@ -91,6 +94,7 @@ class ServiceController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'tax' => $request->tax,
+            'time' => $request->time,
             'detail' => $request->detail,
         ];
 
