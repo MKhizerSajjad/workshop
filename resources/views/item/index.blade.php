@@ -58,7 +58,7 @@
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $item->name }}</td>
                                                     <td>
-                                                        @foreach ($item->colors as $color)
+                                                        @foreach (json_decode($item->colors) as $color)
                                                             <span class="d-inline-block rounded" style="display: inline-block; width: 12px; height: 12px; background-color: {{ $color }}"></span>
                                                         @endforeach
                                                     </td>
