@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('service_id')->nullable()->constrained()->onDelete('cascade');
-            $table->tinyInteger('status')->default(1);
+            $table->boolean('status')->default(1);
             $table->string('name');
             $table->decimal('price', 15, 2)->nullable();
             $table->decimal('tax', 5, 2)->nullable();
             $table->string('time', 100);
             $table->string('picture')->nullable();
+            $table->boolean('show_price')->default(1);
+            $table->boolean('prioritized')->default(1)->comment('to show in main');
             $table->text('detail')->nullable();
             $table->timestamps();
         });

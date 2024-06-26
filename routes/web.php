@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/booking', [JobController::class, 'create'])->name('create');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
