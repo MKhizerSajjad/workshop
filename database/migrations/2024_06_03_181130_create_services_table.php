@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('price', 15, 2)->nullable();
             $table->decimal('tax', 5, 2)->nullable();
-            $table->text('detail');
+            $table->string('time', 100);
+            $table->string('picture')->nullable();
+            $table->text('detail')->nullable();
             $table->timestamps();
         });
     }
