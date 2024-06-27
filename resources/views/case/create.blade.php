@@ -18,6 +18,7 @@
                                             <!--Select item -- START-->
                                             <h3>Select Item</h3>
                                             <section>
+                                                <h5 class="mt-3">Select item from below</h5>
                                                 <div class="form-check">
                                                     @foreach (\App\Models\Item::all() as $val)
                                                     <div class="form-check mt-3">
@@ -38,9 +39,10 @@
                                             <!--Select item -- END-->
 
 
-                                            <!-- Company Document -->
+                                            <!--item info -- START -->
                                             <h3>Item Information</h3>
                                             <section>
+                                                <h5 class="mt-3">Enter item below</h5>
                                                 <form>
                                                     <div class="row">
                                                         <div class="col-lg-6">
@@ -81,7 +83,9 @@
                                                 </form>
                                             </section>
 
-                                            <!-- Bank Details -->
+                                         <!--item info -- END -->
+
+                                         <!--Description -- START -->
                                             <h3>Description</h3>
                                             <section>
                                                 <div class="row">
@@ -91,12 +95,52 @@
                                                     </div>
                                                 </div>
                                             </section>
+                                        <!--Description -- END -->    
 
-                                            <!-- Confirm Details -->
+                                       <!--Parts -- START -->
                                             <h3>Parts</h3>
                                             <section>
+                                                <h5 class="mt-3">Do you leave more parts ?</h5>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="battery">
+                                                    <label class="form-check-label" for="battery">
+                                                        Battery
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="charger">
+                                                    <label class="form-check-label" for="charger">
+                                                        Charger
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="other-parts">
+                                                    <label class="form-check-label" for="other-parts">
+                                                        Other parts
+                                                    </label>
+                                                </div>
 
                                             </section>
+                                       <!--Parts -- START -->    
+
+                                        <!--Services -- START -->
+                                            <h3>Services</h3>
+                                            <section>
+                                           
+
+                                            </section>
+                                       <!--Services -- START -->  
+
+                                              <!--Uplaod  -- START -->
+                                            <h3>Upload Media</h3>
+                                            <section>
+                                           
+
+                                            </section>
+                                       <!--Upload -- START -->  
+                                         
                                         </div>
 
                                     </div>
@@ -115,6 +159,7 @@
                             ©
                             <script>
                                 document.write(new Date().getFullYear())
+
                             </script>
                             {{ config('app.name') }}.
                             Powered with
