@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('manufacturer')->nullable();
             $table->json('colors')->nullable();
-            $table->text('detail');
+            $table->text('detail')->nullable();
             $table->timestamps();
         });
     }

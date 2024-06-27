@@ -54,7 +54,7 @@
                                     <div class="col-sm-6">
                                         <div class="mb-3">
                                             <label for="colors">Color <span class="text text-danger"> *</span></label>
-                                            <input id="colors" name="colors[]" type="color" class="form-control @error('colors') is-invalid @enderror" placeholder="Color" value="{{ old('colors') }}">
+                                            <input id="colors" name="colors[]" type="color" class="form-control @error('colors') is-invalid @enderror" placeholder="Color" value="{{ old('colors.0') }}">
                                             @error('colors')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
