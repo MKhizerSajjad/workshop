@@ -45,7 +45,7 @@
                                     <div class="col-sm-4">
                                         <div class="mb-3">
                                             <label for="price">Price <span class="text text-danger"> *</span></label>
-                                            <input id="price" name="price" type="number" class="form-control @error('price') is-invalid @enderror" placeholder="Price" value="{{ $service->price }}">
+                                            <input id="price" name="price" type="number" step="any" class="form-control @error('price') is-invalid @enderror" placeholder="Price" value="{{ $service->price }}">
                                             @error('price')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -56,7 +56,7 @@
                                     <div class="col-sm-4">
                                         <div class="mb-3">
                                             <label for="tax">Tax <span class="text text-danger"> *</span></label>
-                                            <input id="tax" name="tax" type="number" class="form-control @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ $service->tax }}">
+                                            <input id="tax" name="tax" type="number" step="any" class="form-control @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ $service->tax }}">
                                             @error('tax')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
