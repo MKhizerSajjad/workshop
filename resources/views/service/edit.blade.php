@@ -67,7 +67,7 @@
                                     <div class="col-sm-4">
                                         <div class="mb-3">
                                             <label for="time">Time <span class="text text-danger"> *</span></label>
-                                            <input id="time" name="time" type="text" class="form-control @error('tax') is-invalid @enderror" placeholder="Time" value="{{ service->time }}">
+                                            <input id="time" name="time" type="text" class="form-control @error('time') is-invalid @enderror" placeholder="Time" value="{{ $service->time }}">
                                             @error('time')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
