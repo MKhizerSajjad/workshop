@@ -47,9 +47,11 @@
                                                 <th>Picture</th>
                                                 <th>Name</th>
                                                 <th>Price</th>
-                                                <th>Tax</th>
+                                                {{-- <th>Tax</th> --}}
+                                                <th>Qty</th>
                                                 <th>Status</th>
-                                                <th class="text-center">Options</th>
+                                                {{-- <th>Status</th> --}}
+                                                {{-- <th class="text-center">Options</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -59,9 +61,11 @@
                                                     <td><img src=" {{ $product->img_url }}" alt="image" width="50px" height="50px" onerror="this.onerror=null;this.src='{{ asset('images/brands/bitbucket.png') }}'"></td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->price }}</td>
-                                                    <td>{{ $product->tax }}</td>
-                                                    <td>{!! $product->status == 1 ? '<span class="badge bg-primary">Active</span>' : '<span class="badge bg-warning">Inactive</span' !!}</td>
-                                                    <td class="text-center"> <a href="{{ route('product.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td>
+                                                    {{-- <td>{{ $product->tax }}</td> --}}
+                                                    <td>{{ $product->stock_quantity }}</td>
+                                                    <td>{!! getStockStatus('woocommerce', $product->stock_status, 'badge') !!}</td>
+                                                    {{-- <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td> --}}
+                                                    {{-- <td class="text-center"> <a href="{{ route('product.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td> --}}
                                                 </tr>
                                             @endforeach
                                         </tbody>
