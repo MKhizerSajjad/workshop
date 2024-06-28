@@ -41,10 +41,10 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="mb-3">
                                             <label for="price">Price <span class="text text-danger"> *</span></label>
-                                            <input id="price" name="price" type="number" step="any" class="form-control @error('price') is-invalid @enderror" placeholder="Price" value="{{ old('price') }}">
+                                            <input id="price" name="price" type="number" step="any" class="form-control cal @error('price') is-invalid @enderror" placeholder="Price" value="{{ old('price') }}">
                                             @error('price')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -52,10 +52,10 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="mb-3">
                                             <label for="tax">Tax <span class="text text-danger"> *</span></label>
-                                            <input id="tax" name="tax" type="number" step="any" class="form-control @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ old('tax') }}">
+                                            <input id="tax" name="tax" type="number" step="any" class="form-control cal @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ old('tax') }}">
                                             @error('tax')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -63,7 +63,13 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
+                                        <div class="mb-3">
+                                            <label for="total">Total Price</label>
+                                            <input id="total" name="total" type="number" step="any" class="form-control" placeholder="Total" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
                                         <div class="mb-3">
                                             <label for="time">Time <span class="text text-danger"> *</span></label>
                                             <input id="time" name="time" type="text" class="form-control @error('tax') is-invalid @enderror" placeholder="Time" value="{{ old('time') }}">
@@ -96,3 +102,23 @@
         </div> <!-- container-fluid -->
     </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var priceInput = document.getElementById('price');
+        var taxInput = document.getElementById('tax');
+        var totalInput = document.getElementById('total');
+
+        if (priceInput && taxInput) {
+            priceInput.addEventListener('keyup', calculateSum);
+            taxInput.addEventListener('keyup', calculateSum);
+        }
+
+        function calculateSum() {
+            var price = parseFloat(priceInput.value) || 0;
+            var tax = parseFloat(taxInput.value) || 0;
+            var total = price + tax;
+            totalInput.value = total.toFixed(2);
+        }
+    });
+</script>
