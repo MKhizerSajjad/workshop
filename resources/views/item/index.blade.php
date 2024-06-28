@@ -66,7 +66,7 @@
                                                     </td>
                                                     <td>{{ $item->manufacturer }}</td>
                                                     {{-- <td>{{ $notification->detail }}</td> --}}
-                                                    <td>{!! $item->status == 1 ? '<span class="badge bg-primary">Active</span>' : '<span class="badge bg-warning">Inactive</span' !!}</td>
+                                                    <td>{!! getGenStatus('general', $item->status, 'badge') !!}</td>
                                                     <td class="text-center"> <a href="{{ route('item.edit', $item->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>
                                             @endforeach

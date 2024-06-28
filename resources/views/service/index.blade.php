@@ -60,7 +60,7 @@
                                                     <td>{{ $product->price }}</td>
                                                     <td>{{ $product->tax }}</td>
                                                     <td>{{ $product->time }}</td>
-                                                    <td>{!! $product->status == 1 ? '<span class="badge bg-primary">Active</span>' : '<span class="badge bg-warning">Inactive</span' !!}</td>
+                                                    <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td>
                                                     <td class="text-center"> <a href="{{ route('service.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>
                                             @endforeach
