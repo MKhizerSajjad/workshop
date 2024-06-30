@@ -11,5 +11,9 @@
 <link href="{{ asset('css/icons.min.css')}}" rel="stylesheet" type="text/css" />
 <!-- App Css-->
 <link href="{{ asset('css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+{{-- Step form --}}
+<link href="{{ asset('css/jquery.steps.css')}}" rel="stylesheet" type="text/css" />
 <!-- JS -->
 <link href="{{ asset('js/plugin.js')}}" id="app-style" rel="stylesheet" type="text/css" />
+{{-- DROPZONE --}}
+<link href="{{ asset('libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
