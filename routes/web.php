@@ -6,6 +6,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\JobController;
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('item', ItemController::class)->names('item');
     Route::resource('product', ProductController::class)->names('product');
     Route::resource('service', ServiceController::class)->names('service');
+    Route::resource('priority', PriorityController::class)->names('priority');
     Route::resource('employee', EmployeeController::class)->names('employee');
     Route::resource('customer', CustomerController::class)->names('customer');
 
