@@ -42,35 +42,30 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="mb-3">
-                                            <label for="price">Price <span class="text text-danger"> *</span></label>
-                                            <input id="price" name="price" type="number" step="any" class="form-control @error('price') is-invalid @enderror" placeholder="Price" value="{{ $service->price }}">
-                                            @error('price')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
+                                            <label for="time">Parent Service <span class="text text-danger"> (if any)</span></label>
+                                            <select id="service_id" name="service_id" class="select2 form-control">
+                                                <option value="">Select Parent Service </option>
+                                                @foreach ($services as $key => $loopService)
+                                                    <option value="{{ $loopService->id }}" @if($loopService->id == $service->id) selected @endif>{{ $loopService->name }}</option>
+                                                @endforeach
+                                            </select>
+
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="mb-3">
-                                            <label for="tax">Tax <span class="text text-danger"> *</span></label>
-                                            <input id="tax" name="tax" type="number" step="any" class="form-control @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ $service->tax }}">
-                                            @error('tax')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
+                                            <label for="time">Prioritized <span class="text text-danger"> *</span></label>
+                                            <select id="prioritized" name="prioritized" class="select2 form-control">
+                                                <option value="">Select Priority </option>
+                                                @foreach (getGenStatus('bool') as $key => $priority)
+                                                    <option value="{{ ++$key }}" @if($key == $service->prioritized) selected @endif>{{ $priority }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="mb-3">
-                                            <label for="total">Total Price</label>
-                                            <input id="total" name="total" type="number" step="any" class="form-control" placeholder="Total" value="{{ $service->price + $service->tax }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <div class="mb-3">
                                             <label for="time">Time <span class="text text-danger"> *</span></label>
                                             <input id="time" name="time" type="text" class="form-control @error('time') is-invalid @enderror" placeholder="Time" value="{{ $service->time }}">
@@ -81,9 +76,37 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label for="price">Price <span class="text text-danger"> *</span></label>
+                                            <input id="price" name="price" type="number" step="any" class="form-control @error('price') is-invalid @enderror" placeholder="Price" value="{{ $service->price }}">
+                                            @error('price')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label for="tax">Tax <span class="text text-danger"> *</span></label>
+                                            <input id="tax" name="tax" type="number" step="any" class="form-control @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ $service->tax }}">
+                                            @error('tax')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label for="total">Total Price</label>
+                                            <input id="total" name="total" type="number" step="any" class="form-control" placeholder="Total" value="{{ $service->price + $service->tax }}" readonly>
+                                        </div>
+                                    </div>
                                     <div class="col-sm-12">
                                         <div class="mb-3">
-                                            <label for="detail">Detail <span class="text text-danger"> *</span></label>
+                                            <label for="detail">Detail </label>
                                             <textarea id="detail" name="detail" rows="4" class="form-control @error('detail') is-invalid @enderror" placeholder="Detail">{{ $service->detail }}</textarea>
                                             @error('detail')
                                                 <span class="invalid-feedback" role="alert">

@@ -9,4 +9,9 @@ class Service extends Model
 {
     use HasFactory;
     protected $guarded;
+
+    public function service() {
+
+        return $this->hasOne(Service::class);
+    }
 }

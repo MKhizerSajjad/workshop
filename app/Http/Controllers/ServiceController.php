@@ -12,7 +12,7 @@ class ServiceController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Service::orderBy('name')->paginate(10);
+        $data = Service::with('service')->orderBy('name')->paginate(10);
 
         return view('service.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 10);
@@ -23,7 +23,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('service.create');
+        $services = Service::where('service_id', null)->select('id', 'name')->orderBy('name')->get();
+        return view('service.create', compact('services'));
     }
 
     /**
@@ -40,10 +41,12 @@ class ServiceController extends Controller
 
         $data = [
             'status' => $request->status ?? 1,
+            'service_id' => $request->service_id ?? null,
             'name' => $request->name,
             'price' => $request->price,
             'tax' => $request->tax,
             'time' => $request->time,
+            'prioritized' => $request->prioritized ?? 2,
             'detail' => $request->detail,
         ];
 
@@ -74,7 +77,8 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        return view('service.edit', compact('service'));
+        $services = Service::where([['service_id', null],['id', '!=', $service['id']]])->select('id', 'name')->orderBy('name')->get();
+        return view('service.edit', compact('service', 'services'));
     }
 
     /**
@@ -91,10 +95,12 @@ class ServiceController extends Controller
 
         $data = [
             'status' => $request->status ?? 1,
+            'service_id' => $request->service_id ?? null,
             'name' => $request->name,
             'price' => $request->price,
             'tax' => $request->tax,
             'time' => $request->time,
+            'prioritized' => $request->prioritized ?? 2,
             'detail' => $request->detail,
         ];
 

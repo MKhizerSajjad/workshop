@@ -48,6 +48,8 @@
                                                 <th>Price</th>
                                                 <th>Tax</th>
                                                 <th>Time</th>
+                                                <th>Parent</th>
+                                                <th>Prioritized</th>
                                                 <th>Status</th>
                                                 <th class="text-center">Options</th>
                                             </tr>
@@ -60,6 +62,8 @@
                                                     <td>{{ $product->price }}</td>
                                                     <td>{{ $product->tax }}</td>
                                                     <td>{{ $product->time }}</td>
+                                                    <td>{{ $product->service->name ?? '' }}</td>
+                                                    <td>{!! getGenStatus('bool', $product->prioritized, 'badge') !!}</td>
                                                     <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td>
                                                     <td class="text-center"> <a href="{{ route('service.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>
