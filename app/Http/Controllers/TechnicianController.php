@@ -3,24 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Technician;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-class EmployeeController extends Controller
+class TechnicianController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::whereIn('user_type', [2,3])->orderBy('first_name')->paginate(10);
+        $data = User::where('user_type', 3)->orderBy('first_name')->paginate(10);
 
-        return view('employee.index',compact('data'))
+        return view('technician.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
     public function create()
     {
         $user = Auth::user()->user_type;
-        return view('employee.create');
+        return view('technician.create');
     }
 
     public function store(Request $request)
@@ -48,12 +49,9 @@ class EmployeeController extends Controller
 
         User::create($data);
 
-        return redirect()->route('employee.index')->with('success','Record created successfully');
+        return redirect()->route('technician.index')->with('success','Record created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user)
     {
         if (!empty($user)) {
@@ -61,25 +59,19 @@ class EmployeeController extends Controller
             $data = [
                 'user' => $user
             ];
-            return view('employee.show', $data);
+            return view('technician.show', $data);
 
         } else {
-            return redirect()->route('employee.index');
+            return redirect()->route('technician.index');
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('employee.edit', compact('user'));
+        return view('technician.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
@@ -103,15 +95,12 @@ class EmployeeController extends Controller
         }
 
         User::find($id)->update($data);
-        return redirect()->route('employee.index')->with('success','Updated successfully');
+        return redirect()->route('technician.index')->with('success','Updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
         User::find($user->id)->delete();
-        return redirect()->route('employee.index')->with('success', 'Deleted successfully');
+        return redirect()->route('technician.index')->with('success', 'Deleted successfully');
     }
 }

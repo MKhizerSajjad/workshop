@@ -29,6 +29,20 @@ function getGenStatus($prefix, $status = null, $type = null)
     return statusReturn($prefix, $statuses, $status, $type );
 }
 
+function getUsertype($prefix, $status = null, $type = null)
+{
+    $statuses = [
+        'all'=> [
+            '1' => ['Admin', '<span class="badge bg-info">Admin</span>'],
+            '2' => ['Manager', '<span class="badge bg-warning">Manager</span>'],
+            '3' => ['Technician', '<span class="badge bg-secondary">Technician</span>'],
+            '4' => ['Customer', '<span class="badge bg-success">Customer</span>']
+        ]
+    ];
+
+    return statusReturn($prefix, $statuses, $status, $type );
+}
+
 
 function getStockStatus($prefix, $status = null, $type = null)
 {

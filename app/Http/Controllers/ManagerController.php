@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Manager;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-class EmployeeController extends Controller
+class ManagerController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::whereIn('user_type', [2,3])->orderBy('first_name')->paginate(10);
+        $data = User::where('user_type', 2)->orderBy('first_name')->paginate(10);
 
-        return view('employee.index',compact('data'))
+        return view('manager.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
     public function create()
     {
         $user = Auth::user()->user_type;
-        return view('employee.create');
+        return view('manager.create');
     }
 
     public function store(Request $request)
@@ -36,7 +37,7 @@ class EmployeeController extends Controller
 
         $data = [
             'status' => $request->status ?? 1,
-            'user_type' => $request->user_type ?? 3,
+            'user_type' => $request->user_type ?? 2,
             'picture' => '',
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -48,12 +49,9 @@ class EmployeeController extends Controller
 
         User::create($data);
 
-        return redirect()->route('employee.index')->with('success','Record created successfully');
+        return redirect()->route('manager.index')->with('success','Record created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user)
     {
         if (!empty($user)) {
@@ -61,25 +59,19 @@ class EmployeeController extends Controller
             $data = [
                 'user' => $user
             ];
-            return view('employee.show', $data);
+            return view('manager.show', $data);
 
         } else {
-            return redirect()->route('employee.index');
+            return redirect()->route('manager.index');
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('employee.edit', compact('user'));
+        return view('manager.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
@@ -91,7 +83,7 @@ class EmployeeController extends Controller
 
         $data = [
             'status' => $request->status ?? 1,
-            'user_type' => $request->user_type ?? 3,
+            'user_type' => $request->user_type ?? 2,
             'picture' => '',
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -103,15 +95,12 @@ class EmployeeController extends Controller
         }
 
         User::find($id)->update($data);
-        return redirect()->route('employee.index')->with('success','Updated successfully');
+        return redirect()->route('manager.index')->with('success','Updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
         User::find($user->id)->delete();
-        return redirect()->route('employee.index')->with('success', 'Deleted successfully');
+        return redirect()->route('manager.index')->with('success', 'Deleted successfully');
     }
 }
