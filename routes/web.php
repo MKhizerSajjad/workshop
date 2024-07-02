@@ -35,6 +35,8 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/booking', [JobController::class, 'create'])->name('create');
+Route::post('/save-booking', [JobController::class, 'store'])->name('save');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');

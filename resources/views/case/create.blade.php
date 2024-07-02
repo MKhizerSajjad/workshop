@@ -13,7 +13,8 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
-
+                                          <form method="POST" action="{{ route('save') }}" class="form" enctype="multipart/form-data">
+                                            @csrf
                                         <div id="booking-form">
                                             <!--Select item -- START-->
                                             <h3>Select Item</h3>
@@ -138,6 +139,15 @@
                                                         <h5>Inspection and diagnotics - 35EUR</h5>
                                                     </label>
                                                 </div>
+                                                @foreach (\App\Models\Service::where('prioritized', 1)->get() as $val)
+                                                  <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="{{$val->name}}">
+                                                    <label class="form-check-label" for="{{$val->name}}">
+                                                        <h5>{{$val->name}} - €{{$val->price}}</h5>
+                                                    </label>
+                                                </div>
+                                                @endforeach
+
                                                 <br>
                                                 <div class="d-flex gap-2 flex-wrap mb-3">
                                                     <button class="btn btn-primary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -147,7 +157,14 @@
 
                                                 <div class="collapse" id="collapseExample" style="">
                                                     <div class="card border shadow-none card-body text-muted mb-0">
-                                                        <h4>Please select from services below</h4>
+                                                        @foreach (\App\Models\Service::where('prioritized', 2)->get() as $val)
+                                                            <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="{{$val->name}}">
+                                                            <label class="form-check-label" for="{{$val->name}}">
+                                                            <h5>{{$val->name}} - €{{$val->price}}</h5>
+                                                            </label>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
                                                 </div>
 
@@ -205,26 +222,15 @@
                                             <section>
                                             <h3 class="mt-3">Do you leave more parts ?</h3>
                                                 <br>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="battery">
-                                                    <label class="form-check-label" for="battery">
-                                                        <h5>Standard</h5>
-                                                    </label>
-                                                </div>
+                                                @foreach (\App\Models\Priority::all() as $val)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="battery">
+                                                        <label class="form-check-label" for="battery">
+                                                            <h5>{{$val->name}} (+ €{{$val->price}})</h5>
+                                                        </label>
+                                                    </div>
+                                                @endforeach    
 
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="charger">
-                                                    <label class="form-check-label" for="charger">
-                                                        <h5>Higher (+45Eur) </h5>
-                                                    </label>
-                                                </div>
-
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="other-parts">
-                                                    <label class="form-check-label" for="other-parts">
-                                                        <h5>Highest (+70Eur)</h5>
-                                                    </label>
-                                                </div>
                                             </section>
                                             <!--Priority -- START -->
 
@@ -321,9 +327,30 @@
                                                     </label>
                                                 </div>
 
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="battery">
+                                                    <label class="form-check-label" for="battery">
+                                                        <h5>I read and agree with service pricing</h5>
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="battery">
+                                                    <label class="form-check-label" for="battery">
+                                                        <h5>I agree to receive newsletter</h5>
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="battery">
+                                                    <label class="form-check-label" for="battery">
+                                                        <h5>I read with GDR</h5>
+                                                    </label>
+                                                </div>
+
                                                 <div class="d-grid gap-2">
-                                            <button type="button" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
-                                            
+                                            <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
+                                            </form>
                                         </div>
                                             </section>
                                             <!--Confirmation -- START -->
