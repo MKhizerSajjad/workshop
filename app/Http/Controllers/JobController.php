@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\JobService;
+use App\Models\JobMedia;
+use App\Models\JobLeavePart;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -28,7 +33,59 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+      
+
+        ## General info
+        $job                      = new Job;
+        $job->date_opened         = Carbon::now();
+        $job->customer_id         = Auth::check() ? auth()->user()->id : null;
+        $job->technician_id       = 0;//
+        $job->company_id          = 0;//
+        $job->details             = 0;//
+        $job->item_id             = $request->item;
+        $job->manufacturer        = $request->manufacturer;
+        $job->model               = $request->model;
+        $job->year                = $request->year;
+        $job->color               = $request->color;
+        $job->additional_info     = $request->additional_info;
+        $job->problem_description = $request->description;
+        $job->priority_id         = $request->priority;
+        $job->save();
+
+        ## Services
+        foreach($request->service as $service_id){
+            $job_service = new JobService;
+            $job_service->job_id     = $job_id->id;
+            $job_service->service_id = $request->service_id;
+            $job_service->save();
+        }    
+
+        ## Parts
+        foreach($request->parts as $part_id){
+            $job_part             = new JobLeavePart;
+            $job_part->job_id     = $job->id;
+            $job_part->service_id = $part_id->id;
+            $job_part->save();
+        }
+
+        ## Media
+        if ($request->hasFile('files')) {
+                    
+            foreach ($request->file('files') as $index => $file) {
+                $filenameWithExt = $file->getClientOriginalName();
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                $extension = $file->getClientOriginalExtension();
+                $fileNameToStore = time() . '_' . $index . '.' . $extension;
+                $file->storeAs('public/media', $fileNameToStore);
+
+                $job_media             = new JobMedia;
+                $job_media->job_id     = $job->id;
+                $job_media->media      = $fileNameToStore;
+                $job_media->save();
+                
+            }
+
+        } 
     }
 
     /**
