@@ -16,9 +16,9 @@ return new class extends Migration
             $table->boolean('status')->default(1);
             $table->dateTime('date_opened');
             $table->dateTime('date_closed')->nullable();
-            $table->bigInteger('technician_id')->unsigned();
-            $table->bigInteger('customer_id')->unsigned();
-            $table->bigInteger('company_id')->unsigned();
+            $table->bigInteger('technician_id')->unsigned()->nullable();
+            $table->bigInteger('customer_id')->unsigned()->nullable();
+            $table->bigInteger('company_id')->unsigned()->nullable();
             $table->bigInteger('item_id')->unsigned();
             $table->string('manufacturer')->nullable();
             $table->string('model')->nullable();

@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('job_leave_parts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_id')->constrained()->onDelete('cascade');
-            $table->foreignId('part_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('job_id')->constrained()->onDelete('cascade');
+            // $table->foreignId('part_id')->constrained()->onDelete('cascade');
+            $table->bigInteger('job_id')->nullable();
+            $table->bigInteger('part_id')->nullable();
             $table->timestamps();
         });
     }

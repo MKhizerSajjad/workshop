@@ -106,21 +106,21 @@
                                                     <h3 class="mt-3">Do you leave more parts ?</h3>
                                                     <br>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="battery" name="parts[]">
+                                                        <input class="form-check-input" type="checkbox" value="1" name="parts[]">
                                                         <label class="form-check-label" for="battery">
                                                             <h5>Battery</h5>
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="charger" name="parts[]">
+                                                        <input class="form-check-input" type="checkbox" value="2" name="parts[]">
                                                         <label class="form-check-label" for="charger">
                                                             <h5>Charger</h5>
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="other-parts" name="parts[]">
+                                                        <input class="form-check-input" type="checkbox" value="3" name="parts[]">
                                                         <label class="form-check-label" for="other-parts">
                                                             <h5>Other parts</h5>
                                                         </label>
@@ -133,14 +133,14 @@
                                                 <h3>Services</h3>
                                                 <section>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="charger" name="service[]">
+                                                        <input class="form-check-input" type="checkbox" value="1" name="service[]">
                                                         <label class="form-check-label" for="charger">
                                                             <h5>Inspection and diagnostics - 35EUR</h5>
                                                         </label>
                                                     </div>
                                                     @foreach (\App\Models\Service::where('prioritized', 1)->get() as $val)
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="{{$val->name}}" name="service[]">
+                                                        <input class="form-check-input" type="checkbox" value="{{$val->id}}" name="service[]">
                                                         <label class="form-check-label" for="{{$val->name}}">
                                                             <h5>{{$val->name}} - €{{$val->price}}</h5>
                                                         </label>
@@ -158,7 +158,7 @@
                                                         <div class="card border shadow-none card-body text-muted mb-0">
                                                             @foreach (\App\Models\Service::where('prioritized', 2)->get() as $val)
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="{{$val->name}}" name="service[]">
+                                                                <input class="form-check-input" type="checkbox" value="{{$val->id}}" name="service[]">
                                                                 <label class="form-check-label" for="{{$val->name}}">
                                                                     <h5>{{$val->name}} - €{{$val->price}}</h5>
                                                                 </label>
@@ -173,8 +173,9 @@
                                                 <!--Uplaod  -- START -->
                                                 <h3>Media</h3>
                                                 <section>
-
-                                                    <div>
+                                                    <input name="files" type="file" multiple="multiple">
+                                                    
+                                                    {{-- <div>
                                                         <div class="dropzone">
                                                             <div class="fallback">
                                                                 <input name="file" type="file" multiple="multiple">
@@ -212,7 +213,7 @@
                                                                 </div>
                                                             </li>
                                                         </ul>
-                                                    </div>
+                                                    </div> --}}
                                                 </section>
                                                 <!--Upload -- START -->
 

@@ -34,13 +34,13 @@ class JobController extends Controller
     public function store(Request $request)
     {
       
-
+  
         ## General info
         $job                      = new Job;
         $job->date_opened         = Carbon::now();
         $job->customer_id         = Auth::check() ? auth()->user()->id : null;
-        $job->technician_id       = 0;//
-        $job->company_id          = 0;//
+        // $job->technician_id       = 0;//
+        // $job->company_id          = 0;//
         $job->details             = 0;//
         $job->item_id             = $request->item;
         $job->manufacturer        = $request->manufacturer;
@@ -55,8 +55,8 @@ class JobController extends Controller
         ## Services
         foreach($request->service as $service_id){
             $job_service = new JobService;
-            $job_service->job_id     = $job_id->id;
-            $job_service->service_id = $request->service_id;
+            $job_service->job_id     = $job->id;
+            $job_service->service_id = $service_id;
             $job_service->save();
         }    
 
@@ -64,28 +64,41 @@ class JobController extends Controller
         foreach($request->parts as $part_id){
             $job_part             = new JobLeavePart;
             $job_part->job_id     = $job->id;
-            $job_part->service_id = $part_id->id;
+            $job_part->part_id    = $part_id;
             $job_part->save();
         }
 
         ## Media
         if ($request->hasFile('files')) {
-                    
-            foreach ($request->file('files') as $index => $file) {
-                $filenameWithExt = $file->getClientOriginalName();
-                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $fileNameToStore = time() . '_' . $index . '.' . $extension;
-                $file->storeAs('public/media', $fileNameToStore);
 
-                $job_media             = new JobMedia;
-                $job_media->job_id     = $job->id;
-                $job_media->media      = $fileNameToStore;
-                $job_media->save();
-                
+            $index = 0; // Initialize the index variable
+            foreach ($request->file('files') as $file) {
+                try {
+                    $filenameWithExt = $file->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                    $extension = $file->getClientOriginalExtension();
+                    $fileNameToStore = time() . '_' . $index . '.' . $extension;
+        
+                    $file->storeAs('public/media', $fileNameToStore);
+        
+                    $job_media = new JobMedia;
+                    $job_media->job_id = $job->id;
+                    $job_media->media = $fileNameToStore;
+                    $job_media->save();
+        
+                    logger('File saved successfully: ' . $fileNameToStore);
+                    $index++; 
+        
+                } catch (\Exception $e) {
+                    logger('Error saving file: ' . $e->getMessage());
+
+                }
             }
+        } else {
+            logger('No files found in the request.');
+        }
 
-        } 
+        return 'DATA SAVED SUCCESSFULLY';
     }
 
     /**
