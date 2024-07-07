@@ -13,7 +13,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\JobController;
+use App\Http\Controllers\TaskController;
 use App\Models\Technician;
 use Illuminate\Support\Facades\Route;
 
@@ -34,8 +34,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/booking', [JobController::class, 'create'])->name('create');
-Route::post('/save-booking', [JobController::class, 'store'])->name('save');
+Route::get('/booking0', [TaskController::class, 'create0'])->name('bookingCreate0');
+Route::get('/booking', [TaskController::class, 'create'])->name('bookingCreate');
+Route::post('/save-booking', [TaskController::class, 'store'])->name('bookingSave');
 
 
 Route::middleware(['auth'])->group(function () {
