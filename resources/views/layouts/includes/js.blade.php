@@ -21,7 +21,7 @@
  <script src="{{ asset('js/pages/saas-dashboard.init.js')}}"></script>
  <script src="{{ asset('js/app.js')}}"></script>
 
- {{-- <script src="{{ asset('js/pages/project-create.init.js') }}"></script> --}}
+ <script src="{{ asset('js/pages/project-create.init.js') }}"></script>
  {{-- DROP ZONE --}}
  <script src="{{ asset('libs/dropzone/dropzone-min.js') }}"></script>
  <script src="{{ asset('js/pages/form-file-upload.init.js') }}"></script>
@@ -35,4 +35,3 @@
         , autoFocus: true
     });
  </script>
- 

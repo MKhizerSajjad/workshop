@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vpn', VpnController::class)->names('vpn');
     Route::resource('suggestion', SuggestionController::class)->names('suggestion');
     Route::resource('notification', NotificationController::class)->names('notification');
-    Route::resource('jobs', JobController::class)->names('jobs')->middleware('access.level:1,2,3');
+    Route::resource('case', TaskController::class)->names('case')->middleware('access.level:1,2,3');
     Route::resource('item', ItemController::class)->names('item')->middleware('access.level:1,2,3');
     Route::resource('product', ProductController::class)->names('product')->middleware('access.level:1,2,3');
     Route::resource('service', ServiceController::class)->names('service')->middleware('access.level:1,2,3');

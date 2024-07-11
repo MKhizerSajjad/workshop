@@ -52,6 +52,15 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="tab-content" id="v-pills-tabContent">
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
                                         <div class="tab-pane fade show active" id="v-pills-item" role="tabpanel" aria-labelledby="v-pills-item-tab">
                                             <div>
                                                 <h4 class="card-title">Itme information</h4>
@@ -185,13 +194,13 @@
                                                         </div>
                                                     </div>
                                                 </div> --}}
-
                                                 <section>
+                                                    <input name="files[]" type="file" multiple="multiple">
                                                     <div>
                                                         <h5 class="font-size-14 mb-3">Upload document file for a verification</h5>
                                                         <div class="dropzone">
                                                             <div class="fallback">
-                                                                <input name="file" type="file" multiple="multiple">
+                                                                <input name="media[]" type="file" multiple="multiple">
                                                             </div>
                                                             <div class="dz-message needsclick">
                                                                 <div class="mb-3">
@@ -271,7 +280,7 @@
                                                 <div class="mb-4 row">
                                                     <div class="col-md-6">
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="inspection" id="inspection" checked>
+                                                            <input class="form-check-input" type="radio" value="1" name="inspection" id="inspection" checked>
                                                             <label class="form-check-label font-size-13" for="inspection">
                                                                 <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
                                                                 Inspection and diagnostics - <b class="font-size-16">35€</b>
@@ -281,7 +290,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="inspection" id="withoutinspection2">
+                                                            <input class="form-check-input" type="radio" value="2" name="inspection" id="withoutinspection2">
                                                             <label class="form-check-label font-size-13" for="withoutinspection2">
                                                                 <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
                                                                 Without diagnostics - <b class="font-size-16">0€</b>
@@ -321,198 +330,227 @@
                                                 <h4 class="card-title">Service Location</h4>
                                                 <p class="card-title-desc">Fill all information below</p>
                                                 {{-- <form> --}}
-                                                    <h3 class="mt-3">Select Service Location</h3>
-                                                            <br>
-                                                            <!-- Nav tabs -->
-                                                            <ul class="nav nav-pills nav-justified" role="tablist">
-                                                                <li class="nav-item waves-effect waves-light" role="presentation">
-                                                                    <a class="nav-link active" data-bs-toggle="tab" href="#home-1" role="tab" aria-selected="true">
-                                                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-                                                                        <span class="d-none d-sm-block">Deliver To Office</span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item waves-effect waves-light" role="presentation">
-                                                                    <a class="nav-link" data-bs-toggle="tab" href="#office-1" role="tab" aria-selected="false" tabindex="-1">
-                                                                        <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-                                                                        <span class="d-none d-sm-block">I Will Send To Office</span>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="nav-item waves-effect waves-light" role="presentation">
-                                                                    <a class="nav-link" data-bs-toggle="tab" href="#engineer-1" role="tab" aria-selected="false" tabindex="-1">
-                                                                        <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-                                                                        <span class="d-none d-sm-block">Invite Engineer To My Home</span>
-                                                                    </a>
-                                                                </li>
+                                                    <br>
+                                                    <div>
 
-                                                            </ul>
+                                                    @foreach (getService('location') as $key => $location)
+                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                            <input class="form-check-input" type="radio" name="services_location" value="{{++$key}}" name="services_location" id="loc-{{$key}}" {{ $key == 1 ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="loc-{{$key}}">
+                                                                <h5>{{ $location }}</h5>
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
 
-                                                            <div class="tab-content p-3 text-muted">
-                                                                <div class="tab-pane active show" id="home-1" role="tabpanel">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="first_name_home">First Name</label>
-                                                                                <input type="text" class="form-control" id="first_name_home" name="first_name_home" placeholder="Enter first name">
-                                                                            </div>
-                                                                        </div>
+                                                        {{-- <div class="mb-2 form-check form-check-inline font-size-16">
+                                                            <input class="form-check-input" type="radio" name="services_location" value="1" name="services_location" id="location1" chnecked>
+                                                            <label class="form-check-label" for="location1">
+                                                                <h5>Deliver to office</h5>
+                                                            </label>
+                                                        </div>
+                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                            <input class="form-check-input" type="radio" name="services_location" value="2" name="services_location" id="location2">
+                                                            <label class="form-check-label" for="location2">
+                                                                <h5>I will send to office</h5>
+                                                            </label>
+                                                        </div>
+                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                            <input class="form-check-input" type="radio" name="services_location" value="3" name="services_location" id="location3">
+                                                            <label class="form-check-label" for="location3">
+                                                                <h5>Invite engineer to my home</h5>
+                                                            </label>
+                                                        </div> --}}
+                                                    </div>
+                                                    <!-- Nav tabs -->
+                                                    {{-- <ul class="nav nav-pills nav-justified" role="tablist">
+                                                        <li class="nav-item waves-effect waves-light" role="presentation">
+                                                            <a class="nav-link active" data-bs-toggle="tab" href="#home-1" role="tab" aria-selected="true">
+                                                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                                                <span class="d-none d-sm-block">Deliver To Office</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item waves-effect waves-light" role="presentation">
+                                                            <a class="nav-link" data-bs-toggle="tab" href="#office-1" role="tab" aria-selected="false" tabindex="-1">
+                                                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                                                <span class="d-none d-sm-block">I Will Send To Office</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item waves-effect waves-light" role="presentation">
+                                                            <a class="nav-link" data-bs-toggle="tab" href="#engineer-1" role="tab" aria-selected="false" tabindex="-1">
+                                                                <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                                                <span class="d-none d-sm-block">Invite Engineer To My Home</span>
+                                                            </a>
+                                                        </li>
 
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="last_name_home">Last Name</label>
-                                                                                <input type="text" class="form-control" id="last_name_home" name="last_name_home" placeholder="Enter last name">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="phone_number_home">Phone Number</label>
-                                                                                <input type="text" class="form-control" id="phone_number_home" name="phone_number_home" placeholder="Enter phone number">
-                                                                            </div>
-                                                                        </div>
+                                                    </ul> --}}
 
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="email_home">Email</label>
-                                                                                <input type="email" class="form-control" id="email_home" name="email_home" placeholder="Enter email">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="city_home">City</label>
-                                                                                <input type="text" class="form-control" id="city_home" name="city_home" placeholder="Enter city">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="company_home">Company</label>
-                                                                                <input type="text" class="form-control" id="company_home" name="company_home" placeholder="Enter company">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="address_home">Address</label>
-                                                                                <input type="text" class="form-control" id="address_home" name="address_home" placeholder="Enter address">
-                                                                            </div>
-                                                                        </div>
+                                                    <div class="tab-content p-3 text-muted">
+                                                        <div class="tab-pane active show" id="home-1" role="tabpanel">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="first_name">First Name</label>
+                                                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name">
                                                                     </div>
                                                                 </div>
-                                                                <div class="tab-pane" id="office-1" role="tabpanel">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="first_name_office">First Name</label>
-                                                                                <input type="text" class="form-control" id="first_name_office" name="first_name_office" placeholder="Enter first name">
-                                                                            </div>
-                                                                        </div>
 
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="last_name_office">Last Name</label>
-                                                                                <input type="text" class="form-control" id="last_name_office" name="last_name_office" placeholder="Enter last name">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="phone_number_office">Phone Number</label>
-                                                                                <input type="text" class="form-control" id="phone_number_office" name="phone_number_office" placeholder="Enter phone number">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="email_office">Email</label>
-                                                                                <input type="email" class="form-control" id="email_office" name="email_office" placeholder="Enter email">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="city_office">City</label>
-                                                                                <input type="text" class="form-control" id="city_office" name="city_office" placeholder="Enter city">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="company_office">Company</label>
-                                                                                <input type="text" class="form-control" id="company_office" name="company_office" placeholder="Enter company">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="address_office">Address</label>
-                                                                                <input type="text" class="form-control" id="address_office" name="address_office" placeholder="Enter address">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="tab-pane" id="engineer-1" role="tabpanel">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="first_name_home">First Name</label>
-                                                                                <input type="text" class="form-control" id="first_name_home" name="first_name_home" placeholder="Enter first name">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="last_name_home">Last Name</label>
-                                                                                <input type="text" class="form-control" id="last_name_home" name="last_name_home" placeholder="Enter last name">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="phone_number_home">Phone Number</label>
-                                                                                <input type="text" class="form-control" id="phone_number_home" name="phone_number_home" placeholder="Enter phone number">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="email_home">Email</label>
-                                                                                <input type="email" class="form-control" id="email_home" name="email_home" placeholder="Enter email">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="city_home">City</label>
-                                                                                <input type="text" class="form-control" id="city_home" name="city_home" placeholder="Enter city">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="company_home">Company</label>
-                                                                                <input type="text" class="form-control" id="company_home" name="company_home" placeholder="Enter company">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="mb-3">
-                                                                                <label for="address_home">Address</label>
-                                                                                <input type="text" class="form-control" id="address_home" name="address_home" placeholder="Enter address">
-                                                                            </div>
-                                                                        </div>
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="last_name">Last Name</label>
+                                                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name">
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="phone">Phone Number</label>
+                                                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="email">Email</label>
+                                                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="city">City</label>
+                                                                        <input type="text" class="form-control" id="city" name="city" placeholder="Enter city">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="company">Company</label>
+                                                                        <input type="text" class="form-control" id="company" name="company" placeholder="Enter company">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <div class="mb-3">
+                                                                        <label for="address">Address</label>
+                                                                        <textarea class="form-control" id="address" name="address" placeholder="Enter address"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {{-- <div class="tab-pane" id="office-1" role="tabpanel">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="first_name_office">First Name</label>
+                                                                        <input type="text" class="form-control" id="first_name_office" name="first_name_office" placeholder="Enter first name">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="last_name_office">Last Name</label>
+                                                                        <input type="text" class="form-control" id="last_name_office" name="last_name_office" placeholder="Enter last name">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="phone_office">Phone Number</label>
+                                                                        <input type="text" class="form-control" id="phone_office" name="phone_office" placeholder="Enter phone number">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="email_office">Email</label>
+                                                                        <input type="email" class="form-control" id="email_office" name="email_office" placeholder="Enter email">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="city_office">City</label>
+                                                                        <input type="text" class="form-control" id="city_office" name="city_office" placeholder="Enter city">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="company_office">Company</label>
+                                                                        <input type="text" class="form-control" id="company_office" name="company_office" placeholder="Enter company">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="address_office">Address</label>
+                                                                        <input type="text" class="form-control" id="address_office" name="address_office" placeholder="Enter address">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="engineer-1" role="tabpanel">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="first_name_engineer">First Name</label>
+                                                                        <input type="text" class="form-control" id="first_name_engineer" name="first_name_engineer" placeholder="Enter first name">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="last_name_engineer">Last Name</label>
+                                                                        <input type="text" class="form-control" id="last_name_engineer" name="last_name_engineer" placeholder="Enter last name">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="phone_engineer">Phone Number</label>
+                                                                        <input type="text" class="form-control" id="phone_engineer" name="phone_engineer" placeholder="Enter phone number">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="email_engineer">Email</label>
+                                                                        <input type="email" class="form-control" id="email_engineer" name="email_engineer" placeholder="Enter email">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="city_engineer">City</label>
+                                                                        <input type="text" class="form-control" id="city_engineer" name="city_engineer" placeholder="Enter city">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="company_engineer">Company</label>
+                                                                        <input type="text" class="form-control" id="company_engineer" name="company_engineer" placeholder="Enter company">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <div class="mb-3">
+                                                                        <label for="address_engineer">Address</label>
+                                                                        <textarea class="form-control" id="address" name="address_engineer" placeholder="Enter address"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> --}}
+                                                    </div>
 
                                                 {{-- </form> --}}
                                             </div>

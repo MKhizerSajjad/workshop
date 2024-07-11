@@ -19,17 +19,20 @@ return new class extends Migration
             $table->dateTime('date_closed')->nullable();
             $table->bigInteger('technician_id')->unsigned()->nullable();
             $table->bigInteger('customer_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('company_id')->unsigned()->nullable();
             $table->bigInteger('item_id')->unsigned();
             $table->string('manufacturer')->nullable();
             $table->string('model')->nullable();
             $table->string('year')->nullable();
             $table->string('color')->nullable();
-            $table->string('additional_info')->nullable()->comment('additional information about item');
-            $table->string('problem_description')->nullable()->comment('Description of the problem / failure');
-            $table->boolean('inspection_diagnose')->default(false)->comment('Inspection and diagnostics fix charges i.e: 35Eur');
-            $table->boolean('without_diagnose')->default(false)->comment('Repair, according to the problem named and described by the customer. Without diagnostics');
-            $table->boolean('priority_id')->nullable(1);  // case_priorities table
+            $table->longText('additional_info')->nullable()->comment('additional information about item');
+            $table->longText('problem_description')->nullable()->comment('Description of the problem / failure');
+            $table->bigInteger('priority_id')->unsigned()->nullable();
+            $table->boolean('inspection_diagnose')->default(1)->comment('Inspection and diagnostics fix charges i.e: 35Eur');
+            $table->boolean('services_location')->default(1)->comment('where from service get');
+            // $table->boolean('without_diagnose')->default(false)->comment('Repair, according to the problem named and described by the customer. Without diagnostics');
+            // $table->boolean('priority_id')->nullable(1);  // case_priorities table
             // $table->foreignId('technician_id')->nullable()->constrained()->onDelete('cascade');
             $table->text('details');
             $table->text('notes')->nullable();
@@ -37,8 +40,10 @@ return new class extends Migration
 
             $table->foreign('technician_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('customer_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
-            $table->foreign('item_id')->references('id')->on('items')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('item_id')->references('id')->on('items')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('priority_id')->references('id')->on('priorities')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 
