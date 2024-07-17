@@ -103,14 +103,28 @@ function getService($prefix, $status = null, $type = null)
 
 // ************************* OTHERS ************************
 function getFileTypeFromExtension($extension) {
+    // Define arrays for different file types
     $imageExtensions = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
     $videoExtensions = ['mp4', 'avi', 'mov', 'mkv'];
+    $documentExtensions = ['doc', 'docx', 'pdf', 'txt', 'xls', 'xlsx', 'ppt', 'pptx'];
+    // Add more arrays as needed for other file types
 
-    if (in_array(strtolower($extension), $imageExtensions)) {
-        return '1';
-    } elseif (in_array(strtolower($extension), $videoExtensions)) {
-        return '2';
-    } else {
-        return '3'; // Default type or handle other types as needed
+    // Convert extension to lowercase for case-insensitive comparison
+    $lowercaseExtension = strtolower($extension);
+
+    // Check if the extension belongs to images
+    if (in_array($lowercaseExtension, $imageExtensions)) {
+        return '1'; // Return 'image' for images
+    }
+    // Check if the extension belongs to videos
+    elseif (in_array($lowercaseExtension, $videoExtensions)) {
+        return '2'; // Return 'video' for videos
+    }
+    // Check if the extension belongs to documents/files
+    elseif (in_array($lowercaseExtension, $documentExtensions)) {
+        return '3'; // Return 'document' for documents/files
+    }
+    else {
+        return '0'; // Default type or handle other types as needed
     }
 }

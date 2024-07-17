@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_media', function (Blueprint $table) {
+        Schema::create('serivce_locations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->constrained()->onDelete('cascade');
-            $table->boolean('type')->nullable();
-            $table->string('media');
+            $table->tinyInteger('status')->default(1);
+            $table->string('title');
+            $table->text('detail')->nullable();
+            $table->json('fields')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_media');
+        Schema::dropIfExists('serivce_locations');
     }
 };

@@ -14,6 +14,7 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\SerivceLocationController;
 use App\Models\Technician;
 use Illuminate\Support\Facades\Route;
 
@@ -55,4 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('manager', ManagerController::class)->names('manager')->middleware('access.level:1');
     Route::resource('technician', TechnicianController::class)->names('technician')->middleware('access.level:1,2');
     Route::resource('customer', CustomerController::class)->names('customer')->middleware('access.level:1,2,3');
+
+    Route::get('service-location/{locationId}', [SerivceLocationController::class, 'locationDetail']);
+
 });

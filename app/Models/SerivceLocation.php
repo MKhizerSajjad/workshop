@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JobMedia extends Model
+class SerivceLocation extends Model
 {
     use HasFactory;
-    protected $guarded;
 }

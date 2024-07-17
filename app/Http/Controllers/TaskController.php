@@ -15,6 +15,7 @@ use App\Models\Priority;
 use App\Models\Customer;
 use App\Models\TaskMedia;
 use App\Models\TaskService;
+use App\Models\SerivceLocation;
 use App\Models\TaskLeavePart;
 
 class TaskController extends Controller
@@ -39,13 +40,12 @@ class TaskController extends Controller
         $data->parts = Part::where('status', 1)->orderBy('name')->get();
         $data->services = Service::where('status', 1)->orderBy('name')->get();
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
+        $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         return view('case.create', compact('data'));
     }
 
     public function store(Request $request)
     {
-
-
         $this->validate($request, [
             'item' => 'required',
             'manufacturer' => 'required',

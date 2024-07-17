@@ -82,11 +82,17 @@
                     </li>
                 @endif
 
-                @if (in_array(auth()->user()->user_type , [1, 2, 3]))
+                @if (in_array(auth()->user()->user_type , [1, 2]))
                     <li>
                         <a href="{{ route('customer.index') }}" class="waves-effect">
                             <i class="bx bx-user-circle"></i>
                             <span key="t-authentication">Customers</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('case.index') }}" class="waves-effect">
+                            <i class="bx bx-receipt"></i>
+                            <span key="t-authentication">Cases</span>
                         </a>
                     </li>
                 @endif

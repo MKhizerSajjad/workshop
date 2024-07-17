@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -10,7 +10,7 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::whereIn('user_type', [4])->orderBy('first_name')->paginate(10);
+        $data = Customer::orderBy('first_name')->paginate(10);
 
         return view('customer.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 10);

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
             $table->boolean('status')->default(1);
+            $table->string('code');
             $table->dateTime('date_opened');
             $table->dateTime('date_closed')->nullable();
             $table->bigInteger('technician_id')->unsigned()->nullable();
