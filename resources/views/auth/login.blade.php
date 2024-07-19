@@ -6,6 +6,14 @@
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5">
                 <div class="card overflow-hidden">
+
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success alert-border-left alert-dismissible fade show auto-colse-3" role="alert">
+                            <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success! </strong>
+                            {{ $message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <div class="bg-primary-subtle">
                         <div class="row">
                             <div class="col-7">

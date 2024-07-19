@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
+// use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use Carbon\Carbon;
@@ -166,9 +167,11 @@ class TaskController extends Controller
             }
         }
 
-
-
-        return redirect()->route('case.index')->with('success','Record created successfully');
+        if(auth()->check() && Auth::user()->user_type != 4) {
+            return redirect()->route('dashboard')->with('success','Record created successfully');
+        } else {
+            return redirect()->route('login')->with('success','Your booking has been created successfully');
+        }
 
 
 

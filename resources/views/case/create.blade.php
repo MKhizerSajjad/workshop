@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    @guest
+        @include('layouts.components.web-topbar')
+    @endguest
 
     <div class="page-content">
         <div class="container-fluid">
