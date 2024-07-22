@@ -572,10 +572,6 @@
 
                                                 {{-- </form> --}}
                                             </div>
-
-                                            <div class="d-grid gap-2">
-                                                <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
-                                            </div>
                                         </div>
                                         <div class="tab-pane fade" id="v-confirmation" role="tabpanel" aria-labelledby="v-confirmation-tab">
                                             <div>
