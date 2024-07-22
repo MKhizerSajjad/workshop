@@ -160,11 +160,15 @@ class TaskController extends Controller
             }
         }
 
+        $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
+
         if(isset($request->services)) {
             foreach ($request->input('services') as $service_id) {
                 TaskService::create([
                     'task_id' => $task->id,
                     'service_id' => $service_id,
+                    'service_id' => $service_id,
+                    'customer_choice' => $isCustomerChoice
                 ]);
             }
         }
