@@ -64,7 +64,7 @@
                                                     <td></td>
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>
                                                     <td class="text-center">
-                                                        {{-- <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-bullseye"></i></a> --}}
+                                                        <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-pencil"></i></a>
                                                         {{-- <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-pencil"></i></a> --}}
                                                     </td>
                                                 </tr>

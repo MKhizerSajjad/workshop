@@ -32,23 +32,17 @@
                                 <i class= "fa fa-map-marker d-block check-nav-icon mt-4 mb-2"></i>
                                 <p class="fw-bold mb-4">Service Location</p>
                             </a>
-                            {{-- <a class="nav-link" id="v-pills-shipping-tab" data-bs-toggle="pill" href="#v-pills-shipping" role="tab" aria-controls="v-pills-shipping" aria-selected="false">
-                                <i class= "bx bxs-truck d-block check-nav-icon mt-4 mb-2"></i>
-                                <p class="fw-bold mb-4">Shipping Info</p>
-                            </a>
-                            <a class="nav-link" id="v-pills-payment-tab" data-bs-toggle="pill" href="#v-pills-payment" role="tab" aria-controls="v-pills-payment" aria-selected="false">
-                                <i class= "bx bx-money d-block check-nav-icon mt-4 mb-2"></i>
-                                <p class="fw-bold mb-4">Payment Info</p>
-                            </a>
-                            <a class="nav-link" id="v-pills-confir-tab" data-bs-toggle="pill" href="#v-pills-confir" role="tab" aria-controls="v-pills-confir" aria-selected="false">
-                                <i class= "bx bx-badge-check d-block check-nav-icon mt-4 mb-2"></i>
+                            <a class="nav-link" id="v-confirmation-tab" data-bs-toggle="pill" href="#v-confirmation" role="tab" aria-controls="v-confirmation" aria-selected="false">
+                                <i class= "fa fa-check-circle d-block check-nav-icon mt-4 mb-2"></i>
                                 <p class="fw-bold mb-4">Confirmation</p>
-                            </a> --}}
+                            </a>
                         </div>
                     </div>
                     <div class="col-xl-10 col-sm-9">
-                        <form method="POST" action="{{ route('bookingSave') }}" class="form" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('case.update', $data->task->id) }}" class="form" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
+
                             <div class="card">
                                 <div class="card-body">
                                     <div class="tab-content" id="v-pills-tabContent">
@@ -78,7 +72,7 @@
                                                             <select class="form-control select2" title="Item" name="item">
                                                                 <option value="">Select Item </option>
                                                                 @foreach ($data->items as $item)
-                                                                    <option value="{{ $item->id }}" @if($item->id == $task->item_id) selected @endif>{{ $item->name }}</option>
+                                                                    <option value="{{ $item->id }}" @if($item->id == $data->task->item_id) selected @endif>{{ $item->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('item')
@@ -91,7 +85,7 @@
                                                     <div class="form-group row mb-2">
                                                         <div class="col-md-6">
                                                             <label for="manufacturer" class="form-label">Manufacturer</label>
-                                                            <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ $task->manufacturer }}" placeholder="Enter Manufacturer">
+                                                            <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ $data->task->manufacturer }}" placeholder="Enter Manufacturer">
                                                             @error('manufacturer')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -100,7 +94,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="model" class="form-label">Model</label>
-                                                            <input type="text" name="model" class="form-control" id="model" value="{{ $task->model }}" placeholder="Enter Model">
+                                                            <input type="text" name="model" class="form-control" id="model" value="{{ $data->task->model }}" placeholder="Enter Model">
                                                             @error('model')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -111,7 +105,7 @@
                                                     <div class="form-group row mb-2">
                                                         <div class="col-md-6">
                                                             <label for="year" class="form-label">Year</label>
-                                                            <input type="text" name="year" class="form-control" id="year" value="{{ $task->year }}" placeholder="Enter Year">
+                                                            <input type="text" name="year" class="form-control" id="year" value="{{ $data->task->year }}" placeholder="Enter Year">
                                                             @error('year')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -120,7 +114,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="color" class="form-label">Color</label>
-                                                            <input type="text" name="color" class="form-control" id="color" value="{{ $task->color }}" placeholder="Enter Color">
+                                                            <input type="text" name="color" class="form-control" id="color" value="{{ $data->task->color }}" placeholder="Enter Color">
                                                             @error('color')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -129,15 +123,15 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mb-3">
-                                                        <label for="additional_info" class="form-label">Additional Information {{ $task->additional_info }}</label>
+                                                        <label for="additional_info" class="form-label">Additional Information</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" nmae="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $task->additional_info }}</textarea>
+                                                            <textarea class="form-control" nmae="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $data->task->additional_info }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mb-3">
                                                         <label for="problem_description" class="form-label">Description of Problem / Failure</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" nmae="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $task->problem_description }}</textarea>
+                                                            <textarea class="form-control" nmae="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $data->task->problem_description }}</textarea>
                                                             @error('problem_description')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -167,8 +161,11 @@
 
                                                 <div>
                                                     @foreach ($data->parts as $part)
+                                                        @php
+                                                            $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id);
+                                                        @endphp
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}">
+                                                            <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ $isChecked ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="part-{{ $part->id }}">
                                                                 <h5>{{ $part->name }}</h5>
                                                             </label>
@@ -177,7 +174,7 @@
                                                 </div>
 
                                                 <h4 class="card-title mt-5">Medias</h4>
-                                                <p class="card-title-desc">Pictures and videos of product</p>
+                                                {{-- <p class="card-title-desc">Pictures and videos of product</p> --}}
                                                 {{-- <div>
                                                     <label class="form-label">Attached Files</label>
                                                     <div class="fallback dropzone" id="myId" enctype="multipart/form-data">
@@ -194,13 +191,53 @@
                                                         </div>
                                                     </div>
                                                 </div> --}}
-                                                <section>
-                                                    <input name="files[]" type="file" multiple="multiple">
+
+                                                <label for="uploadImage" class="custom-file-upload">
+                                                    <span><i class="ti-cloud-up"></i> Pictures, files and videos of product</span>
+                                                    <input type="file" name="files[]" id="uploadImage" class="form-control-file" multiple>
+                                                    {{-- <input type="file" id="uploadImage" name="file[]" class="form-control-file" multiple="multiple"> --}}
+                                                </label>
+                                                <div id="imagesBody">
+
+                                                    @foreach ($data->task->media as $media)
+                                                        @php
+                                                            $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
+                                                            $previewContent = '';
+                                                            $imagePath = '';
+
+                                                            switch ($fileType) {
+                                                                case 'jpg':
+                                                                case 'jpeg':
+                                                                case 'png':
+                                                                case 'gif':
+                                                                    $previewContent = '<img class="thumb" src="' . asset('storage/app/public/task/media/test.png') . '" title="' . $media->media . '">';
+                                                                    break;
+                                                                case 'mp4':
+                                                                case 'avi':
+                                                                case 'mov':
+                                                                case 'wmv':
+                                                                    $imagePath = asset('images/video.png');
+                                                                    $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
+                                                                    break;
+                                                                default:
+                                                                    $imagePath = asset('images/file.png');
+                                                                    $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
+                                                                    break;
+                                                            }
+                                                        @endphp
+                                                        <div class="preview-image">
+                                                            {!! $previewContent !!}
+                                                            <span class="delete-image" data-nxame="' + theFile.name + '"><i class="fa fa-trash text-danger"></i></span>
+                                                        </div>
+
+                                                    @endforeach
+                                                </div>
+                                                {{-- <section>
                                                     <div>
                                                         <h5 class="font-size-14 mb-3">Upload document file for a verification</h5>
                                                         <div class="dropzone">
                                                             <div class="fallback">
-                                                                <input name="media[]" type="file" multiple="multiple">
+                                                                <input name="file[]" type="file" multiple="multiple">
                                                             </div>
                                                             <div class="dz-message needsclick">
                                                                 <div class="mb-3">
@@ -236,7 +273,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                </section>
+                                                </section> --}}
 
 
                                                 {{-- </form> --}}
@@ -244,6 +281,19 @@
                                         </div>
                                         <div class="tab-pane fade" id="v-services" role="tabpanel" aria-labelledby="v-services-tab">
                                             <div>
+                                                <h4 class="card-title">Technician</h4>
+                                                <p class="card-title-desc">Alot Technician To Case</p>
+                                                <div class="form-group row mb-5">
+                                                    <div class="col-md-12">
+                                                        <select class="form-control select2" title="Technician" name="technician_id">
+                                                            <option value="">Select Technician </option>
+                                                            @foreach ($data->technicians as $technician)
+                                                                <option value="{{ $technician->id }}" @if($technician->id == $data->task->technician_id) selected @endif>{{ $technician->first_name .' '. $technician->last_name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
                                                 <h4 class="card-title">Priority of Case</h4>
                                                 <p class="card-title-desc">How fast you wants get back?</p>
                                                 {{-- <form> --}}
@@ -251,7 +301,7 @@
                                                 <div>
                                                     @foreach ($data->priorities as $priority)
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="priority" value="{{$priority->id}}" id="priority-{{$priority->id}}" {{ $priority->id == 1 ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="radio" name="priority" value="{{$priority->id}}" id="priority-{{$priority->id}}" {{ $priority->id == $data->task->priority_id ? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="priority-{{$priority->id}}">
                                                                 {{ $priority->name }} - {{ number_format($priority->price, 0) }}€
                                                             </label>
@@ -280,7 +330,7 @@
                                                 <div class="mb-4 row">
                                                     <div class="col-md-6">
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" value="1" name="inspection" id="inspection" checked>
+                                                            <input class="form-check-input" type="radio" value="1" name="inspection" id="inspection" {{ $data->task->inspection_diagnose == 1 ? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="inspection">
                                                                 <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
                                                                 Inspection and diagnostics - <b class="font-size-16">35€</b>
@@ -290,7 +340,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" value="2" name="inspection" id="withoutinspection2">
+                                                            <input class="form-check-input" type="radio" value="2" name="inspection" id="withoutinspection2" {{ $data->task->inspection_diagnose != 1 ? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="withoutinspection2">
                                                                 <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
                                                                 Without diagnostics - <b class="font-size-16">0€</b>
@@ -303,18 +353,39 @@
                                                 <h4 class="card-title mt-5">Services</h4>
                                                 <p class="card-title-desc">Please select your required services carefully</p>
                                                 <div class="mb-5">
-                                                    @foreach ($data->services as $service)
-                                                        <div class="mb-2 form-check form-check-inline font-size-16 {{ $service->prioritized != 1 ? 'd-none' : '' }}">
-                                                            <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}">
+                                                    @foreach ($data->services->where('status', 1) as $service)
+                                                        @php
+                                                            $isChecked = $data->task->taskServices->contains('service_id', $service->id);
+                                                        @endphp
+                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                            <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ $isChecked ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
-                                                                <h5>{{ $service->name }}</h5>
+                                                                <h5>
+                                                                    {{ $service->name }}
+                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' €</b></span>' : '' !!}
+                                                                </h5>
                                                             </label>
                                                         </div>
                                                     @endforeach
 
-                                                    <div class="text-align-center mt-3">
-                                                        <button type="button" id="showAllServices" class="btn btn-primary"><i class="bx bx-show"></i> Show More</button>
+                                                    <div class="text-align-center mt-3 mb-3">
+                                                        <h3 type="button" id="showAllServices" class="btn btn-primary show-more"><i class="bx bx-show"></i> Show More</button>
                                                     </div>
+
+                                                    @foreach ($data->services->where('status', 2) as $service)
+                                                        @php
+                                                            $isChecked = $data->task->taskServices->contains('service_id', $service->id);
+                                                        @endphp
+                                                        <div class="mb-2 form-check form-check-inline font-size-16 hidden-services d-none">
+                                                            <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="service-{{ $service->id }}">
+                                                                <h5>
+                                                                    {{ $service->name }}
+                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' €</b></span>' : '' !!}
+                                                                </h5>
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
                                                     @error('services')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -335,7 +406,7 @@
 
                                                     @foreach (getService('location') as $key => $location)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="services_location" value="{{++$key}}" name="services_location" id="loc-{{$key}}" {{ $key == 1 ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="radio" name="services_location" value="{{++$key}}" name="services_location" id="loc-{{$key}}" {{ $key == $data->task->services_location ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="loc-{{$key}}">
                                                                 <h5>{{ $location }}</h5>
                                                             </label>
@@ -390,14 +461,14 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="first_name">First Name</label>
-                                                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name">
+                                                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" value="{{ $data->task->customer->first_name }}">
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="last_name">Last Name</label>
-                                                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name">
+                                                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" value="{{ $data->task->customer->last_name }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -405,14 +476,14 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="phone">Phone Number</label>
-                                                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
+                                                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" value="{{ $data->task->customer->phone }}">
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="email">Email</label>
-                                                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                                                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="{{ $data->task->customer->email }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -420,14 +491,14 @@
                                                                 <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="city">City</label>
-                                                                        <input type="text" class="form-control" id="city" name="city" placeholder="Enter city">
+                                                                        <input type="text" class="form-control" id="city" name="city" placeholder="Enter city" value="{{ $data->task->customer->city }}">
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="company">Company</label>
-                                                                        <input type="text" class="form-control" id="company" name="company" placeholder="Enter company">
+                                                                        <input type="text" class="form-control" id="company" name="company" placeholder="Enter company" value="{{ $data->task->customer->company }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -435,7 +506,7 @@
                                                                 <div class="col-lg-12">
                                                                     <div class="mb-3">
                                                                         <label for="address">Address</label>
-                                                                        <textarea class="form-control" id="address" name="address" placeholder="Enter address"></textarea>
+                                                                        <textarea class="form-control" id="address" name="address" placeholder="Enter address">{{ $data->task->customer->address }}</textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -554,415 +625,60 @@
 
                                                 {{-- </form> --}}
                                             </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="v-confirmation" role="tabpanel" aria-labelledby="v-confirmation-tab">
+                                            <div>
+
+                                                {{-- @foreach($data->serviceLocations as $serviceLocation)
+                                                    <div class="mb-2 form-check form-check-inline font-size-16">
+                                                        <input class="form-check-input" type="radio" id="location_{{ $serviceLocation->id }}" name="services_location" value="{{ $serviceLocation->id }}" {{ $loop->first ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="location_{{ $serviceLocation->id }}">
+                                                            <h5>{{ $serviceLocation->title }}</h5>
+                                                        </label>
+                                                    </div>
+                                                @endforeach --}}
+
+                                                <div class="tab-content p-3 text-muted">
+                                                    <div class="tab-pane active show" id="home-1" role="tabpanel">
+                                                        <div class="row">
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_term" id="read_service_term"
+                                                                       {{ isset($data->confirmations['read_service_term']) && $data->confirmations['read_service_term'] ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="read_service_term">
+                                                                    <h5>I read and agree with terms of service</h5>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_pricing" id="read_service_pricing"
+                                                                       {{ isset($data->confirmations['read_service_pricing']) && $data->confirmations['read_service_pricing'] ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="read_service_pricing">
+                                                                    <h5>I read and agree with service pricing</h5>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="receive_newsletter" id="receive_newsletter"
+                                                                       {{ isset($data->confirmations['receive_newsletter']) && $data->confirmations['receive_newsletter'] ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="receive_newsletter">
+                                                                    <h5>I agree to receive newsletter</h5>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="read_gdr" id="read_gdr"
+                                                                       {{ isset($data->confirmations['read_gdr']) && $data->confirmations['read_gdr'] ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="read_gdr">
+                                                                    <h5>I read with GDR</h5>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <div class="d-grid gap-2">
-                                                <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab">
-                                            <div>
-                                                <h4 class="card-title">Shipping information</h4>
-                                                <p class="card-title-desc">Fill all information below</p>
-                                                {{-- <form> --}}
-                                                    <div class="form-group row mb-4">
-                                                        <label for="billing-name" class="col-md-2 col-form-label">Name</label>
-                                                        <div class="col-md-10">
-                                                            <input type="text" class="form-control" id="billing-name" placeholder="Enter your name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-4">
-                                                        <label for="billing-email-address" class="col-md-2 col-form-label">Email Address</label>
-                                                        <div class="col-md-10">
-                                                            <input type="email" class="form-control" id="billing-email-address" placeholder="Enter your email">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-4">
-                                                        <label for="billing-phone" class="col-md-2 col-form-label">Phone</label>
-                                                        <div class="col-md-10">
-                                                            <input type="text" class="form-control" id="billing-phone" placeholder="Enter your Phone no.">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-4">
-                                                        <label for="billing-address" class="col-md-2 col-form-label">Address</label>
-                                                        <div class="col-md-10">
-                                                            <textarea class="form-control" id="billing-address" rows="3" placeholder="Enter full address"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-4">
-                                                        <label class="col-md-2 col-form-label">Country</label>
-                                                        <div class="col-md-10">
-                                                            <select class="form-control select2" title="Country">
-                                                                <option value="0">Select Country</option>
-                                                                <option value="AF">Afghanistan</option>
-                                                                <option value="AL">Albania</option>
-                                                                <option value="DZ">Algeria</option>
-                                                                <option value="AS">American Samoa</option>
-                                                                <option value="AD">Andorra</option>
-                                                                <option value="AO">Angola</option>
-                                                                <option value="AI">Anguilla</option>
-                                                                <option value="AQ">Antarctica</option>
-                                                                <option value="AR">Argentina</option>
-                                                                <option value="AM">Armenia</option>
-                                                                <option value="AW">Aruba</option>
-                                                                <option value="AU">Australia</option>
-                                                                <option value="AT">Austria</option>
-                                                                <option value="AZ">Azerbaijan</option>
-                                                                <option value="BS">Bahamas</option>
-                                                                <option value="BH">Bahrain</option>
-                                                                <option value="BD">Bangladesh</option>
-                                                                <option value="BB">Barbados</option>
-                                                                <option value="BY">Belarus</option>
-                                                                <option value="BE">Belgium</option>
-                                                                <option value="BZ">Belize</option>
-                                                                <option value="BJ">Benin</option>
-                                                                <option value="BM">Bermuda</option>
-                                                                <option value="BT">Bhutan</option>
-                                                                <option value="BO">Bolivia</option>
-                                                                <option value="BW">Botswana</option>
-                                                                <option value="BV">Bouvet Island</option>
-                                                                <option value="BR">Brazil</option>
-                                                                <option value="BN">Brunei Darussalam</option>
-                                                                <option value="BG">Bulgaria</option>
-                                                                <option value="BF">Burkina Faso</option>
-                                                                <option value="BI">Burundi</option>
-                                                                <option value="KH">Cambodia</option>
-                                                                <option value="CM">Cameroon</option>
-                                                                <option value="CA">Canada</option>
-                                                                <option value="CV">Cape Verde</option>
-                                                                <option value="KY">Cayman Islands</option>
-                                                                <option value="CF">Central African Republic</option>
-                                                                <option value="TD">Chad</option>
-                                                                <option value="CL">Chile</option>
-                                                                <option value="CN">China</option>
-                                                                <option value="CX">Christmas Island</option>
-                                                                <option value="CC">Cocos (Keeling) Islands</option>
-                                                                <option value="CO">Colombia</option>
-                                                                <option value="KM">Comoros</option>
-                                                                <option value="CG">Congo</option>
-                                                                <option value="CK">Cook Islands</option>
-                                                                <option value="CR">Costa Rica</option>
-                                                                <option value="CI">Cote d'Ivoire</option>
-                                                                <option value="HR">Croatia (Hrvatska)</option>
-                                                                <option value="CU">Cuba</option>
-                                                                <option value="CY">Cyprus</option>
-                                                                <option value="CZ">Czech Republic</option>
-                                                                <option value="DK">Denmark</option>
-                                                                <option value="DJ">Djibouti</option>
-                                                                <option value="DM">Dominica</option>
-                                                                <option value="DO">Dominican Republic</option>
-                                                                <option value="EC">Ecuador</option>
-                                                                <option value="EG">Egypt</option>
-                                                                <option value="SV">El Salvador</option>
-                                                                <option value="GQ">Equatorial Guinea</option>
-                                                                <option value="ER">Eritrea</option>
-                                                                <option value="EE">Estonia</option>
-                                                                <option value="ET">Ethiopia</option>
-                                                                <option value="FK">Falkland Islands (Malvinas)</option>
-                                                                <option value="FO">Faroe Islands</option>
-                                                                <option value="FJ">Fiji</option>
-                                                                <option value="FI">Finland</option>
-                                                                <option value="FR">France</option>
-                                                                <option value="GF">French Guiana</option>
-                                                                <option value="PF">French Polynesia</option>
-                                                                <option value="GA">Gabon</option>
-                                                                <option value="GM">Gambia</option>
-                                                                <option value="GE">Georgia</option>
-                                                                <option value="DE">Germany</option>
-                                                                <option value="GH">Ghana</option>
-                                                                <option value="GI">Gibraltar</option>
-                                                                <option value="GR">Greece</option>
-                                                                <option value="GL">Greenland</option>
-                                                                <option value="GD">Grenada</option>
-                                                                <option value="GP">Guadeloupe</option>
-                                                                <option value="GU">Guam</option>
-                                                                <option value="GT">Guatemala</option>
-                                                                <option value="GN">Guinea</option>
-                                                                <option value="GW">Guinea-Bissau</option>
-                                                                <option value="GY">Guyana</option>
-                                                                <option value="HT">Haiti</option>
-                                                                <option value="HN">Honduras</option>
-                                                                <option value="HK">Hong Kong</option>
-                                                                <option value="HU">Hungary</option>
-                                                                <option value="IS">Iceland</option>
-                                                                <option value="IN">India</option>
-                                                                <option value="ID">Indonesia</option>
-                                                                <option value="IQ">Iraq</option>
-                                                                <option value="IE">Ireland</option>
-                                                                <option value="IL">Israel</option>
-                                                                <option value="IT">Italy</option>
-                                                                <option value="JM">Jamaica</option>
-                                                                <option value="JP">Japan</option>
-                                                                <option value="JO">Jordan</option>
-                                                                <option value="KZ">Kazakhstan</option>
-                                                                <option value="KE">Kenya</option>
-                                                                <option value="KI">Kiribati</option>
-                                                                <option value="KR">Korea, Republic of</option>
-                                                                <option value="KW">Kuwait</option>
-                                                                <option value="KG">Kyrgyzstan</option>
-                                                                <option value="LV">Latvia</option>
-                                                                <option value="LB">Lebanon</option>
-                                                                <option value="LS">Lesotho</option>
-                                                                <option value="LR">Liberia</option>
-                                                                <option value="LY">Libyan Arab Jamahiriya</option>
-                                                                <option value="LI">Liechtenstein</option>
-                                                                <option value="LT">Lithuania</option>
-                                                                <option value="LU">Luxembourg</option>
-                                                                <option value="MO">Macau</option>
-                                                                <option value="MG">Madagascar</option>
-                                                                <option value="MW">Malawi</option>
-                                                                <option value="MY">Malaysia</option>
-                                                                <option value="MV">Maldives</option>
-                                                                <option value="ML">Mali</option>
-                                                                <option value="MT">Malta</option>
-                                                                <option value="MH">Marshall Islands</option>
-                                                                <option value="MQ">Martinique</option>
-                                                                <option value="MR">Mauritania</option>
-                                                                <option value="MU">Mauritius</option>
-                                                                <option value="YT">Mayotte</option>
-                                                                <option value="MX">Mexico</option>
-                                                                <option value="MD">Moldova, Republic of</option>
-                                                                <option value="MC">Monaco</option>
-                                                                <option value="MN">Mongolia</option>
-                                                                <option value="MS">Montserrat</option>
-                                                                <option value="MA">Morocco</option>
-                                                                <option value="MZ">Mozambique</option>
-                                                                <option value="MM">Myanmar</option>
-                                                                <option value="NA">Namibia</option>
-                                                                <option value="NR">Nauru</option>
-                                                                <option value="NP">Nepal</option>
-                                                                <option value="NL">Netherlands</option>
-                                                                <option value="AN">Netherlands Antilles</option>
-                                                                <option value="NC">New Caledonia</option>
-                                                                <option value="NZ">New Zealand</option>
-                                                                <option value="NI">Nicaragua</option>
-                                                                <option value="NE">Niger</option>
-                                                                <option value="NG">Nigeria</option>
-                                                                <option value="NU">Niue</option>
-                                                                <option value="NF">Norfolk Island</option>
-                                                                <option value="MP">Northern Mariana Islands</option>
-                                                                <option value="NO">Norway</option>
-                                                                <option value="OM">Oman</option>
-                                                                <option value="PW">Palau</option>
-                                                                <option value="PA">Panama</option>
-                                                                <option value="PG">Papua New Guinea</option>
-                                                                <option value="PY">Paraguay</option>
-                                                                <option value="PE">Peru</option>
-                                                                <option value="PH">Philippines</option>
-                                                                <option value="PN">Pitcairn</option>
-                                                                <option value="PL">Poland</option>
-                                                                <option value="PT">Portugal</option>
-                                                                <option value="PR">Puerto Rico</option>
-                                                                <option value="QA">Qatar</option>
-                                                                <option value="RE">Reunion</option>
-                                                                <option value="RO">Romania</option>
-                                                                <option value="RU">Russian Federation</option>
-                                                                <option value="RW">Rwanda</option>
-                                                                <option value="KN">Saint Kitts and Nevis</option>
-                                                                <option value="LC">Saint LUCIA</option>
-                                                                <option value="WS">Samoa</option>
-                                                                <option value="SM">San Marino</option>
-                                                                <option value="ST">Sao Tome and Principe</option>
-                                                                <option value="SA">Saudi Arabia</option>
-                                                                <option value="SN">Senegal</option>
-                                                                <option value="SC">Seychelles</option>
-                                                                <option value="SL">Sierra Leone</option>
-                                                                <option value="SG">Singapore</option>
-                                                                <option value="SK">Slovakia (Slovak Republic)</option>
-                                                                <option value="SI">Slovenia</option>
-                                                                <option value="SB">Solomon Islands</option>
-                                                                <option value="SO">Somalia</option>
-                                                                <option value="ZA">South Africa</option>
-                                                                <option value="ES">Spain</option>
-                                                                <option value="LK">Sri Lanka</option>
-                                                                <option value="SH">St. Helena</option>
-                                                                <option value="PM">St. Pierre and Miquelon</option>
-                                                                <option value="SD">Sudan</option>
-                                                                <option value="SR">Suriname</option>
-                                                                <option value="SZ">Swaziland</option>
-                                                                <option value="SE">Sweden</option>
-                                                                <option value="CH">Switzerland</option>
-                                                                <option value="SY">Syrian Arab Republic</option>
-                                                                <option value="TW">Taiwan, Province of China</option>
-                                                                <option value="TJ">Tajikistan</option>
-                                                                <option value="TZ">Tanzania, United Republic of</option>
-                                                                <option value="TH">Thailand</option>
-                                                                <option value="TG">Togo</option>
-                                                                <option value="TK">Tokelau</option>
-                                                                <option value="TO">Tonga</option>
-                                                                <option value="TT">Trinidad and Tobago</option>
-                                                                <option value="TN">Tunisia</option>
-                                                                <option value="TR">Turkey</option>
-                                                                <option value="TM">Turkmenistan</option>
-                                                                <option value="TC">Turks and Caicos Islands</option>
-                                                                <option value="TV">Tuvalu</option>
-                                                                <option value="UG">Uganda</option>
-                                                                <option value="UA">Ukraine</option>
-                                                                <option value="AE">United Arab Emirates</option>
-                                                                <option value="GB">United Kingdom</option>
-                                                                <option value="US">United States</option>
-                                                                <option value="UY">Uruguay</option>
-                                                                <option value="UZ">Uzbekistan</option>
-                                                                <option value="VU">Vanuatu</option>
-                                                                <option value="VE">Venezuela</option>
-                                                                <option value="VN">Viet Nam</option>
-                                                                <option value="VG">Virgin Islands (British)</option>
-                                                                <option value="VI">Virgin Islands (U.S.)</option>
-                                                                <option value="WF">Wallis and Futuna Islands</option>
-                                                                <option value="EH">Western Sahara</option>
-                                                                <option value="YE">Yemen</option>
-                                                                <option value="ZM">Zambia</option>
-                                                                <option value="ZW">Zimbabwe</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row mb-4">
-                                                        <label class="col-md-2 col-form-label">States</label>
-                                                        <div class="col-md-10">
-                                                            <select class="form-control select2" title="Country">
-                                                                <option value="0">Select States</option>
-                                                                <option value="AL">Alabama</option>
-                                                                <option value="AK">Alaska</option>
-                                                                <option value="AZ">Arizona</option>
-                                                                <option value="AR">Arkansas</option>
-                                                                <option value="CA">California</option>
-                                                                <option value="CO">Colorado</option>
-                                                                <option value="DE">Delaware</option>
-                                                                <option value="Fl"> Florida</option>
-                                                                <option value="GA">Georgia</option>
-                                                                <option value="HI">Hawaii</option>
-                                                                <option value="MT">Montana</option>
-                                                                <option value="NV">Nevada</option>
-                                                                <option value="NM">New Mexico</option>
-                                                                <option value="NY">New York</option>
-                                                                <option value="NC">North Dakota</option>
-                                                                <option value="TX">Texas</option>
-                                                                <option value="VA">Virginia</option>
-                                                                <option value="WI">Wisconsin</option>
-                                                                <option value="WY">Wyoming</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-0">
-                                                        <label for="example-textarea" class="col-md-2 col-form-label">Order Notes:</label>
-                                                        <div class="col-md-10">
-                                                            <textarea class="form-control" id="example-textarea" rows="3" placeholder="Write some note.."></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                {{-- </form> --}}
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="v-pills-payment" role="tabpanel" aria-labelledby="v-pills-payment-tab">
-                                            <div>
-                                                <h4 class="card-title">Payment information</h4>
-                                                <p class="card-title-desc">Fill all information below</p>
-
-                                                <div>
-                                                    <div class="form-check form-check-inline font-size-16">
-                                                        <input class="form-check-input" type="radio" name="paymentoptionsRadio" id="paymentoptionsRadio1" checked>
-                                                        <label class="form-check-label font-size-13" for="paymentoptionsRadio1"><i class="fab fa-cc-mastercard me-1 font-size-20 align-top"></i> Credit / Debit Card</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline font-size-16">
-                                                        <input class="form-check-input" type="radio" name="paymentoptionsRadio" id="paymentoptionsRadio2">
-                                                        <label class="form-check-label font-size-13" for="paymentoptionsRadio2"><i class="fab fa-cc-paypal me-1 font-size-20 align-top"></i> Paypal</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline font-size-16">
-                                                        <input class="form-check-input" type="radio" name="paymentoptionsRadio" id="paymentoptionsRadio3">
-                                                        <label class="form-check-label font-size-13" for="paymentoptionsRadio3"><i class="far fa-money-bill-alt me-1 font-size-20 align-top"></i> Cash on Delivery</label>
-                                                    </div>
-                                                </div>
-
-                                                <h5 class="mt-5 mb-3 font-size-15">For card Payment</h5>
-                                                <div class="p-4 border">
-                                                    {{-- <form> --}}
-                                                        <div class="form-group mb-0">
-                                                            <label for="cardnumberInput">Card Number</label>
-                                                            <input type="text" class="form-control" id="cardnumberInput" placeholder="0000 0000 0000 0000">
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-6">
-                                                                <div class="form-group mt-4 mb-0">
-                                                                    <label for="cardnameInput">Name on card</label>
-                                                                    <input type="text" class="form-control" id="cardnameInput" placeholder="Name on Card">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-3">
-                                                                <div class="form-group mt-4 mb-0">
-                                                                    <label for="expirydateInput">Expiry date</label>
-                                                                    <input type="text" class="form-control" id="expirydateInput" placeholder="MM/YY">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-3">
-                                                                <div class="form-group mt-4 mb-0">
-                                                                    <label for="cvvcodeInput">CVV Code</label>
-                                                                    <input type="text" class="form-control" id="cvvcodeInput" placeholder="Enter CVV Code">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    {{-- </form> --}}
-                                                </div>
-                                                </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="v-pills-confir" role="tabpanel" aria-labelledby="v-pills-confir-tab">
-                                            <div class="card shadow-none border mb-0">
-                                                <div class="card-body">
-                                                    <h4 class="card-title mb-4">Order Summary</h4>
-
-                                                    <div class="table-responsive">
-                                                        <table class="table align-middle mb-0 table-nowrap">
-                                                            <thead class="table-light">
-                                                            <tr>
-                                                                <th scope="col">Product</th>
-                                                                <th scope="col">Product Desc</th>
-                                                                <th scope="col">Price</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr>
-                                                                <th scope="row"><img src="assets/images/product/img-1.png" alt="product-img" title="product-img" class="avatar-md"></th>
-                                                                <td>
-                                                                    <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-dark">Half sleeve T-shirt  (64GB) </a></h5>
-                                                                    <p class="text-muted mb-0">$ 450 x 1</p>
-                                                                </td>
-                                                                <td>$ 450</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="row"><img src="assets/images/product/img-7.png" alt="product-img" title="product-img" class="avatar-md"></th>
-                                                                <td>
-                                                                    <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-dark">Wireless Headphone </a></h5>
-                                                                    <p class="text-muted mb-0">$ 225 x 1</p>
-                                                                </td>
-                                                                <td>$ 225</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="2">
-                                                                    <h6 class="m-0 text-end">Sub Total:</h6>
-                                                                </td>
-                                                                <td>
-                                                                    $ 675
-                                                                </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="3">
-                                                                        <div class="bg-primary-subtle p-3 rounded">
-                                                                            <h5 class="font-size-14 text-primary mb-0"><i class="fas fa-shipping-fast me-2"></i> Shipping <span class="float-end">Free</span></h5>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="2">
-                                                                        <h6 class="m-0 text-end">Total:</h6>
-                                                                    </td>
-                                                                    <td>
-                                                                        $ 675
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-
-                                                    </div>
-                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
                                             </div>
                                         </div>
                                     </div>
@@ -989,29 +705,156 @@
     </div>
 @endsection
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     const showAllButton = document.getElementById('showAllServices');
-    //     const allServices = document.querySelectorAll('.form-check-inline');
-
-    //     showAllButton.addEventListener('click', function() {
-    //         allServices.forEach(service => {
-    //             service.style.display = 'block';
-    //         });
-    //         showAllButton.style.display = 'none'; // Optionally hide the button after showing all services
-    //     });
-    // });
-
     document.addEventListener('DOMContentLoaded', function() {
         const showAllButton = document.getElementById('showAllServices');
-        const allServices = document.querySelectorAll('.form-check-inline');
 
         showAllButton.addEventListener('click', function() {
-            allServices.forEach(service => {
-                service.classList.remove('d-none');
+            // Toggle visibility of hidden services
+            const hiddenServices = document.querySelectorAll('.hidden-services');
+            hiddenServices.forEach(function(service) {
+                service.classList.toggle('d-none');
             });
-            showAllButton.style.display = 'none'; // Optionally hide the button after showing all services
+
+            // Toggle button text and class
+            if (showAllButton.classList.contains('show-more')) {
+                showAllButton.innerHTML = '<i class="bx bx-hide"></i> Show Less';
+                showAllButton.classList.remove('show-more');
+                showAllButton.classList.add('show-less');
+            } else {
+                showAllButton.innerHTML = '<i class="bx bx-show"></i> Show More';
+                showAllButton.classList.remove('show-less');
+                showAllButton.classList.add('show-more');
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Function to handle file selection and preview
+        $('#uploadImage').on('change', function(e) {
+            var files = e.target.files; // Get the files from input
+            var imagesBody = $('#imagesBody'); // Get the div where preview will be displayed
+
+            // Loop through the files
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader(); // Create a new FileReader
+
+                // Closure to capture the file information
+                reader.onload = (function(theFile) {
+                    return function(e) {
+                        var fileType = theFile.type.split('/')[0]; // Get file type (image, pdf, etc.)
+                        var previewContent;
+
+                        // Check file type to decide on preview content
+                        if (fileType === 'image') {
+                            previewContent = '<img class="thumb" src="' + e.target.result + '" title="' + escape(theFile.name) + '">';
+                        } else if (fileType === 'video') {
+                            imagePath = '{{ asset("images/video.png") }}';
+                            previewContent = '<img class="thumb" src="' + imagePath + '" title="' + escape(theFile.name) + '">';
+                        }else {
+                            imagePath = '{{ asset("images/file.png") }}';
+                            previewContent = '<img class="thumb" src="' + imagePath + '" title="' + escape(theFile.name) + '">';
+
+                        }
+
+                        // Create a new image or file preview element
+                        var imgElement = $('<div class="preview-image"> \
+                                            ' + previewContent + ' \
+                                            <span class="delete-image" data-name="' + theFile.name + '"><i class="fa fa-trash text-danger"></i></span> \
+                                        </div>');
+
+                        // Append the image or file preview element to the imagesBody
+                        imagesBody.append(imgElement);
+                    };
+                })(file);
+
+                // Read in the image file as a data URL
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Function to handle deletion of images
+        $('#imagesBody').on('click', '.delete-image', function() {
+            var imageName = $(this).data('name'); // Get the file name from data attribute
+            $(this).parent().remove(); // Remove the parent element (the whole preview div)
+
+            // If you need to do something else with the deleted file (like removing from server),
+            // you would typically make an AJAX call here.
         });
     });
 </script>
+
+<style>
+    .switch {position: relative;display: inline-block;width: 60px;height: 34px;}
+    .switch input {opacity: 0;width: 0;height: 0;}
+    .slider {position: absolute;cursor: pointer;top: 0;left: 0;right: 0;bottom: 0;background-color: #ccc;-webkit-transition: .4s;transition: .4s;}
+    .slider:before {position: absolute;content: "";height: 26px;width: 26px;left: 4px;bottom: 4px;background-color: white;-webkit-transition: .4s;transition: .4s;}
+    input:checked + .slider {background-color: #84ba3f;}
+    input:focus + .slider {box-shadow: 0 0 1px #84ba3f;}
+    input:checked + .slider:before {-webkit-transform: translateX(26px);-ms-transform: translateX(26px);transform: translateX(26px);}
+    .slider.round {border-radius: 34px;}
+    .slider.round:before {border-radius: 50%;}
+    .custom-file-upload {
+        border: 2px dashed #ccc;
+        border-radius: 5px;
+        display: inline-block;
+        padding: 20px 200px;
+        cursor: pointer;
+        text-align: center;
+        width: 100%;
+        font-size: 20px;
+        transition: border 0.3s ease;
+    }
+
+    .custom-file-upload:hover {
+        border-color: #aaa;
+    }
+
+    .custom-file-upload input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload span {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .custom-file-upload i {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+
+
+
+
+
+
+    .preview-image {
+        display: inline-block;
+        position: relative;
+        margin: 10px;
+    }
+
+    .preview-image img {
+        width: 100px; /* Adjust as per your requirement */
+        height: 100px; /* Adjust as per your requirement */
+        object-fit: cover;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .delete-image {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        padding: 2px;
+        cursor: pointer;
+    }
+</style>

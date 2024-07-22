@@ -306,11 +306,14 @@
                                                 <h4 class="card-title mt-5">Services</h4>
                                                 <p class="card-title-desc">Please select your required services carefully</p>
                                                 <div class="mb-5">
-                                                    @foreach ($data->services->where('prioritized', 1) as $service)
+                                                    @foreach ($data->services->where('status', 1) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
                                                             <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
-                                                                <h5>{{ $service->name }}</h5>
+                                                                <h5>
+                                                                    {{ $service->name }}
+                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' €</b></span>' : '' !!}
+                                                                </h5>
                                                             </label>
                                                         </div>
                                                     @endforeach
@@ -319,11 +322,14 @@
                                                         <h3 type="button" id="showAllServices" class="btn btn-primary show-more"><i class="bx bx-show"></i> Show More</button>
                                                     </div>
 
-                                                    @foreach ($data->services->where('prioritized', 2) as $service)
+                                                    @foreach ($data->services->where('status', 2) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16 hidden-services d-none">
                                                             <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
-                                                                <h5>{{ $service->name }}</h5>
+                                                                <h5>
+                                                                    {{ $service->name }}
+                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' €</b></span>' : '' !!}
+                                                                </h5>
                                                             </label>
                                                         </div>
                                                     @endforeach
@@ -345,29 +351,14 @@
                                                     <br>
                                                     <div>
 
-                                                    @foreach($data->serviceLocations as $serviceLocation)
-                                                        <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" id="location_{{ $serviceLocation->id }}" name="services_location" value="{{ $serviceLocation->id }}" {{ $loop->first ? 'checked' : '' }}>
-                                                            {{--  onchange="showFieldsConfiguration({{ $serviceLocation->id }})" --}}
-                                                            <label class="form-check-label" for="location_{{ $serviceLocation->id }}">
-                                                                <h5>{{ $serviceLocation->title }}</h5>
-                                                            </label>
-                                                        </div>
-                                                    @endforeach
-
-                                                    {{-- <h3>Here is:</h3> --}}
-                                                    <div id="fields-container">
-                                                        <!-- Placeholder for input fields, initially empty -->
-                                                    </div>
-
-                                                    {{-- @foreach (getService('location') as $key => $location)
+                                                    @foreach (getService('location') as $key => $location)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
                                                             <input class="form-check-input" type="radio" name="services_location" value="{{++$key}}" name="services_location" id="loc-{{$key}}" {{ $key == 1 ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="loc-{{$key}}">
                                                                 <h5>{{ $location }}</h5>
                                                             </label>
                                                         </div>
-                                                    @endforeach --}}
+                                                    @endforeach
 
                                                         {{-- <div class="mb-2 form-check form-check-inline font-size-16">
                                                             <input class="form-check-input" type="radio" name="services_location" value="1" name="services_location" id="location1" chnecked>
@@ -444,19 +435,14 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-lg-4">
+                                                                <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="city">City</label>
                                                                         <input type="text" class="form-control" id="city" name="city" placeholder="Enter city">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-lg-4">
-                                                                    <div class="mb-3">
-                                                                        <label for="post_code">Post Code</label>
-                                                                        <input type="text" class="form-control" id="post_code" name="post_code" placeholder="Enter Post Code">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-4">
+
+                                                                <div class="col-lg-6">
                                                                     <div class="mb-3">
                                                                         <label for="company">Company</label>
                                                                         <input type="text" class="form-control" id="company" name="company" placeholder="Enter company">
@@ -472,12 +458,125 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        {{-- <div class="tab-pane" id="office-1" role="tabpanel">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="first_name_office">First Name</label>
+                                                                        <input type="text" class="form-control" id="first_name_office" name="first_name_office" placeholder="Enter first name">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="last_name_office">Last Name</label>
+                                                                        <input type="text" class="form-control" id="last_name_office" name="last_name_office" placeholder="Enter last name">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="phone_office">Phone Number</label>
+                                                                        <input type="text" class="form-control" id="phone_office" name="phone_office" placeholder="Enter phone number">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="email_office">Email</label>
+                                                                        <input type="email" class="form-control" id="email_office" name="email_office" placeholder="Enter email">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="city_office">City</label>
+                                                                        <input type="text" class="form-control" id="city_office" name="city_office" placeholder="Enter city">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="company_office">Company</label>
+                                                                        <input type="text" class="form-control" id="company_office" name="company_office" placeholder="Enter company">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="address_office">Address</label>
+                                                                        <input type="text" class="form-control" id="address_office" name="address_office" placeholder="Enter address">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="engineer-1" role="tabpanel">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="first_name_engineer">First Name</label>
+                                                                        <input type="text" class="form-control" id="first_name_engineer" name="first_name_engineer" placeholder="Enter first name">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="last_name_engineer">Last Name</label>
+                                                                        <input type="text" class="form-control" id="last_name_engineer" name="last_name_engineer" placeholder="Enter last name">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="phone_engineer">Phone Number</label>
+                                                                        <input type="text" class="form-control" id="phone_engineer" name="phone_engineer" placeholder="Enter phone number">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="email_engineer">Email</label>
+                                                                        <input type="email" class="form-control" id="email_engineer" name="email_engineer" placeholder="Enter email">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="city_engineer">City</label>
+                                                                        <input type="text" class="form-control" id="city_engineer" name="city_engineer" placeholder="Enter city">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="company_engineer">Company</label>
+                                                                        <input type="text" class="form-control" id="company_engineer" name="company_engineer" placeholder="Enter company">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <div class="mb-3">
+                                                                        <label for="address_engineer">Address</label>
+                                                                        <textarea class="form-control" id="address" name="address_engineer" placeholder="Enter address"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div> --}}
                                                     </div>
 
                                                 {{-- </form> --}}
                                             </div>
-                                        </div>
 
+                                            <div class="d-grid gap-2">
+                                                <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
+                                            </div>
+                                        </div>
                                         <div class="tab-pane fade" id="v-confirmation" role="tabpanel" aria-labelledby="v-confirmation-tab">
                                             <div>
 
@@ -494,30 +593,30 @@
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
                                                         <div class="row">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="is_terms">
-                                                                <label class="form-check-label" for="battery">
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_term" id="read_service_term">
+                                                                <label class="form-check-label" for="read_service_term">
                                                                     <h5>I read and agree with terms of service</h5>
                                                                 </label>
                                                             </div>
 
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="is_service">
-                                                                <label class="form-check-label" for="battery">
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_pricing" id="read_service_pricing">
+                                                                <label class="form-check-label" for="read_service_pricing">
                                                                     <h5>I read and agree with service pricing</h5>
                                                                 </label>
                                                             </div>
 
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="is_newsletter">
-                                                                <label class="form-check-label" for="battery">
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="receive_newsletter" id="receive_newsletter">
+                                                                <label class="form-check-label" for="receive_newsletter">
                                                                     <h5>I agree to receive newsletter</h5>
                                                                 </label>
                                                             </div>
 
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="is_gdr">
-                                                                <label class="form-check-label" for="battery">
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="read_gdr" id="read_gdr">
+                                                                <label class="form-check-label" for="read_gdr">
                                                                     <h5>I read with GDR</h5>
                                                                 </label>
                                                             </div>
@@ -702,8 +801,6 @@
     }
 
 </script>
-
-
 
 <style>
     .switch {position: relative;display: inline-block;width: 60px;height: 34px;}

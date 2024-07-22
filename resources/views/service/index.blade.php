@@ -45,11 +45,13 @@
                                             <tr>
                                                 <th class="text-center">#</th>
                                                 <th>Name</th>
+                                                <th>Sort Order</th>
                                                 <th>Price</th>
                                                 <th>Tax</th>
                                                 <th>Time</th>
                                                 <th>Parent</th>
-                                                <th>Prioritized</th>
+                                                <th>Show Price</th>
+                                                {{-- <th>Prioritized</th> --}}
                                                 <th>Status</th>
                                                 <th class="text-center">Options</th>
                                             </tr>
@@ -59,12 +61,14 @@
                                                 <tr>
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $product->name }}</td>
+                                                    <td>{{ $product->sort_order }}</td>
                                                     <td>{{ $product->price }}</td>
                                                     <td>{{ $product->tax }}</td>
                                                     <td>{{ $product->time }}</td>
                                                     <td>{{ $product->service->name ?? '' }}</td>
-                                                    <td>{!! getGenStatus('bool', $product->prioritized, 'badge') !!}</td>
-                                                    <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td>
+                                                    <td>{!! getGenStatus('bool', $product->show_price, 'badge') !!}</td>
+                                                    {{-- <td>{!! getGenStatus('bool', $product->prioritized, 'badge') !!}</td> --}}
+                                                    <td>{!! getGenStatus('service', $product->status, 'badge') !!}</td>
                                                     <td class="text-center"> <a href="{{ route('service.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>
                                             @endforeach

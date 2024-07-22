@@ -33,20 +33,24 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'status' => 'required',
             'name' => 'required|max:200',
             'price' => 'required',
             'tax' => 'required',
             'time' => 'required',
+            'show_price' => 'required'
         ]);
 
         $data = [
             'status' => $request->status ?? 1,
             'service_id' => $request->service_id ?? null,
+            'sort_order' => $request->sort_order ?? null,
             'name' => $request->name,
             'price' => $request->price,
             'tax' => $request->tax,
             'time' => $request->time,
-            'prioritized' => $request->prioritized ?? 2,
+            'show_price' => $request->show_price,
+            // 'prioritized' => $request->prioritized ?? 2,
             'detail' => $request->detail,
         ];
 
@@ -96,11 +100,12 @@ class ServiceController extends Controller
         $data = [
             'status' => $request->status ?? 1,
             'service_id' => $request->service_id ?? null,
+            'sort_order' => $request->sort_order ?? null,
             'name' => $request->name,
             'price' => $request->price,
             'tax' => $request->tax,
             'time' => $request->time,
-            'prioritized' => $request->prioritized ?? 2,
+            'show_price' => $request->show_price,
             'detail' => $request->detail,
         ];
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('item_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('service_id')->nullable()->constrained()->onDelete('cascade');
             $table->boolean('status')->default(1);
+			$table->integer('sort_order')->nullable();
             $table->string('name');
             $table->decimal('price', 15, 2)->nullable();
             $table->decimal('tax', 5, 2)->nullable();

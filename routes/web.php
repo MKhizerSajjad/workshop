@@ -47,7 +47,20 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vpn', VpnController::class)->names('vpn');
     Route::resource('suggestion', SuggestionController::class)->names('suggestion');
     Route::resource('notification', NotificationController::class)->names('notification');
-    Route::resource('case', TaskController::class)->names('case')->middleware('access.level:1,2,3');
+    // Route::get('case', [TaskController::class, 'create'])->name('case.create');
+    // ->except(['create'])
+
+    Route::prefix('case')->group(function () {
+        Route::get('/', [TaskController::class, 'index'])->name('case.index');
+        Route::get('create', [TaskController::class, 'create'])->name('case.create');
+        Route::post('/store', [TaskController::class, 'store'])->name('case.store');
+        Route::get('{task}', [TaskController::class, 'show'])->name('case.show');
+        Route::get('{task}/edit', [TaskController::class, 'edit'])->name('case.edit');
+        Route::put('{task}/update', [TaskController::class, 'update'])->name('case.update');
+        Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('case.destroy');
+    });
+
+    // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');
     Route::resource('item', ItemController::class)->names('item')->middleware('access.level:1,2,3');
     Route::resource('product', ProductController::class)->names('product')->middleware('access.level:1,2,3');
     Route::resource('service', ServiceController::class)->names('service')->middleware('access.level:1,2,3');

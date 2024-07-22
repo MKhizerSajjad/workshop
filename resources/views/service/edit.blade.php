@@ -42,7 +42,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="mb-3">
                                             <label for="time">Parent Service <span class="text text-danger"> (if any)</span></label>
                                             <select id="service_id" name="service_id" class="select2 form-control">
@@ -54,15 +54,10 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="time">Prioritized <span class="text text-danger"> *</span></label>
-                                            <select id="prioritized" name="prioritized" class="select2 form-control">
-                                                <option value="">Select Priority </option>
-                                                @foreach (getGenStatus('bool') as $key => $priority)
-                                                    <option value="{{ ++$key }}" @if($key == $service->prioritized) selected @endif>{{ $priority }}</option>
-                                                @endforeach
-                                            </select>
+                                            <label for="sort_order">Sort Order </label>
+                                            <input id="sort_order" name="sort_order" type="number" class="form-control" placeholder="Sort Order" value="{{ $service->sort_order }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -70,6 +65,38 @@
                                             <label for="time">Time <span class="text text-danger"> *</span></label>
                                             <input id="time" name="time" type="text" class="form-control @error('time') is-invalid @enderror" placeholder="Time" value="{{ $service->time }}">
                                             @error('time')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label for="status">Status <span class="text text-danger"> *</span></label>
+                                            <select id="service_status" name="status" class="select2 form-control @error('status') is-invalid @enderror">
+                                                <option value="">Select Status </option>
+                                                @foreach (getGenStatus('service') as $key => $price)
+                                                    <option value="{{ ++$key }}" @if($key == $service->status) selected @endif>{{ $price }}</option>
+                                                @endforeach
+                                                @error('status')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label for="time">Show Price <span class="text text-danger"> *</span></label>
+                                            <select id="show_price" name="show_price" class="select2 form-control @error('show_price') is-invalid @enderror">
+                                                <option value="">Select Show Price </option>
+                                                @foreach (getGenStatus('bool') as $key => $price)
+                                                    <option value="{{ ++$key }}" @if($key == $service->show_price) selected @endif>{{ $price }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('show_price')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>

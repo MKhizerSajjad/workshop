@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\Part;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Service;
 use App\Models\Priority;
 use App\Models\Customer;
@@ -23,7 +24,7 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Task::with('technician')->orderBy('code')->paginate(10);
+        $data = Task::with('technician')->orderByDesc('code')->paginate(10);
 
         return view('case.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 10);
@@ -39,7 +40,7 @@ class TaskController extends Controller
         $data = json_decode('{}');
         $data->items = Item::where('status', 1)->orderBy('name')->get();
         $data->parts = Part::where('status', 1)->orderBy('name')->get();
-        $data->services = Service::where('status', 1)->orderBy('name')->get();
+        $data->services = Service::orderBy('name')->get(); // where('status', '!=', 3)->
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         return view('case.create', compact('data'));
@@ -94,13 +95,23 @@ class TaskController extends Controller
             $customer
         );
 
+        // Extract confirmation checkboxes
+        $checkboxes = [
+            'read_service_term' => isset($request['read_service_term']),
+            'read_service_pricing' => isset($request['read_service_pricing']),
+            'receive_newsletter' => isset($request['receive_newsletter']),
+            'read_gdr' => isset($request['read_gdr']),
+        ];
+        // Convert to JSON array
+        $confirmation = json_encode($checkboxes);
+
         $invoce = $this->generateInvoiceCode();
         $data = [
             'code' => $invoce,
             'date_opened' => now(),
             'customer_id' => $customerAdd->id ?? null,
             'user_id' => auth()->check() ? auth()->id() : null,
-            'details' => 0, // Assuming this is correct based on your original code
+            'details' => $confirmation,
             'item_id' => $request->input('item'),
             'manufacturer' => $request->input('manufacturer'),
             'model' => $request->input('model'),
@@ -160,7 +171,7 @@ class TaskController extends Controller
 
         if(isset($request->parts)) {
             foreach ($request->input('parts') as $part_id) {
-                taskLeavePart::create([
+                TaskLeavePart::create([
                     'task_id' => $task->id,
                     'part_id' => $part_id,
                 ]);
@@ -246,26 +257,149 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-        dd('case details');
+        $data['task'] = $task;
+        return view('case.show', compact('data'));
     }
 
     public function edit(Task $task)
     {
-        dd($task->id);
-        $task = Task::where('id', $task->id)->first();
-        // dd($task);
+        // dd(asset('storage/task/media/test.png'));
         $data = json_decode('{}');
+        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts')->first();
+        $data->confirmations = json_decode($task->details, true);
         $data->items = Item::where('status', 1)->orderBy('name')->get();
         $data->parts = Part::where('status', 1)->orderBy('name')->get();
-        $data->services = Service::where('status', 1)->orderBy('name')->get();
+        $data->services = Service::orderBy('name')->get(); // where('status', 1)->
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
-        dd($task);
-        return view('case.edit',compact('task', 'data'));
+        $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
+
+        return view('case.edit',compact('data'));
     }
 
     public function update(Request $request, Task $task)
     {
-        //
+        $this->validate($request, [
+            'item' => 'required',
+            'manufacturer' => 'required',
+            'model' => 'required',
+            'year' => 'required',
+            'color' => 'required',
+            'additional_info' => 'nullable',
+            'problem_description' => 'nullable',
+            // 'description' => 'required',
+            'priority' => 'required',
+            'service.*' => 'required',
+            'parts.*' => 'required',
+            // 'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
+
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required',
+            'city' => 'required',
+            'company' => 'required',
+            'address' => 'required',
+        ]);
+
+        $phone = $request->input('phone');
+        $customer = [
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+            'city' => $request->input('city'),
+            'company' => $request->input('company'),
+            'address' => $request->input('address'),
+        ];
+
+        $customerAdd = Customer::updateOrCreate(
+            ['phone' => $phone], //
+            $customer
+        );
+
+        // Extract confirmation checkboxes
+        $checkboxes = [
+            'read_service_term' => isset($request['read_service_term']),
+            'read_service_pricing' => isset($request['read_service_pricing']),
+            'receive_newsletter' => isset($request['receive_newsletter']),
+            'read_gdr' => isset($request['read_gdr']),
+        ];
+        // Convert to JSON array
+        $confirmation = json_encode($checkboxes);
+
+        $data = [
+            'customer_id' => $customerAdd->id ?? null,
+            'details' => $confirmation,
+            'item_id' => $request->input('item'),
+            'technician_id' => $request->input('technician_id'),
+            'manufacturer' => $request->input('manufacturer'),
+            'model' => $request->input('model'),
+            'year' => $request->input('year'),
+            'color' => $request->input('color'),
+            'additional_info' => $request->input('additional_info'),
+            'problem_description' => $request->input('description'),
+            'priority_id' => $request->input('priority'),
+            'inspection_diagnose' => $request->input('inspection'),
+            'services_location' => $request->input('services_location'),
+        ];
+
+        $taskId = $task->id;
+        $task = Task::updateOrCreate(['id' => $taskId], $data);
+
+        // if ($request->hasFile('files')) {
+
+        //     $index = 0; // Initialize the index variable
+        //     foreach ($request->file('files') as $file) {
+        //         try {
+
+        //             // $path = $file->store('task/images', 'public'); // 'images' is a folder inside 'public' disk
+        //             // $url = asset('storage/' . $path);
+
+        //             $filenameWithExt = $file->getClientOriginalName();
+        //             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        //             $extension = $file->getClientOriginalExtension();
+        //             $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
+        //             $path = $file->store('task/media', 'public'); // 'images' is a folder inside 'public' disk
+        //             // $url = asset('storage/' . $path);
+        //             // $file->storeAs('public/media', $fileNameToStore);
+
+        //             $data = [
+        //                 'task_id' => $task->id,
+        //                 'type' => getFileTypeFromExtension($extension),
+        //                 'media' => $fileNameToStore,
+        //             ];
+        //             $media = TaskMedia::create($data);
+
+        //             logger('File saved successfully: ' . $fileNameToStore);
+        //             $index++;
+
+        //         } catch (\Exception $e) {
+        //             logger('Error saving file: ' . $e->getMessage());
+
+        //         }
+        //     }
+        // }
+
+        $task->services()->sync($request->input('services', []));
+        $task->leaveParts()->sync($request->input('parts', []));
+
+        // if(isset($request->services)) {
+        //     foreach ($request->input('services') as $service_id) {
+        //         TaskService::create([
+        //             'task_id' => $task->id,
+        //             'service_id' => $service_id,
+        //         ]);
+        //     }
+        // }
+
+        // if(isset($request->parts)) {
+        //     foreach ($request->input('parts') as $part_id) {
+        //         TaskLeavePart::create([
+        //             'task_id' => $task->id,
+        //             'part_id' => $part_id,
+        //         ]);
+        //     }
+        // }
+
+        return redirect()->route('case.index')->with('success','Record update successfully');
     }
 
     public function destroy(Task $task)

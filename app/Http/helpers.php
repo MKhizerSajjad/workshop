@@ -20,6 +20,11 @@ function getGenStatus($prefix, $status = null, $type = null)
             '1' => ['Active', '<span class="badge bg-primary">Active</span>'],
             '2' => ['Inactive', '<span class="badge bg-warning">Inactive</span>']
         ],
+        'service'=> [
+            '1' => ['Prioritized', '<span class="badge bg-success">Prioritized</span>'],
+            '2' => ['Active', '<span class="badge bg-primary">Active</span>'],
+            '3' => ['Inactive', '<span class="badge bg-warning">Inactive</span>'],
+        ],
         'bool'=> [
             '1' => ['Yes', '<span class="badge bg-primary">Yes</span>'],
             '2' => ['No', '<span class="badge bg-warning">No</span>']
