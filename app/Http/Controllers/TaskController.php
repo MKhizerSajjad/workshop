@@ -13,6 +13,7 @@ use App\Models\Part;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Service;
+use App\Models\Product;
 use App\Models\Priority;
 use App\Models\Customer;
 use App\Models\TaskMedia;
@@ -48,7 +49,11 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $serviceLocationID = $request->input('services_location');
+        $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
+        $fieldsArray = json_decode($serviceLocationFields);
+
+        $additionalRules = [
             'item' => 'required',
             'manufacturer' => 'required',
             'model' => 'required',
@@ -61,34 +66,24 @@ class TaskController extends Controller
             'service.*' => 'required',
             'parts.*' => 'required',
             // 'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
-
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'city' => 'required',
-            'company' => 'required',
-            'address' => 'required',
-        ]);
-
-        $phone = $request->input('phone');
-        $customer = [
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'city' => $request->input('city'),
-            'company' => $request->input('company'),
-            'address' => $request->input('address'),
         ];
 
-        // $customer = [
-        //     'first_name' => $request->input('first_name_office'),
-        //     'last_name' => $request->input('last_name_office'),
-        //     'phone' => $request->input('phone_office'),
-        //     'email' => $request->input('email_office'),
-        //     'city' => $request->input('city_office'),
-        //     'company' => $request->input('company_office'),
-        //     'address' => $request->input('address_office'),
-        // ];
+        // Merge dynamic field validation with additional rules
+        $rules = [];
+        foreach ($fieldsArray as $field) {
+            $fieldName = $serviceLocationID . '-' . $field->name;
+            $rules[$fieldName] = 'required';
+        }
+        $rules = array_merge($additionalRules, $rules);
+
+        // Validate the request with merged rules
+        $this->validate($request, $rules);
+
+        $phone = $request->input('phone');
+        $customer = [];
+        foreach ($fieldsArray as $field) {
+            $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
+        }
 
         $customerAdd = Customer::updateOrCreate(
             ['phone' => $phone], //
@@ -269,12 +264,14 @@ class TaskController extends Controller
     {
         // dd(asset('storage/task/media/test.png'));
         $data = json_decode('{}');
-        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts')->first();
+        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts')->first();
         $data->confirmations = json_decode($task->details, true);
         $data->items = Item::where('status', 1)->orderBy('name')->get();
         $data->parts = Part::where('status', 1)->orderBy('name')->get();
         $data->services = Service::orderBy('name')->get(); // where('status', 1)->
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
+        $data->products = Product::where('status', 1)->orderBy('name')->get();
+        $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
 
         return view('case.edit',compact('data'));
@@ -282,7 +279,11 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        $this->validate($request, [
+        $serviceLocationID = $request->input('services_location');
+        $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
+        $fieldsArray = json_decode($serviceLocationFields);
+
+        $additionalRules = [
             'item' => 'required',
             'manufacturer' => 'required',
             'model' => 'required',
@@ -295,24 +296,24 @@ class TaskController extends Controller
             'service.*' => 'required',
             'parts.*' => 'required',
             // 'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
+        ];
 
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'city' => 'required',
-            'company' => 'required',
-            'address' => 'required',
-        ]);
+        // Merge dynamic field validation with additional rules
+        $rules = [];
+        foreach ($fieldsArray as $field) {
+            $fieldName = $serviceLocationID . '-' . $field->name;
+            $rules[$fieldName] = 'required';
+        }
+        $rules = array_merge($additionalRules, $rules);
+
+        // Validate the request with merged rules
+        $this->validate($request, $rules);
 
         $phone = $request->input('phone');
-        $customer = [
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'city' => $request->input('city'),
-            'company' => $request->input('company'),
-            'address' => $request->input('address'),
-        ];
+        $customer = [];
+        foreach ($fieldsArray as $field) {
+            $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
+        }
 
         $customerAdd = Customer::updateOrCreate(
             ['phone' => $phone], //
@@ -384,6 +385,7 @@ class TaskController extends Controller
 
         $task->services()->sync($request->input('services', []));
         $task->leaveParts()->sync($request->input('parts', []));
+        $task->products()->sync($request->input('products', []));
 
         // if(isset($request->services)) {
         //     foreach ($request->input('services') as $service_id) {

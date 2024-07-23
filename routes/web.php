@@ -38,7 +38,7 @@ Auth::routes();
 Route::get('/booking0', [TaskController::class, 'create0'])->name('bookingCreate0');
 Route::get('/booking', [TaskController::class, 'create'])->name('bookingCreate');
 Route::post('/save-booking', [TaskController::class, 'store'])->name('bookingSave');
-
+// Route::get('service-location/{locationId}/fields', [SerivceLocationController::class, 'locationDetail']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
@@ -69,7 +69,17 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('manager', ManagerController::class)->names('manager')->middleware('access.level:1');
     Route::resource('technician', TechnicianController::class)->names('technician')->middleware('access.level:1,2');
     Route::resource('customer', CustomerController::class)->names('customer')->middleware('access.level:1,2,3');
+    // Route::resource('service-location', SerivceLocationController::class)->names('service-location')->middleware('access.level:1,2,3');
 
-    Route::get('service-location/{locationId}', [SerivceLocationController::class, 'locationDetail']);
+    Route::prefix('service-location')->group(function () {
+        Route::get('/', [SerivceLocationController::class, 'index'])->name('service-location.index');
+        Route::get('create', [SerivceLocationController::class, 'create'])->name('service-location.create');
+        Route::post('/store', [SerivceLocationController::class, 'store'])->name('service-location.store');
+        Route::get('{id}', [SerivceLocationController::class, 'show'])->name('service-location.show');
+        Route::get('{id}/edit', [SerivceLocationController::class, 'edit'])->name('service-location.edit');
+        Route::put('{id}/update', [SerivceLocationController::class, 'update'])->name('service-location.update');
+        Route::delete('{id}/delete', [SerivceLocationController::class, 'destroy'])->name('service-location.destroy');
+    });
+
 
 });

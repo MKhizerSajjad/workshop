@@ -7,60 +7,127 @@ use Illuminate\Http\Request;
 
 class SerivceLocationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        //
+        $data = SerivceLocation::orderBy('title')->paginate(10);
+
+        return view('service_location.index',compact('data'))
+            ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('service_location.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|max:200',
+            'status' => 'required',
+            'fields.*.type' => 'required|string',
+            'name' => 'required|array',
+            'name.*' => 'required|string',
+            'type' => 'required|array',
+            'type.*' => 'required|string',
+            'place_holder' => 'required|array',
+            'place_holder.*' => 'required|string',
+        ]);
+
+        $generatedFields = [];
+
+        for ($i = 0; $i < count($request->type); $i++) {
+            $title = ucwords(str_replace('_', ' ', $request->name[$i]));
+            $type = $request->type[$i];
+            $place_holder = isset($request->place_holder[$i]) ? $request->place_holder[$i] : 'Enter ' . $title;
+
+            $generatedFields[] = [
+                'name' => $request->name[$i],
+                'title' => $title,
+                'type' => $type,
+                'place_holder' => $place_holder,
+            ];
+        }
+
+        $data = [
+            'status' => $request->status ?? 1,
+            'title' => $request->title,
+            'detail' => $request->detail,
+            'fields' => json_encode($generatedFields)
+        ];
+
+        SerivceLocation::create($data);
+
+        return redirect()->route('service-location.index')->with('success','Record created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(SerivceLocation $serivceLocation)
     {
-        //
+        if (!empty($serivceLocation)) {
+
+            $data = [
+                'location' => $serivceLocation
+            ];
+            // return view('service_location.show', $data);
+
+        } else {
+            return redirect()->route('service-location.index');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(SerivceLocation $serivceLocation)
     {
-        //
+        $serivceLocation = SerivceLocation::where('id', 1)->first();
+        // dd($serivceLocation);
+        return view('service_location.edit', compact('serivceLocation'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, SerivceLocation $serivceLocation)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|max:200',
+            'status' => 'required',
+            'fields.*.type' => 'required|string',
+            'name' => 'required|array',
+            'name.*' => 'required|string',
+            'type' => 'required|array',
+            'type.*' => 'required|string',
+            'place_holder' => 'required|array',
+            'place_holder.*' => 'required|string',
+        ]);
+
+        $generatedFields = [];
+
+        for ($i = 0; $i < count($request->type); $i++) {
+            $title = ucwords(str_replace('_', ' ', $request->name[$i]));
+            $type = $request->type[$i];
+            $place_holder = isset($request->place_holder[$i]) ? $request->place_holder[$i] : 'Enter ' . $title;
+
+            $generatedFields[] = [
+                'name' => $request->name[$i],
+                'title' => $title,
+                'type' => $type,
+                'place_holder' => $place_holder,
+            ];
+        }
+
+        $data = [
+            'status' => $request->status ?? 1,
+            'title' => $request->title,
+            'detail' => $request->detail,
+            'fields' => json_encode($generatedFields)
+        ];
+
+        SerivceLocation::find($serivceLocation->id)->update($data);
+
+        return redirect()->route('service-location.index')->with('success','Updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(SerivceLocation $serivceLocation)
     {
-        //
+        SerivceLocation::find($serivceLocation->id)->delete();
+        return redirect()->route('service-location.index')->with('success', 'Deleted successfully');
     }
 
     public function locationDetail($locationId)

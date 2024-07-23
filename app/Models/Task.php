@@ -45,4 +45,14 @@ class Task extends Model
         return $this->belongsToMany(TaskLeavePart::class, 'task_leave_parts', 'task_id', 'part_id');
     }
 
+    public function taskProducts()
+    {
+        return $this->hasMany(TaskProduct::class);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(TaskProduct::class, 'task_products', 'task_id', 'product_id');
+    }
+
 }

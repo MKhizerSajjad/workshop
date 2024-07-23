@@ -105,6 +105,21 @@ function getService($prefix, $status = null, $type = null)
     return statusReturn($prefix, $statuses, $status, $type );
 }
 
+function getFields($prefix, $status = null, $type = null)
+{
+    $statuses = [
+        'types'=> [
+            '1' => ['text', '<span class="badge bg-primary">text</span>'],
+            '2' => ['number', '<span class="badge bg-warning">number</span>'],
+            '3' => ['phone', '<span class="badge bg-danger">phone</span>'],
+            '4' => ['email', '<span class="badge bg-danger">email</span>'],
+            '5' => ['textarea', '<span class="badge bg-danger">textarea</span>'],
+        ],
+    ];
+
+    return statusReturn($prefix, $statuses, $status, $type );
+}
+
 
 // ************************* OTHERS ************************
 function getFileTypeFromExtension($extension) {
