@@ -309,14 +309,16 @@ class TaskController extends Controller
         // Validate the request with merged rules
         $this->validate($request, $rules);
 
-        $phone = $request->input('phone');
+        $phone = $request->input($serviceLocationID.'-phone');
         $customer = [];
         foreach ($fieldsArray as $field) {
+            if($field->name == 'phone') {
+                // continue;
+            }
             $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
         }
-
         $customerAdd = Customer::updateOrCreate(
-            ['phone' => $phone], //
+            ['phone' => $phone],
             $customer
         );
 
