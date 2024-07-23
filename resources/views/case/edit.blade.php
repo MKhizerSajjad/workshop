@@ -397,23 +397,26 @@
                                                 <p class="card-title-desc">Products consumed in this case</p>
                                                 <div class="mb-5">
                                                 <div class="row">
+                                                    <select title="products" id="dd_products" name="dd_products[]" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose ...">
                                                     @foreach ($data->products as $product)
                                                         @php
                                                             $isChecked = $data->task->taskProducts->contains('product_id', $product->id);
                                                         @endphp
-                                                        <div class="col-md-6">
-                                                        <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="checkbox" name="products[]" value="{{ $product->id }}" name="products[]" id="product-{{ $product->id }}" {{ $isChecked ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="product-{{ $product->id }}">
-                                                                <h5>
-                                                                    {{ $product->name }}
-                                                                    <br>
-                                                                    <span class="font-size-14"><b>{{number_format($product->price)}} €</b></span>
-                                                                </h5>
-                                                            </label>
-                                                        </div>
-                                                        </div>
+                                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                        <!-- <div class="col-md-6">
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" name="products[]" value="{{ $product->id }}" name="products[]" id="product-{{ $product->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="product-{{ $product->id }}">
+                                                                    <h5>
+                                                                        {{ $product->name }}
+                                                                        <br>
+                                                                        <span class="font-size-14"><b>{{number_format($product->price)}} €</b></span>
+                                                                    </h5>
+                                                                </label>
+                                                            </div>
+                                                        </div> -->
                                                     @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
 
@@ -614,6 +617,8 @@
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
