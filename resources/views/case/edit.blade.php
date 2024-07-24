@@ -655,20 +655,21 @@
                 <div class="newRow_INDEX">
                     <div data-repeater-item class="row templateRow rowAppend_INDEX">
                         <div class="mb-3 col-lg-3">
-                            <select name="name_INDEX[]" class="select2 form-control name_INDEX">
+                            <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
+                                <option data-price="0" value="">Choose Product</option>
                                 @foreach ($data->products as $product)
-                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                    <option data-price="{{ $product->price }}" value="{{ $product->id }}">{{ $product->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="mb-3 col-lg-3">
-                            <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="">
+                            <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
                         </div>
                         <div class="mb-3 col-lg-3">
-                            <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="">
+                            <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="0">
                         </div>
                         <div class="mb-3 col-lg-2">
-                            <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="">
+                            <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="0">
                         </div>
                         <div class="col-lg-1">
                             <button type="button" class="btn btn-danger remove-btn">
@@ -691,20 +692,21 @@
     <div class="template_row_append d-none">
         <div data-repeater-item class="row templateRow">
             <div class="mb-3 col-lg-3">
-                <select name="name_INDEX[]" class="select2 form-control name_INDEX">
+                <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
+                    <option data-price="0" value="">Choose Product</option>
                     @foreach ($data->products as $product)
-                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                        <option data-price="{{ $product->price }}" value="{{ $product->id }}">{{ $product->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3 col-lg-3">
-                <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="">
+                <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
             </div>
             <div class="mb-3 col-lg-3">
-                <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="">
+                <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="0">
             </div>
             <div class="mb-3 col-lg-2">
-                <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="">
+                <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="0">
             </div>
             <div class="col-lg-1">
                 <button type="button" class="btn btn-danger remove-btn" data-index="INDEX">
@@ -822,16 +824,27 @@
             var price = $(this).closest('.templateRow').find('.price');
             var qty = $(this).closest('.templateRow').find('.qty');
             var total = $(this).closest('.templateRow').find('.total')
-
             if(qty.val() == ''){
                 qty.val(0)
             }
             if(price.val() == ''){
                 price.val(0)
             }
-
             rowTotal = parseFloat(price.val())*parseInt(qty.val());
             total.val(parseFloat(rowTotal));
+        })
+
+        $(document).on('change', '.product', function(){
+            var productPrice = $(this).find(':selected').data('price');
+
+            var price = $(this).closest('.templateRow').find('.price')
+            var qty = $(this).closest('.templateRow').find('.qty')
+            var total = $(this).closest('.templateRow').find('.total')
+
+            rowTotal = parseFloat(productPrice)*parseInt(1);
+            total.val(parseFloat(rowTotal));
+            price.val(productPrice);
+            qty.val(1);
         })
 
 
