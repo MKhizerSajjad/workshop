@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->boolean('status')->default(1);
+            $table->boolean('payment_status')->default(3);
             $table->string('code');
             $table->dateTime('date_opened');
             $table->dateTime('date_closed')->nullable();
@@ -31,9 +32,9 @@ return new class extends Migration
             $table->bigInteger('priority_id')->unsigned()->nullable();
             $table->boolean('inspection_diagnose')->default(1)->comment('Inspection and diagnostics fix charges i.e: 35Eur');
             $table->boolean('services_location')->default(1)->comment('where from service get');
-            // $table->boolean('without_diagnose')->default(false)->comment('Repair, according to the problem named and described by the customer. Without diagnostics');
-            // $table->boolean('priority_id')->nullable(1);  // case_priorities table
-            // $table->foreignId('technician_id')->nullable()->constrained()->onDelete('cascade');
+            $table->decimal('total', 10, 2)->nullable();
+            $table->decimal('paid', 10, 2)->nullable();
+            $table->decimal('pending', 10, 2)->nullable();
             $table->text('details');
             $table->text('notes')->nullable();
             $table->timestamps();

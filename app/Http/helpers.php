@@ -48,7 +48,6 @@ function getUsertype($prefix, $status = null, $type = null)
     return statusReturn($prefix, $statuses, $status, $type );
 }
 
-
 function getStockStatus($prefix, $status = null, $type = null)
 {
     $statuses = [
@@ -62,6 +61,27 @@ function getStockStatus($prefix, $status = null, $type = null)
             'instock' => ['Instock', '<span class="badge bg-primary">Instock</span>'],
             'outofstock' => ['Out of Stock', '<span class="badge bg-danger">Out of Stock</span>'],
             'onbackorder' => ['On Back Order', '<span class="badge bg-info">On Back Order</span>'],
+        ]
+    ];
+
+    return statusReturn($prefix, $statuses, $status, $type );
+}
+
+function getPayment($prefix, $status = null, $type = null)
+{
+    $statuses = [
+        'status'=> [
+            '1' => ['Paid', '<span class="badge bg-success">Paid</span>'],
+            '2' => ['Partially Paid', '<span class="badge bg-primary">Partially Paid</span>'],
+            '3' => ['Pending', '<span class="badge bg-warning">Pending</span>'],
+            '4' => ['Unpaid', '<span class="badge bg-danger">Unpaid</span>']
+        ],
+        'via'=> [
+            '1' => ['Cash', '<span class="badge bg-primary">Cash</span>'],
+            '2' => ['Check', '<span class="badge bg-danger">Check</span>'],
+            '3' => ['Bank Transfer', '<span class="badge bg-info">Bank Transfer</span>'],
+            '4' => ['Card', '<span class="badge bg-info">Card</span>'],
+            '5' => ['Stripe', '<span class="badge bg-info">Stripe</span>'],
         ]
     ];
 

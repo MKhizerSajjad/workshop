@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
             $table->boolean('customer_choice')->default(0);
+            $table->integer('qty');
+            $table->decimal('unit_price', 15, 2)->nullable();
             $table->timestamps();
         });
     }

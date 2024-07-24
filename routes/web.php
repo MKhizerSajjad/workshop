@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('{task}/edit', [TaskController::class, 'edit'])->name('case.edit');
         Route::put('{task}/update', [TaskController::class, 'update'])->name('case.update');
         Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('case.destroy');
+        Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('case.invoice');
     });
 
     // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');

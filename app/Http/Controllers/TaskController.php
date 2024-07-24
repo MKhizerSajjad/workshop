@@ -262,7 +262,6 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        // dd(asset('storage/task/media/test.png'));
         $data = json_decode('{}');
         $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts')->first();
         $data->confirmations = json_decode($task->details, true);
@@ -413,6 +412,11 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         //
+    }
+
+    public function invoice(Task $task)
+    {
+        return view('case.invoice', compact('task'));
     }
 
     public function generateInvoiceCode() {
