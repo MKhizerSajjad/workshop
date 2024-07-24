@@ -50,6 +50,7 @@
                                                 <th>Technician</th>
                                                 <th>Amount</th>
                                                 <th>Status</th>
+                                                <th>Payment</th>
                                                 <th class="text-center">Options</th>
                                             </tr>
                                         </thead>
@@ -63,9 +64,10 @@
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
                                                     <td></td>
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>
+                                                    <td>{!! getPayment('status', $task->payment_status, 'badge') !!}</td>
                                                     <td class="text-center">
+                                                        <a href="{{ route('case.invoice', $task->id) }}"><i class="bx bx-receipt"></i></a>
                                                         <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-pencil"></i></a>
-                                                        {{-- <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-pencil"></i></a> --}}
                                                     </td>
                                                 </tr>
                                             @endforeach

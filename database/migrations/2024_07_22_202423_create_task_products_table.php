@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('qty');
             $table->decimal('unit_price', 15, 2)->nullable();
+            $table->decimal('tax_perc', 15, 2)->nullable();
             $table->timestamps();
         });
     }

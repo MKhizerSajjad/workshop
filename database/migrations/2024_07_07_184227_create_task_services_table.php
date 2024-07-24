@@ -18,6 +18,8 @@ return new class extends Migration
             $table->boolean('customer_choice')->default(0);
             $table->integer('qty');
             $table->decimal('unit_price', 15, 2)->nullable();
+            $table->decimal('tax_perc', 15, 2)->nullable();
+            $table->text('comment');
             $table->timestamps();
         });
     }

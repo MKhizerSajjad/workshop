@@ -10,6 +10,11 @@ class Task extends Model
     use HasFactory;
     protected $guarded;
 
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
     public function technician()
     {
         return $this->belongsTo(User::class, 'technician_id')->where('user_type', 3);
