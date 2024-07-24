@@ -396,31 +396,40 @@
                                                 <h4 class="card-title mt-5">Products</h4>
                                                 <p class="card-title-desc">Products consumed in this case</p>
                                                 <div class="mb-5">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <select title="products" id="dd_products" name="products[]" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose Products" style="width: 100%">
-                                                            @foreach ($data->products as $product)
-                                                                @php
-                                                                    $isChecked = $data->task->taskProducts->contains('product_id', $product->id);
-                                                                @endphp
-                                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                                                <!-- <div class="col-md-6">
-                                                                    <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                        <input class="form-check-input" type="checkbox" name="products[]" value="{{ $product->id }}" name="products[]" id="product-{{ $product->id }}" {{ $isChecked ? 'checked' : '' }}>
-                                                                        <label class="form-check-label" for="product-{{ $product->id }}">
-                                                                            <h5>
-                                                                                {{ $product->name }}
-                                                                                <br>
-                                                                                <span class="font-size-14"><b>{{number_format($product->price)}} €</b></span>
-                                                                            </h5>
-                                                                        </label>
-                                                                    </div>
-                                                                </div> -->
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="row">
+                                                                <div class="col-lg-6 mb-5">
+                                                                    <button type="button" class="btn btn-success add-btn text-bold add_panel_button">
+                                                                        <i class="bx bx-plus-circle me-1"></i> Add Merge Product Panel
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- <select title="products" id="dd_products" name="products[]" class="select2 form-control select2-multiple filter" multiple="multiple" data-placeholder="Choose Products" style="width: 100%">
+                                                                @foreach ($data->products as $product)
+                                                                    @php
+                                                                        $isChecked = $data->task->taskProducts->contains('product_id', $product->id);
+                                                                    @endphp
+                                                                    <option value="{{ $product->id }}">{{ $product->name }}</option> -->
+                                                                    <!-- <div class="col-md-6">
+                                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                            <input class="form-check-input" type="checkbox" name="products[]" value="{{ $product->id }}" name="products[]" id="product-{{ $product->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                                                            <label class="form-check-label" for="product-{{ $product->id }}">
+                                                                                <h5>
+                                                                                    {{ $product->name }}
+                                                                                    <br>
+                                                                                    <span class="font-size-14"><b>{{number_format($product->price)}} €</b></span>
+                                                                                </h5>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div> -->
+                                                                <!-- @endforeach
+                                                            </select> -->
+                                                        </div>
+                                                        <div class="col-md-6"></div>
+                                                        <div class="col-md-12 add_template_area"></div>
                                                     </div>
                                                 </div>
-                                            </div>
 
                                                 {{-- </form> --}}
                                             </div>
@@ -616,6 +625,94 @@
             </div>
         </div>
     </div>
+
+    <div class="row template_row d-none">
+        <div class="col-12 mb-5">
+            <h4 class="card-title mb-4">Input Fields</h4>
+            <div data-repeater-list="group-a">
+                <!-- Initial template for a single row -->
+                <div class="row">
+                    <div class="mb-3 col-lg-6">
+                        <label for="name">Merge Product Name</label>
+                        <input type="text" class="form-control merge_name_INDEX merge_name" name="merge_name_INDEX[]" id="merge_name_INDEX" value="" placeholder="Merge Product Name" >
+                    </div>
+                    <div class="mb-3 col-lg-6"></div>
+                    <div class="mb-3 col-lg-3">
+                        <label for="place_holder">Product Name</label>
+                    </div>
+                    <div class="mb-3 col-lg-3">
+                        <label for="place_holder">Product Price</label>
+                    </div>
+                    <div class="mb-3 col-lg-3">
+                        <label for="place_holder">Product Qty</label>
+                    </div>
+                    <div class="mb-3 col-lg-2">
+                        <label for="place_holder">Product Total</label>
+                    </div>
+                    <div class="mb-3 col-lg-1">
+                    </div>
+                </div>
+                <div class="newRow_INDEX">
+                    <div data-repeater-item class="row templateRow rowAppend_INDEX">
+                        <div class="mb-3 col-lg-3">
+                            <select name="name_INDEX[]" class="select2 form-control name_INDEX">
+                                @foreach ($data->products as $product)
+                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3 col-lg-3">
+                            <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Enter Price" value="">
+                        </div>
+                        <div class="mb-3 col-lg-3">
+                            <input type="text" name="qty_INDEX[]" class="form-control qty_INDEX" placeholder="Enter Quantity" value="">
+                        </div>
+                        <div class="mb-3 col-lg-2">
+                            <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Total" value="">
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="btn btn-danger remove-btn">
+                                <i class="bx bx-minus-circle me-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Button to add new rows -->
+            <div class="row">
+                <div class="col-lg-1 offset-lg-11">
+                    <button type="button" class="btn btn-success add-btn-row text-bold" data-index="INDEX">
+                        <i class="bx bx-plus-circle me-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="template_row_append d-none">
+        <div data-repeater-item class="row templateRow">
+            <div class="mb-3 col-lg-3">
+                <select name="name_INDEX[]" class="select2 form-control name_INDEX">
+                    @foreach ($data->products as $product)
+                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3 col-lg-3">
+                <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Enter Price" value="">
+            </div>
+            <div class="mb-3 col-lg-3">
+                <input type="text" name="qty_INDEX[]" class="form-control qty_INDEX" placeholder="Enter Quantity" value="">
+            </div>
+            <div class="mb-3 col-lg-2">
+                <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Total" value="">
+            </div>
+            <div class="col-lg-1">
+                <button type="button" class="btn btn-danger remove-btn" data-index="INDEX">
+                    <i class="bx bx-minus-circle me-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -700,7 +797,31 @@
     });
 
     $(document).ready(function() {
-        $('#dd_products').select2();
+        // $('.select2').select2(); 
+        var rowCount = 1;
+
+        $(document).on('click', '.add_panel_button', function(){
+            var templateHTML = $('.template_row').html();
+            templateHTML = templateHTML.replace(/INDEX/g, rowCount);
+            $('.add_template_area').append(templateHTML);
+            rowCount++;
+        })
+
+        $(document).on('click', '.remove-btn', function(){
+            $(this).closest('.templateRow').remove();
+        })
+        
+        $(document).on('click', '.add-btn-row', function(){
+            var templateHTML = $('.template_row_append').html();
+            rowNumber = $(this).data('index');
+            templateHTML = templateHTML.replace(/INDEX/g, rowNumber);
+            $('.newRow_'+rowNumber).append(templateHTML);
+
+        })
+
+
+
+
         // Show the initially selected form on page load
         var initialLocationId = $('input[name="services_location"]:checked').val();
         $('#form-location-' + initialLocationId).show();
