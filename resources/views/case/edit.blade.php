@@ -662,13 +662,13 @@
                             </select>
                         </div>
                         <div class="mb-3 col-lg-3">
-                            <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Enter Price" value="">
+                            <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="">
                         </div>
                         <div class="mb-3 col-lg-3">
-                            <input type="text" name="qty_INDEX[]" class="form-control qty_INDEX" placeholder="Enter Quantity" value="">
+                            <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="">
                         </div>
                         <div class="mb-3 col-lg-2">
-                            <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Total" value="">
+                            <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="">
                         </div>
                         <div class="col-lg-1">
                             <button type="button" class="btn btn-danger remove-btn">
@@ -698,13 +698,13 @@
                 </select>
             </div>
             <div class="mb-3 col-lg-3">
-                <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Enter Price" value="">
+                <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="">
             </div>
             <div class="mb-3 col-lg-3">
-                <input type="text" name="qty_INDEX[]" class="form-control qty_INDEX" placeholder="Enter Quantity" value="">
+                <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="">
             </div>
             <div class="mb-3 col-lg-2">
-                <input type="text" name="price_INDEX[]" class="form-control price_INDEX" placeholder="Total" value="">
+                <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="">
             </div>
             <div class="col-lg-1">
                 <button type="button" class="btn btn-danger remove-btn" data-index="INDEX">
@@ -816,7 +816,22 @@
             rowNumber = $(this).data('index');
             templateHTML = templateHTML.replace(/INDEX/g, rowNumber);
             $('.newRow_'+rowNumber).append(templateHTML);
+        })
 
+        $(document).on('keyup', '.price, .qty', function(){
+            var price = $(this).closest('.templateRow').find('.price');
+            var qty = $(this).closest('.templateRow').find('.qty');
+            var total = $(this).closest('.templateRow').find('.total')
+
+            if(qty.val() == ''){
+                qty.val(0)
+            }
+            if(price.val() == ''){
+                price.val(0)
+            }
+
+            rowTotal = parseFloat(price.val())*parseInt(qty.val());
+            total.val(parseFloat(rowTotal));
         })
 
 
