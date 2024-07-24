@@ -87,34 +87,39 @@
                 <ul class="navbar-nav">
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="https://fabiride.lt/remontas/" target="_blank" id="topnav-dashboard" role="button"
-                        >
-                            <i class="bx bx-home-circle me-1"></i>
-                            <span key="t-dashboards">REMONTAS</span>
+                        <a class="nav-link dropdown-toggle arrow-none" href="{{route('bookingCreate')}}" id="topnav-dashboard" role="button">
+                            {{-- <i class="bx bx-home-circle me-1"></i> --}}
+                            <span key="t-dashboards">Registracija</span>
                         </a>
                     </li>
-
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none text-danger" href="https://fabiride.lt/parduotuve/" target="_blank" id="topnav-dashboard" role="button"
-                        >
-                            <i class="bx bx-wrench me-1 text-danger"></i>
-                            <span key="t-aitool">PARDUOTUVĖ</span>
+                        <a class="nav-link dropdown-toggle arrow-none" href="{{route('bookingStatus')}}" id="topnav-dashboard" role="button">
+                            {{-- <i class="bx bx-wrench me-1 text-danger"></i> --}}
+                            <span key="t-aitool">Remonto informacija</span>
                         </a>
                     </li>
-
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="https://fabiride.lt/apie-mus/" target="_blank" id="topnav-dashboard" role="button"
-                        >
-                            <i class="bx bx-bot me-1"></i>
-                            <span key="t-aitool">APIE MUS</span>
+                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-dashboard" role="button">
+                            {{-- <i class="bx bx-bot me-1"></i> take backk--}}
+                            <span key="t-aitool">Atsiėmimas</span>
                         </a>
                     </li>
-
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="https://fabiride.lt/kontaktai/" target="_blank" id="topnav-dashboard" role="button"
-                        >
-                            <i class="bx bx-label me-1"></i>
-                            <span key="t-aitool">Kontaktai</span>
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                            {{-- <i class="bx bx-label me-1"></i> (Our Services) --}}
+                            <span key="t-aitool">Mūsų paslaugos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                            {{-- <i class="bx bx-label me-1"></i> Parts --}}
+                            <span key="t-aitool">Dalys</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                            {{-- <i class="bx bx-label me-1"></i> --}}
+                            <span key="t-aitool">Paskyra</span>
                         </a>
                     </li>
                 </ul>

@@ -38,6 +38,8 @@ Auth::routes();
 Route::get('/booking0', [TaskController::class, 'create0'])->name('bookingCreate0');
 Route::get('/booking', [TaskController::class, 'create'])->name('bookingCreate');
 Route::post('/save-booking', [TaskController::class, 'store'])->name('bookingSave');
+Route::get('/booking/status', [TaskController::class, 'status'])->name('bookingStatus');
+Route::get('/booking/status_search', [TaskController::class, 'statusSearch'])->name('bookingStatusSearch');
 // Route::get('service-location/{locationId}/fields', [SerivceLocationController::class, 'locationDetail']);
 
 Route::middleware(['auth'])->group(function () {

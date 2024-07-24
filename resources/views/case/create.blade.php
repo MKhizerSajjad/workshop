@@ -157,7 +157,7 @@
                                         </div>
                                         <div class="tab-pane fade" id="v-parts" role="tabpanel" aria-labelledby="v-parts-tab">
                                             <div>
-                                                <h4 class="card-title">Leaving PartsMedia</h4>
+                                                <h4 class="card-title">Leaving Parts</h4>
                                                 <p class="card-title-desc">The parts you want to leave</p>
                                                 {{-- <form> --}}
 

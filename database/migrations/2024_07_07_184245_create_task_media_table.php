@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->boolean('type')->nullable();
             $table->string('media');
+            $table->boolean('customer_choice')->default(0);
             $table->timestamps();
         });
     }

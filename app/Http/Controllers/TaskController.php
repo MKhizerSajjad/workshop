@@ -122,6 +122,7 @@ class TaskController extends Controller
         ];
 
         $task = Task::create($data);
+        $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
 
         if ($request->hasFile('files')) {
 
@@ -136,7 +137,7 @@ class TaskController extends Controller
                     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                     $extension = $file->getClientOriginalExtension();
                     $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
-                    $path = $file->store('task/media', 'public'); // 'images' is a folder inside 'public' disk
+                    $path = $file->storeAs('task/media', $fileNameToStore); // 'images' is a folder inside 'public' disk
                     // $url = asset('storage/' . $path);
                     // $file->storeAs('public/media', $fileNameToStore);
 
@@ -144,6 +145,7 @@ class TaskController extends Controller
                         'task_id' => $task->id,
                         'type' => getFileTypeFromExtension($extension),
                         'media' => $fileNameToStore,
+                        'customer_choice' => $isCustomerChoice,
                     ];
                     $media = TaskMedia::create($data);
 
@@ -156,8 +158,6 @@ class TaskController extends Controller
                 }
             }
         }
-
-        $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
 
         if(isset($request->services)) {
             foreach ($request->input('services') as $service_id) {
@@ -182,7 +182,7 @@ class TaskController extends Controller
         if(auth()->check() && Auth::user()->user_type != 4) {
             return redirect()->route('case.index')->with('success','Record created successfully');
         } else {
-            return redirect()->route('login')->with('success','Your booking has been created successfully');
+            return redirect()->route('bookingStatusSearch', ['case_number' => $invoce, 'phone' => $phone])->with('success','Your booking has been created successfully');
         }
 
 
@@ -265,8 +265,8 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $data = json_decode('{}');
-        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts')->first();
-        $data->confirmations = json_decode($task->details, true);
+        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskChildProducts')->first();
+        $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
         $data->items = Item::where('status', 1)->orderBy('name')->get();
         $data->parts = Part::where('status', 1)->orderBy('name')->get();
         $data->services = Service::orderBy('name')->get(); // where('status', 1)->
@@ -274,7 +274,7 @@ class TaskController extends Controller
         $data->products = Product::where('status', 1)->orderBy('name')->get();
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
-        $data->taskProduct = TaskProduct::with('taskChildProducts')->where('task_id', $task->id)->where('task_products_id', null)->get();
+        // $data->taskProduct = TaskProduct::with('taskChildProducts')->where('task_id', $task->id)->where('task_products_id', null)->get();
 
         return view('case.edit',compact('data'));
     }
@@ -490,6 +490,43 @@ class TaskController extends Controller
     public function invoice(Task $task)
     {
         return view('case.invoice', compact('task'));
+    }
+
+    public function status()
+    {
+        return view('case.status');
+    }
+
+    public function statusSearch(Request $request)
+    {
+        $request->validate([
+            'case_number' => 'required|string',
+            'phone' => 'required|string',
+        ]);
+
+        $caseNumber = $request->input('case_number');
+        $phone = $request->input('phone');
+
+        $task = Task::where('code', $caseNumber)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts')
+                    ->whereHas('customer', function ($query) use ($phone) {
+                        $query->where('phone', $phone);
+                    })->first();
+
+        $data = $task;
+        if(isset($task)) {
+            $data = json_decode('{}');
+            $data->task = $task;
+            $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
+            $data->items = Item::where('status', 1)->orderBy('name')->get();
+            $data->parts = Part::where('status', 1)->orderBy('name')->get();
+            $data->services = Service::orderBy('name')->get(); // where('status', 1)->
+            $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
+            $data->products = Product::where('status', 1)->orderBy('name')->get();
+            $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
+            $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
+        }
+
+        return view('case.status',compact('data'));
     }
 
     public function generateInvoiceCode() {

@@ -155,7 +155,7 @@
                                         </div>
                                         <div class="tab-pane fade" id="v-parts" role="tabpanel" aria-labelledby="v-parts-tab">
                                             <div>
-                                                <h4 class="card-title">Leaving PartsMedia</h4>
+                                                <h4 class="card-title">Leaving Parts</h4>
                                                 <p class="card-title-desc">The parts you want to leave</p>
                                                 {{-- <form> --}}
 
@@ -432,7 +432,7 @@
 
                                                         {{-- <div class="row template_row"> --}}
                                                             <div class="col-12 mb-5">
-                                                                @foreach ($data->taskProduct as $index => $parentProduct)
+                                                                @foreach ($data->task->taskProducts as $index => $parentProduct)
                                                                     <div data-repeater-list="group-a">
                                                                         <!-- Initial template for a single row -->
                                                                         <div class="row">
@@ -496,7 +496,7 @@
                                                                 @endforeach
                                                             </div>
                                                         {{-- </div> --}}
-                                                        <input type="hidden" name="row_count" id="row_count" value="{{count($data->taskProduct)}}">
+                                                        <input type="hidden" name="row_count" id="row_count" value="{{count($data->task->taskProducts)}}">
                                                         <div class="col-md-12 add_template_area"></div>
                                                     </div>
                                                 </div>
@@ -788,9 +788,6 @@
     </div>
 @endsection
 
-@php
-    // $dbRowCount = count($data->taskProduct);
-@endphp
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -876,7 +873,7 @@
         // $('.select2').select2();
         var rowCount = 0;
         // if there is record in DB in then consider that count (only parent products)
-        var dbRowCount = <?php echo count($data->taskProduct) ?>;
+        var dbRowCount = <?php echo count($data->task->taskProducts) ?>;
         if (dbRowCount > 0) {
             rowCount = dbRowCount;
         }
