@@ -127,13 +127,13 @@
                                                     <div class="form-group row mb-3">
                                                         <label for="additional_info" class="form-label">Additional Information</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" nmae="additional_info" id="additional_info" placeholder="Enter Additional Information"></textarea>
+                                                            <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mb-3">
                                                         <label for="problem_description" class="form-label">Description of Problem / Failure</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" nmae="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure"></textarea>
+                                                            <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure"></textarea>
                                                             @error('problem_description')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('product_id')->nullable()->constrained()->onDelete('No Action');
             $table->foreignId('task_products_id')->nullable()->constrained()->onDelete('No Action');
             $table->string('name');
-            $table->integer('qty');
-            $table->decimal('unit_price', 15, 2)->nullable();
-            $table->decimal('tax_perc', 15, 2)->nullable();
+            $table->integer('qty')->default(0);
+            $table->decimal('unit_price', 15, 2)->default(0);
+            $table->decimal('tax_perc', 15, 2)->default(0);
             $table->timestamps();
         });
     }

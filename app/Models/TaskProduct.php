@@ -19,4 +19,9 @@ class TaskProduct extends Model
     {
         return $this->belongsToMany(Task::class, 'task_products');
     }
+
+    public function taskChildProducts()
+    {
+        return $this->hasMany(TaskProduct::class, 'task_products_id');
+    }
 }

@@ -57,7 +57,7 @@
                                         @endif
                                         <div class="tab-pane fade show active" id="v-pills-item" role="tabpanel" aria-labelledby="v-pills-item-tab">
                                             <div>
-                                                <h4 class="card-title">Itme information</h4>
+                                                <h4 class="card-title">Item information</h4>
                                                 <p class="card-title-desc">Fill all information below</p>
                                                 {{-- <form> --}}
                                                     {{-- @foreach ($data->items as $item)
@@ -125,13 +125,13 @@
                                                     <div class="form-group row mb-3">
                                                         <label for="additional_info" class="form-label">Additional Information</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" nmae="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $data->task->additional_info }}</textarea>
+                                                            <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $data->task->additional_info }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mb-3">
                                                         <label for="problem_description" class="form-label">Description of Problem / Failure</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" nmae="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $data->task->problem_description }}</textarea>
+                                                            <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $data->task->problem_description }}</textarea>
                                                             @error('problem_description')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -425,8 +425,78 @@
                                                                     </div> -->
                                                                 <!-- @endforeach
                                                             </select> -->
+
                                                         </div>
                                                         <div class="col-md-6"></div>
+
+
+                                                        {{-- <div class="row template_row"> --}}
+                                                            <div class="col-12 mb-5">
+                                                                @foreach ($data->taskProduct as $index => $parentProduct)
+                                                                    <div data-repeater-list="group-a">
+                                                                        <!-- Initial template for a single row -->
+                                                                        <div class="row">
+                                                                            <div class="mb-3 col-lg-6">
+                                                                                <label for="name">Merge Product Name</label>
+                                                                                <input type="text" class="form-control merge_name_INDEX merge_name" name="merge_name_INDEX" id="merge_name_INDEX" value="{{ $parentProduct->name }}" placeholder="Merge Product Name" >
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-6"></div>
+                                                                            <div class="mb-3 col-lg-3">
+                                                                                <label for="place_holder">Product Name</label>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-3">
+                                                                                <label for="place_holder">Product Price</label>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-3">
+                                                                                <label for="place_holder">Product Qty</label>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-2">
+                                                                                <label for="place_holder">Product Total</label>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-1">
+                                                                            </div>
+                                                                        </div>
+                                                                        @foreach ($parentProduct->taskChildProducts as $index => $chilProduct)
+                                                                            <div class="newRow_INDEX">
+                                                                                <div data-repeater-item class="row templateRow rowAppend_INDEX">
+                                                                                    <div class="mb-3 col-lg-3">
+                                                                                        <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
+                                                                                            <option data-price="0" value="">Choose Product</option>
+                                                                                            @foreach ($data->products as $product)
+                                                                                                <option data-price="{{ $product->price }}" value="{{ $product->id }}" @if($product->id == $chilProduct->product_id) selected @endif>{{ $product->name }}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="mb-3 col-lg-3">
+                                                                                        <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="{{ $chilProduct->unit_price }}">
+                                                                                    </div>
+                                                                                    <div class="mb-3 col-lg-3">
+                                                                                        <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="{{ $chilProduct->qty }}">
+                                                                                    </div>
+                                                                                    <div class="mb-3 col-lg-2">
+                                                                                        <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="{{ $chilProduct->unit_price * $chilProduct->qty }}">
+                                                                                    </div>
+                                                                                    <div class="col-lg-1">
+                                                                                        <button type="button" class="btn btn-danger remove-btn">
+                                                                                            <i class="bx bx-minus-circle me-1"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                    <!-- Button to add new rows -->
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1 offset-lg-11">
+                                                                            <button type="button" class="btn btn-success add-btn-row text-bold" data-index="INDEX">
+                                                                                <i class="bx bx-plus-circle me-1"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        {{-- </div> --}}
+                                                        <input type="hidden" name="row_count" id="row_count" value="{{count($data->taskProduct)}}">
                                                         <div class="col-md-12 add_template_area"></div>
                                                     </div>
                                                 </div>
@@ -628,13 +698,14 @@
 
     <div class="row template_row d-none">
         <div class="col-12 mb-5">
-            <h4 class="card-title mb-4">Input Fields</h4>
+            {{-- <h4 class="card-title mb-4">Input Fields</h4> --}}
+
             <div data-repeater-list="group-a">
                 <!-- Initial template for a single row -->
                 <div class="row">
                     <div class="mb-3 col-lg-6">
                         <label for="name">Merge Product Name</label>
-                        <input type="text" class="form-control merge_name_INDEX merge_name" name="merge_name_INDEX[]" id="merge_name_INDEX" value="" placeholder="Merge Product Name" >
+                        <input type="text" class="form-control merge_name_INDEX merge_name" name="merge_name_INDEX" id="merge_name_INDEX" value="" placeholder="Merge Product Name" >
                     </div>
                     <div class="mb-3 col-lg-6"></div>
                     <div class="mb-3 col-lg-3">
@@ -717,6 +788,9 @@
     </div>
 @endsection
 
+@php
+    // $dbRowCount = count($data->taskProduct);
+@endphp
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -799,20 +873,26 @@
     });
 
     $(document).ready(function() {
-        // $('.select2').select2(); 
-        var rowCount = 1;
+        // $('.select2').select2();
+        var rowCount = 0;
+        // if there is record in DB in then consider that count (only parent products)
+        var dbRowCount = <?php echo count($data->taskProduct) ?>;
+        if (dbRowCount > 0) {
+            rowCount = dbRowCount;
+        }
 
         $(document).on('click', '.add_panel_button', function(){
+            rowCount++;
             var templateHTML = $('.template_row').html();
             templateHTML = templateHTML.replace(/INDEX/g, rowCount);
             $('.add_template_area').append(templateHTML);
-            rowCount++;
+            $('#row_count').val(rowCount)
         })
 
         $(document).on('click', '.remove-btn', function(){
             $(this).closest('.templateRow').remove();
         })
-        
+
         $(document).on('click', '.add-btn-row', function(){
             var templateHTML = $('.template_row_append').html();
             rowNumber = $(this).data('index');

@@ -18,8 +18,10 @@ use App\Models\Priority;
 use App\Models\Customer;
 use App\Models\TaskMedia;
 use App\Models\TaskService;
+use App\Models\TaskProduct;
 use App\Models\SerivceLocation;
 use App\Models\TaskLeavePart;
+use Symfony\Component\VarDumper\VarDumper;
 
 class TaskController extends Controller
 {
@@ -79,7 +81,7 @@ class TaskController extends Controller
         // Validate the request with merged rules
         $this->validate($request, $rules);
 
-        $phone = $request->input('phone');
+        $phone = $request->input($serviceLocationID.'-'.'phone');
         $customer = [];
         foreach ($fieldsArray as $field) {
             $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
@@ -178,7 +180,7 @@ class TaskController extends Controller
         }
 
         if(auth()->check() && Auth::user()->user_type != 4) {
-            return redirect()->route('dashboard')->with('success','Record created successfully');
+            return redirect()->route('case.index')->with('success','Record created successfully');
         } else {
             return redirect()->route('login')->with('success','Your booking has been created successfully');
         }
@@ -272,6 +274,7 @@ class TaskController extends Controller
         $data->products = Product::where('status', 1)->orderBy('name')->get();
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
+        $data->taskProduct = TaskProduct::with('taskChildProducts')->where('task_id', $task->id)->where('task_products_id', null)->get();
 
         return view('case.edit',compact('data'));
     }
@@ -350,6 +353,76 @@ class TaskController extends Controller
         $taskId = $task->id;
         $task = Task::updateOrCreate(['id' => $taskId], $data);
 
+        // Merge Product Scenario
+        $row_count = $request->input("row_count");
+        $product = [];
+        for ($count=1; $count <= $row_count; $count++) {
+            $mergeProduct = $request->input("merge_name_$count");
+            if($mergeProduct == null || $mergeProduct == ''){
+                continue;
+            }
+            $productArray = $request->input("product_$count");
+            $priceArray = $request->input("price_$count");
+            $qtyArray = $request->input("qty_$count");
+            $rowTotal = 0;
+            foreach((array)$productArray as $key => $value) {
+                if($value == null || $value == ''){
+                    continue;
+                }
+                $product[$mergeProduct]['child'][] = [
+                    'id' => $value,
+                    'qty' => $qtyArray[$key],
+                    'price' => $priceArray[$key]
+                ];
+                $rowTotal += $priceArray[$key];
+            }
+            $product[$mergeProduct]['name'] = $mergeProduct;
+            $product[$mergeProduct]['qty'] = 1;
+            $product[$mergeProduct]['price'] = $rowTotal;
+        }
+
+        // Parent Product
+        foreach ($product as $key => $productData) {
+            $data = [
+                'task_id' => $taskId,
+                'product_id' => null,
+                'task_products_id' => null,
+                'name' => $productData['name'],
+                'qty' => $productData['qty'],
+                'unit_price' => $productData['price'],
+                // 'tax_perc' => $productData['tax'],
+            ];
+            $parentProduct = TaskProduct::updateOrCreate(
+                [
+                    'task_id' => $taskId,
+                    'name' => $productData['name']
+                ],
+                $data
+            );
+
+            // Child if available
+            if (isset($productData['child'])) {
+                foreach ($productData['child'] as $childData) {
+                    $data = [
+                        'name' => 'child',
+                        'qty' => $childData['qty'],
+                        'unit_price' => $childData['price'],
+                        // 'tax_perc' => $childData->tax,
+                    ];
+
+
+                    TaskProduct::updateOrCreate(
+                        [
+                            'task_id' => $taskId,
+                            'product_id' => $childData['id'],
+                            'task_products_id' => $parentProduct->id
+                        ],
+                        $data
+                    );
+                }
+            }
+        }
+
         // if ($request->hasFile('files')) {
 
         //     $index = 0; // Initialize the index variable
@@ -386,7 +459,7 @@ class TaskController extends Controller
 
         $task->services()->sync($request->input('services', []));
         $task->leaveParts()->sync($request->input('parts', []));
-        $task->products()->sync($request->input('products', []));
+        // $task->products()->sync($request->input('products', []));
 
         // if(isset($request->services)) {
         //     foreach ($request->input('services') as $service_id) {

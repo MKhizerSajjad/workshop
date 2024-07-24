@@ -193,7 +193,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($task->taskProducts as $service)
+                                        @foreach ($task->taskProducts as $product)
                                             @php
                                                 $product->qty;
                                                 $product->unit_price;
@@ -206,7 +206,7 @@
                                                 $total_product_tax = $total_product_tax + $tax;
                                             @endphp
                                             <tr>
-                                                <td>{{ $product->product->name }}</td>
+                                                <td>{{ $product->name ?? $product->product->name }}</td>
                                                 <td>{{ $product->qty }}</td>
                                                 <td>{{ $product->unit_price }}</td>
                                                 <td>{{ $product->tax_perc }}</td>
