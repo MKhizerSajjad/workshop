@@ -132,105 +132,120 @@
                                 $total_product_price = 0;
                             @endphp
 
-                            <div class="py-2 mt-1">
-                                <h3 class="font-size-15 fw-bold">Services</h3>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Comment</th>
-                                            <th style="width: 50px;">Qty</th>
-                                            <th style="width: 70px;">Unit Price</th>
-                                            <th style="width: 50px;">Tax (%)</th>
-                                            <th class="text-end">Total Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($task->taskServices as $service)
-                                            @php
-                                                $service->qty;
-                                                $service->unit_price;
-                                                $service->tax_perc;
-                                                $unit_tax = ($service->tax_perc * $service->unit_price) / 100;
-                                                $price = $service->qty * $service->unit_price;
-                                                $tax = $service->qty * $service->unit_tax;
-                                                $service_price = $price + $tax;
-                                                $total_service_price = $total_service_price + $service_price;
-                                                $total_service_tax = $total_service_tax + $tax;
-                                            @endphp
+                            @if (count($task->taskServices) > 0)
+                                <div class="py-2 mt-1">
+                                    <h3 class="font-size-15 fw-bold">Services</h3>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $service->service->name }}</td>
-                                                <td>{{ $service->comment }}</td>
-                                                <td>{{ $service->qty }}</td>
-                                                <td>{{ $service->unit_price }}</td>
-                                                <td>{{ $service->tax_perc }}</td>
-                                                <td class="text-end">{{ $service_price }}</td>
+                                                <th>Name</th>
+                                                <th>Comment</th>
+                                                <th style="width: 50px;">Qty</th>
+                                                <th style="width: 70px;">Unit Price</th>
+                                                <th style="width: 50px;">Tax (%)</th>
+                                                <th class="text-end">Total Price</th>
                                             </tr>
-                                        @endforeach
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($task->taskServices as $service)
+                                                @php
+                                                    $service->qty;
+                                                    $service->unit_price;
+                                                    $service->tax_perc;
+                                                    $unit_tax = ($service->tax_perc * $service->unit_price) / 100;
+                                                    $price = $service->qty * $service->unit_price;
+                                                    $tax = $service->qty * $service->unit_tax;
+                                                    $service_price = $price + $tax;
+                                                    $total_service_price = $total_service_price + $service_price;
+                                                    $total_service_tax = $total_service_tax + $tax;
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $service->service->name }}</td>
+                                                    <td>{{ $service->comment }}</td>
+                                                    <td>{{ $service->qty }}</td>
+                                                    <td>{{ $service->unit_price }}</td>
+                                                    <td>{{ $service->tax_perc }}</td>
+                                                    <td class="text-end">{{ $service_price }}</td>
+                                                </tr>
+                                            @endforeach
 
-                                        <tr>
-                                            <td colspan="5" class="text-end">Services Total</td>
-                                            <td class="text-end">{{ $total_service_price }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="py-2 mt-1">
-                                <h3 class="font-size-15 fw-bold">Parts</h3>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th style="width: 50px;">Qty</th>
-                                            <th style="width: 70px;">Unit Price</th>
-                                            <th style="width: 50px;">Tax (%)</th>
-                                            <th class="text-end">Total Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($task->taskProducts as $product)
-                                            @php
-                                                $product->qty;
-                                                $product->unit_price;
-                                                $product->tax_perc;
-                                                $unit_tax = ($product->tax_perc * $product->unit_price) / 100;
-                                                $price = $product->qty * $product->unit_price;
-                                                $tax = $product->qty * $product->unit_tax;
-                                                $product_price = $price + $tax;
-                                                $total_product_price = $total_product_price + $product_price;
-                                                $total_product_tax = $total_product_tax + $tax;
-                                            @endphp
                                             <tr>
-                                                <td>{{ $product->name ?? $product->product->name }}</td>
-                                                <td>{{ $product->qty }}</td>
-                                                <td>{{ $product->unit_price }}</td>
-                                                <td>{{ $product->tax_perc }}</td>
-                                                <td class="text-end">{{ $product_price }}</td>
+                                                <td colspan="5" class="text-end">Services Total</td>
+                                                <td class="text-end">{{ $total_service_price }}</td>
                                             </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td colspan="4" class="text-end">Parts Total</td>
-                                            <td class="text-end">{{ $total_product_price }}</td>
-                                        </tr>
-                                        <hr>
-                                        <tr>
-                                            <td colspan="4" class="border-0 text-end">
-                                                <strong>Tax Total</strong></td>
-                                            <td class="border-0 text-end">{{ $total_service_tax + $total_product_tax }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" class="border-0 text-end">
-                                                <strong>Grand Total</strong></td>
-                                            <td class="border-0 text-end"><h4 class="m-0">{{ $total_service_price + $total_product_price }}</h4></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+
+                            @if (count($task->taskProducts) > 0)
+                                <div class="py-2 mt-1">
+                                    <h3 class="font-size-15 fw-bold">Parts</h3>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th style="width: 50px;">Qty</th>
+                                                <th style="width: 70px;">Unit Price</th>
+                                                <th style="width: 50px;">Tax (%)</th>
+                                                <th class="text-end">Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($task->taskProducts as $product)
+                                                @php
+                                                    $product->qty;
+                                                    $product->unit_price;
+                                                    $product->tax_perc;
+                                                    $unit_tax = ($product->tax_perc * $product->unit_price) / 100;
+                                                    $price = $product->qty * $product->unit_price;
+                                                    $tax = $product->qty * $product->unit_tax;
+                                                    $product_price = $price + $tax;
+                                                    $total_product_price = $total_product_price + $product_price;
+                                                    $total_product_tax = $total_product_tax + $tax;
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $product->name ?? $product->product->name }}</td>
+                                                    <td>{{ $product->qty }}</td>
+                                                    <td>{{ $product->unit_price }}</td>
+                                                    <td>{{ $product->tax_perc }}</td>
+                                                    <td class="text-end">{{ $product_price }}</td>
+                                                </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td colspan="4" class="text-end">Parts Total</td>
+                                                <td class="text-end">{{ $total_product_price }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+
+                            @if ((count($task->taskServices) > 0) || (count($task->taskProducts) > 0))
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <tbody>
+                                            <hr>
+                                            <tr>
+                                                <td colspan="4" class="border-0 text-end">
+                                                    <strong>Tax Total</strong></td>
+                                                <td class="border-0 text-end">{{ $total_service_tax + $total_product_tax }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" class="border-0 text-end">
+                                                    <strong>Grand Total</strong></td>
+                                                <td class="border-0 text-end"><h4 class="m-0">{{ $total_service_price + $total_product_price }}</h4></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <h3 class="text text-danger text-center">No Product / Service against this Case</h3>
+                            @endif
 
                             <div class="d-print-none">
                                 <div class="float-end">
