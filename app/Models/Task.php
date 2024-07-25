@@ -52,7 +52,11 @@ class Task extends Model
 
     public function taskProducts()
     {
-        return $this->hasMany(TaskProduct::class)->where('task_products_id', null);
+        return $this->hasMany(TaskProduct::class);
+    }
+    public function taskItemProducts()
+    {
+        return $this->hasMany(TaskItemProduct::class);
     }
 
     public function products()

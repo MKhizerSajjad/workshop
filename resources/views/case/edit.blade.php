@@ -433,12 +433,13 @@
                                                         {{-- <div class="row template_row"> --}}
                                                             <div class="col-12 mb-5">
                                                                 @foreach ($data->task->taskProducts as $index => $parentProduct)
+                                                                @php $index++ @endphp
                                                                     <div data-repeater-list="group-a">
                                                                         <!-- Initial template for a single row -->
                                                                         <div class="row">
                                                                             <div class="mb-3 col-lg-6">
                                                                                 <label for="name">Merge Product Name</label>
-                                                                                <input type="text" class="form-control merge_name_INDEX merge_name" name="merge_name_INDEX" id="merge_name_INDEX" value="{{ $parentProduct->name }}" placeholder="Merge Product Name" >
+                                                                                <input type="text" class="form-control merge_name_{{$index}} merge_name" name="merge_name_{{$index}}" id="merge_name_{{$index}}" value="{{ $parentProduct->name }}" placeholder="Merge Product Name" >
                                                                             </div>
                                                                             <div class="mb-3 col-lg-6"></div>
                                                                             <div class="mb-3 col-lg-3">
@@ -456,11 +457,11 @@
                                                                             <div class="mb-3 col-lg-1">
                                                                             </div>
                                                                         </div>
-                                                                        @foreach ($parentProduct->taskChildProducts as $index => $chilProduct)
-                                                                            <div class="newRow_INDEX">
-                                                                                <div data-repeater-item class="row templateRow rowAppend_INDEX">
+                                                                        @foreach ($parentProduct->taskItemProducts as $indexP => $chilProduct)
+                                                                            <div class="newRow_{{$index}}">
+                                                                                <div data-repeater-item class="row templateRow rowAppend_{{$index}}">
                                                                                     <div class="mb-3 col-lg-3">
-                                                                                        <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
+                                                                                        <select name="product_{{$index}}[]" class="select2 form-control product product_{{$index}}">
                                                                                             <option data-price="0" value="">Choose Product</option>
                                                                                             @foreach ($data->products as $product)
                                                                                                 <option data-price="{{ $product->price }}" value="{{ $product->id }}" @if($product->id == $chilProduct->product_id) selected @endif>{{ $product->name }}</option>
@@ -468,13 +469,13 @@
                                                                                         </select>
                                                                                     </div>
                                                                                     <div class="mb-3 col-lg-3">
-                                                                                        <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="{{ $chilProduct->unit_price }}">
+                                                                                        <input type="text" name="price_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_{{$index}}" placeholder="Enter Price" value="{{ $chilProduct->unit_price }}">
                                                                                     </div>
                                                                                     <div class="mb-3 col-lg-3">
-                                                                                        <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="{{ $chilProduct->qty }}">
+                                                                                        <input type="text" name="qty_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_{{$index}}" placeholder="Enter Quantity" value="{{ $chilProduct->qty }}">
                                                                                     </div>
                                                                                     <div class="mb-3 col-lg-2">
-                                                                                        <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="{{ $chilProduct->unit_price * $chilProduct->qty }}">
+                                                                                        <input type="text" name="total_{{$index}}[]" class="form-control total total_{{$index}}" readonly placeholder="Total" value="{{ $chilProduct->unit_price * $chilProduct->qty }}">
                                                                                     </div>
                                                                                     <div class="col-lg-1">
                                                                                         <button type="button" class="btn btn-danger remove-btn">
@@ -488,7 +489,7 @@
                                                                     <!-- Button to add new rows -->
                                                                     <div class="row">
                                                                         <div class="col-lg-1 offset-lg-11">
-                                                                            <button type="button" class="btn btn-success add-btn-row text-bold" data-index="INDEX">
+                                                                            <button type="button" class="btn btn-success add-btn-row text-bold" data-index="{{$index}}">
                                                                                 <i class="bx bx-plus-circle me-1"></i>
                                                                             </button>
                                                                         </div>

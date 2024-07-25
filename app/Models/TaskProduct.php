@@ -24,4 +24,9 @@ class TaskProduct extends Model
     {
         return $this->hasMany(TaskProduct::class, 'task_products_id');
     }
+    
+    public function taskItemProducts()
+    {
+        return $this->hasMany(TaskItemProduct::class, 'task_products_id');
+    }
 }

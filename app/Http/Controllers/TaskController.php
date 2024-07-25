@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // use Auth;
+use App\Models\TaskItemProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -265,7 +266,7 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $data = json_decode('{}');
-        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskChildProducts')->first();
+        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskItemProducts')->first();
         $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
         $data->items = Item::where('status', 1)->orderBy('name')->get();
         $data->parts = Part::where('status', 1)->orderBy('name')->get();
@@ -372,25 +373,24 @@ class TaskController extends Controller
                 $product[$mergeProduct]['child'][] = [
                     'id' => $value,
                     'qty' => $qtyArray[$key],
-                    'price' => $priceArray[$key]
+                    'price' => $priceArray[$key],
+                    'total' =>  $priceArray[$key]*$qtyArray[$key]
                 ];
                 $rowTotal += $priceArray[$key];
             }
             $product[$mergeProduct]['name'] = $mergeProduct;
             $product[$mergeProduct]['qty'] = 1;
-            $product[$mergeProduct]['price'] = $rowTotal;
+            $product[$mergeProduct]['total'] = $rowTotal;
         }
 
         // Parent Product
+        TaskItemProduct::where('task_id', $taskId)->delete();
+        TaskProduct::where('task_id', $taskId)->delete();
         foreach ($product as $key => $productData) {
             $data = [
                 'task_id' => $taskId,
-                'product_id' => null,
-                'task_products_id' => null,
                 'name' => $productData['name'],
-                'qty' => $productData['qty'],
-                'unit_price' => $productData['price'],
-                // 'tax_perc' => $productData['tax'],
+                'total' => $productData['total'],
             ];
             $parentProduct = TaskProduct::updateOrCreate(
                 [
@@ -403,15 +403,19 @@ class TaskController extends Controller
             // Child if available
             if (isset($productData['child'])) {
                 foreach ($productData['child'] as $childData) {
+                    $productInfo = Product::whereId($childData['id'])->first();
+                    if(!isset($productInfo->id)){
+                        continue;
+                    }
                     $data = [
-                        'name' => 'child',
+                        'product_id' => $childData['id'],
                         'qty' => $childData['qty'],
                         'unit_price' => $childData['price'],
-                        // 'tax_perc' => $childData->tax,
+                        'total' => $childData['total'],
+                        'tax_perc' => 0,
                     ];
 
-
-                    TaskProduct::updateOrCreate(
+                    TaskItemProduct::updateOrCreate(
                         [
                             'task_id' => $taskId,
                             'product_id' => $childData['id'],
