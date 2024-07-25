@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    @guest
+        @include('layouts.components.web-topbar')
+    @endguest
     <div class="page-content">
         <div class="container-fluid">
 
@@ -8,12 +11,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Products</h4>
+                        <h4 class="mb-sm-0 font-size-18">Services</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class=""><a href="javascript: void(0);">Products</a></li>
+                                <li class=""><a href="javascript: void(0);">Services</a></li>
                                 <li class="mx-1"><a href="javascript: void(0);"> > </a></li>
-                                <li class="breadcrumb-item active">Products List</li>
+                                <li class="breadcrumb-item active">Services List</li>
                             </ol>
                         </div>
                     </div>
@@ -33,39 +36,27 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Products List</h4>
-                            {{-- <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
-                                <a href="{{ route('product.create') }}" class="btn btn-primary waves-effect waves-light"> <i class="bx bx-plus me-1"></i> Add New</a>
-                            </div> --}}
-                            {{-- <div class="card-title-desc card-subtitle" bis_skin_checked="1">Create responsive tables by wrapping any <code>.table</code> in <code>.table-responsive</code>to make them scroll horizontally on small devices (under 768px).</div> --}}
+                            <h4 class="card-title">Services List</h4>
                             @if (count($data) > 0)
                                 <div class="table-responsive" bis_skin_checked="1">
                                     <table class="table mb-0 table">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">#</th>
-                                                <th>Picture</th>
                                                 <th>Name</th>
+                                                <th>Time</th>
+                                                <th>Tax</th>
                                                 <th>Price</th>
-                                                {{-- <th>Tax</th> --}}
-                                                <th>Qty</th>
-                                                <th>Status</th>
-                                                {{-- <th>Status</th> --}}
-                                                {{-- <th class="text-center">Options</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($data as $key => $product)
                                                 <tr>
                                                     <td  class="text-center">{{ ++$key }}</td>
-                                                    <td><img src=" {{ $product->img_url }}" alt="{{ $product->name }}" width="50px" height="50px" onerror="this.onerror=null;this.src='{{ asset('images/brands/bitbucket.png') }}'"></td>
                                                     <td>{{ $product->name }}</td>
+                                                    <td>{{ $product->time }}</td>
+                                                    <td>{{ $product->tax }}</td>
                                                     <td>{{ $product->price }}</td>
-                                                    {{-- <td>{{ $product->tax }}</td> --}}
-                                                    <td>{{ $product->stock_quantity }}</td>
-                                                    <td>{!! getStockStatus('woocommerce', $product->stock_status, 'badge') !!}</td>
-                                                    {{-- <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td> --}}
-                                                    {{-- <td class="text-center"> <a href="{{ route('product.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td> --}}
                                                 </tr>
                                             @endforeach
                                         </tbody>

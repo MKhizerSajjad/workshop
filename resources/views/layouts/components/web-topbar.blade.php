@@ -105,19 +105,19 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" href="{{ route('servicesList') }}" id="topnav-dashboard" role="button">
                             {{-- <i class="bx bx-label me-1"></i> (Our Services) --}}
                             <span key="t-aitool">Mūsų paslaugos</span>
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" href="{{ route('productsList') }}" id="topnav-dashboard" role="button">
                             {{-- <i class="bx bx-label me-1"></i> Parts --}}
                             <span key="t-aitool">Dalys</span>
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" href=" {{ route('dashboard') }} " id="topnav-dashboard" role="button">
                             {{-- <i class="bx bx-label me-1"></i> --}}
                             <span key="t-aitool">Paskyra</span>
                         </a>

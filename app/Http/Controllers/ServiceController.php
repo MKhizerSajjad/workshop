@@ -18,6 +18,14 @@ class ServiceController extends Controller
             ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
+    public function list(Request $request)
+    {
+        $data = Service::with('service')->orderBy('name')->paginate(10);
+
+        return view('service.list',compact('data'))
+            ->with('i', ($request->input('page', 1) - 1) * 10);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

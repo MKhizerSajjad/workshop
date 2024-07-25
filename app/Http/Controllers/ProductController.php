@@ -18,6 +18,14 @@ class ProductController extends Controller
             ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
+    public function list(Request $request)
+    {
+        $data = Product::orderBy('name')->where('name', 'LIKE', '%'.$request->product.'%')->paginate(10);
+
+        return view('product.list',compact('data'))
+            ->with('i', ($request->input('page', 1) - 1) * 20);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

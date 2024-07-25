@@ -42,6 +42,9 @@ Route::get('/booking/status', [TaskController::class, 'status'])->name('bookingS
 Route::get('/booking/status_search', [TaskController::class, 'statusSearch'])->name('bookingStatusSearch');
 // Route::get('service-location/{locationId}/fields', [SerivceLocationController::class, 'locationDetail']);
 
+Route::get('products', [ProductController::class, 'list'])->name('productsList');
+Route::get('services', [ServiceController::class, 'list'])->name('servicesList');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
