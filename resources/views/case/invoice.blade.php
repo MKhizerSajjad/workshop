@@ -189,8 +189,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th style="width: 50px;">Qty</th>
-                                                <th style="width: 70px;">Unit Price</th>
+                                                {{-- <th style="width: 50px;">Qty</th> --}}
+                                                <th style="width: 70px;">Price</th>
                                                 <th style="width: 50px;">Tax (%)</th>
                                                 <th class="text-end">Total Price</th>
                                             </tr>
@@ -198,26 +198,27 @@
                                         <tbody>
                                             @foreach ($task->taskProducts as $product)
                                                 @php
-                                                    $product->qty;
-                                                    $product->unit_price;
-                                                    $product->tax_perc;
-                                                    $unit_tax = ($product->tax_perc * $product->unit_price) / 100;
-                                                    $price = $product->qty * $product->unit_price;
+                                                    // $product->qty;
+                                                    // $product->total;
+                                                    // $product->unit_price;
+                                                    // $product->tax_perc;
+                                                    // $unit_tax = ($product->tax_perc * $product->unit_price) / 100;
+                                                    // $price = $product->qty * $product->unit_price;
                                                     $tax = $product->qty * $product->unit_tax;
-                                                    $product_price = $price + $tax;
-                                                    $total_product_price = $total_product_price + $product_price;
-                                                    $total_product_tax = $total_product_tax + $tax;
+                                                    $product_price = $product->total + $tax;
+                                                    $total_product_price += $product->total;
+                                                    $total_product_tax += $tax;
                                                 @endphp
                                                 <tr>
-                                                    <td>{{ $product->name ?? $product->product->name }}</td>
-                                                    <td>{{ $product->qty }}</td>
-                                                    <td>{{ $product->unit_price }}</td>
-                                                    <td>{{ $product->tax_perc }}</td>
+                                                    <td>{{ $product->name }}</td>
+                                                    {{-- <td>{{ $product->qty }}</td> --}}
+                                                    <td>{{ $product->total }}</td>
+                                                    <td>{{ $tax }}</td>
                                                     <td class="text-end">{{ $product_price }}</td>
                                                 </tr>
                                             @endforeach
                                             <tr>
-                                                <td colspan="4" class="text-end">Parts Total</td>
+                                                <td colspan="3" class="text-end">Parts Total</td>
                                                 <td class="text-end">{{ $total_product_price }}</td>
                                             </tr>
                                         </tbody>
@@ -231,12 +232,12 @@
                                         <tbody>
                                             <hr>
                                             <tr>
-                                                <td colspan="4" class="border-0 text-end">
+                                                <td colspan="3" class="border-0 text-end">
                                                     <strong>Tax Total</strong></td>
                                                 <td class="border-0 text-end">{{ $total_service_tax + $total_product_tax }}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" class="border-0 text-end">
+                                                <td colspan="3" class="border-0 text-end">
                                                     <strong>Grand Total</strong></td>
                                                 <td class="border-0 text-end"><h4 class="m-0">{{ $total_service_price + $total_product_price }}</h4></td>
                                             </tr>
