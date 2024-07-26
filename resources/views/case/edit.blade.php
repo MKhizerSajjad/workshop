@@ -210,7 +210,7 @@
                                                                 case 'jpeg':
                                                                 case 'png':
                                                                 case 'gif':
-                                                                    $previewContent = '<img class="thumb" src="' . asset('storage/app/public/task/media/test.png') . '" title="' . $media->media . '">';
+                                                                    $previewContent = '<img class="thumb" src="' . asset('/task/media/'. $media->media) . '" title="' . $media->media . '">';
                                                                     break;
                                                                 case 'mp4':
                                                                 case 'avi':
@@ -227,7 +227,7 @@
                                                         @endphp
                                                         <div class="preview-image">
                                                             {!! $previewContent !!}
-                                                            <span class="delete-image" data-nxame="' + theFile.name + '"><i class="fa fa-trash text-danger"></i></span>
+                                                            <span class="delete-image deleteCaseMedia" data-href="{{ route('case.destroyMedia', $media->id) }}" data-nxame="' + theFile.name + '"><i class="fa fa-trash text-danger"></i></span>
                                                         </div>
 
                                                     @endforeach
@@ -923,6 +923,23 @@
             total.val(parseFloat(rowTotal));
             price.val(productPrice);
             qty.val(1);
+        })
+
+
+        $(document).on('click', '.deleteCaseMedia', function(){
+            var url = $(this).data('href');
+            console.log(url);
+            $.ajax({
+                type: 'get',
+                url: url,
+                data: '',
+                success: function(response){
+                    console.log(response);
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
         })
 
 

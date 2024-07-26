@@ -138,7 +138,8 @@ class TaskController extends Controller
                     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                     $extension = $file->getClientOriginalExtension();
                     $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
-                    $path = $file->storeAs('task/media', $fileNameToStore); // 'images' is a folder inside 'public' disk
+                    $file->move(base_path('/public/task/media/'), $fileNameToStore);
+                    // $path = $file->store('task/media', $fileNameToStore); // 'images' is a folder inside 'public' disk
                     // $url = asset('storage/' . $path);
                     // $file->storeAs('public/media', $fileNameToStore);
 
@@ -427,39 +428,43 @@ class TaskController extends Controller
             }
         }
 
-        // if ($request->hasFile('files')) {
+        $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
+        if ($request->hasFile('files')) {
 
-        //     $index = 0; // Initialize the index variable
-        //     foreach ($request->file('files') as $file) {
-        //         try {
+            $index = 0; // Initialize the index variable
+            foreach ($request->file('files') as $file) {
+                try {
 
-        //             // $path = $file->store('task/images', 'public'); // 'images' is a folder inside 'public' disk
-        //             // $url = asset('storage/' . $path);
+                    // $path = $file->store('task/images', 'public'); // 'images' is a folder inside 'public' disk
+                    // $url = asset('storage/' . $path);
 
-        //             $filenameWithExt = $file->getClientOriginalName();
-        //             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        //             $extension = $file->getClientOriginalExtension();
-        //             $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
-        //             $path = $file->store('task/media', 'public'); // 'images' is a folder inside 'public' disk
-        //             // $url = asset('storage/' . $path);
-        //             // $file->storeAs('public/media', $fileNameToStore);
+                    $filenameWithExt = $file->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                    $extension = $file->getClientOriginalExtension();
+                    $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
+                    $file->move(base_path('/public/task/media/'), $fileNameToStore);
+                    // $path = $file->store('task/media', $fileNameToStore); // 'images' is a folder inside 'public' disk
+                    // $url = asset('storage/' . $path);
+                    // $file->storeAs('public/media', $fileNameToStore);
 
-        //             $data = [
-        //                 'task_id' => $task->id,
-        //                 'type' => getFileTypeFromExtension($extension),
-        //                 'media' => $fileNameToStore,
-        //             ];
-        //             $media = TaskMedia::create($data);
+                    $data = [
+                        'task_id' => $task->id,
+                        'type' => getFileTypeFromExtension($extension),
+                        'media' => $fileNameToStore,
+                        'customer_choice' => $isCustomerChoice,
+                    ];
+                    $media = TaskMedia::create($data);
 
-        //             logger('File saved successfully: ' . $fileNameToStore);
-        //             $index++;
+                    logger('File saved successfully: ' . $fileNameToStore);
+                    $index++;
 
-        //         } catch (\Exception $e) {
-        //             logger('Error saving file: ' . $e->getMessage());
+                } catch (\Exception $e) {
+                    logger('Error saving file: ' . $e->getMessage());
 
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
+
 
         $task->services()->sync($request->input('services', []));
         $task->leaveParts()->sync($request->input('parts', []));
@@ -489,6 +494,14 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         //
+    }
+
+    public function destroyMedia(Request $request, $id=0)
+    {
+        TaskMedia::where('id', $id)->delete();
+        return response()->json(['message' => $id]);
+
+        // $task->media()->delete();
     }
 
     public function invoice(Task $task)
