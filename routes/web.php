@@ -6,6 +6,7 @@ use App\Http\Controllers\VpnController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PriorityController;
@@ -68,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');
+    Route::resource('settings', SettingController::class)->names('setting')->middleware('access.level:1,2');
     Route::resource('item', ItemController::class)->names('item')->middleware('access.level:1,2,3');
     Route::resource('product', ProductController::class)->names('product')->middleware('access.level:1,2,3');
     Route::resource('service', ServiceController::class)->names('service')->middleware('access.level:1,2,3');

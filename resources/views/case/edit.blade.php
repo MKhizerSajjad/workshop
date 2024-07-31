@@ -621,50 +621,25 @@
                                         </div>
                                         <div class="tab-pane fade" id="v-confirmation" role="tabpanel" aria-labelledby="v-confirmation-tab">
                                             <div>
-
-                                                {{-- @foreach($data->serviceLocations as $serviceLocation)
-                                                    <div class="mb-2 form-check form-check-inline font-size-16">
-                                                        <input class="form-check-input" type="radio" id="location_{{ $serviceLocation->id }}" name="services_location" value="{{ $serviceLocation->id }}" {{ $loop->first ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="location_{{ $serviceLocation->id }}">
-                                                            <h5>{{ $serviceLocation->title }}</h5>
-                                                        </label>
-                                                    </div>
-                                                @endforeach --}}
-
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
                                                         <div class="row">
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_term" id="read_service_term"
-                                                                       {{ isset($data->confirmations['read_service_term']) && $data->confirmations['read_service_term'] ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="read_service_term">
-                                                                    <h5>I read and agree with terms of service</h5>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_pricing" id="read_service_pricing"
-                                                                       {{ isset($data->confirmations['read_service_pricing']) && $data->confirmations['read_service_pricing'] ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="read_service_pricing">
-                                                                    <h5>I read and agree with service pricing</h5>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="receive_newsletter" id="receive_newsletter"
-                                                                       {{ isset($data->confirmations['receive_newsletter']) && $data->confirmations['receive_newsletter'] ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="receive_newsletter">
-                                                                    <h5>I agree to receive newsletter</h5>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="read_gdr" id="read_gdr"
-                                                                       {{ isset($data->confirmations['read_gdr']) && $data->confirmations['read_gdr'] ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="read_gdr">
-                                                                    <h5>I read with GDR</h5>
-                                                                </label>
-                                                            </div>
+                                                            @foreach (json_decode($data->task->details) as $term)
+                                                                <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                    <input type="hidden" name="terms[{{ $term->name }}][status]" value="0">
+                                                                    <input type="hidden" name="terms[{{ $term->name }}][link]" value="{{ $term->link }}">
+                                                                    <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $term->name }}][status]" id="term_{{ $term->name }}" {{ $term->is_check == "1" ? 'checked' : '' }}>
+                                                                    <label class="form-check-label" for="term_{{$term->name}}">
+                                                                        <h5>
+                                                                            @if(!empty($term->link))
+                                                                                <a href="{{ $term->link }}" target="_blank">{{ $term->title }}</a>
+                                                                            @else
+                                                                                {{ $term->title }}
+                                                                            @endif
+                                                                        </h5>
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </div>

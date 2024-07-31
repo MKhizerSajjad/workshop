@@ -401,33 +401,27 @@
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
                                                         <div class="row">
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_term" id="read_service_term">
-                                                                <label class="form-check-label" for="read_service_term">
-                                                                    <h5>I read and agree with terms of service</h5>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="read_service_pricing" id="read_service_pricing">
-                                                                <label class="form-check-label" for="read_service_pricing">
-                                                                    <h5>I read and agree with service pricing</h5>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="receive_newsletter" id="receive_newsletter">
-                                                                <label class="form-check-label" for="receive_newsletter">
-                                                                    <h5>I agree to receive newsletter</h5>
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                <input class="form-check-input" type="checkbox" value="1" name="read_gdr" id="read_gdr">
-                                                                <label class="form-check-label" for="read_gdr">
-                                                                    <h5>I read with GDR</h5>
-                                                                </label>
-                                                            </div>
+                                                            @foreach (json_decode($data->terms) as $term)
+                                                                @php
+                                                                    // Sanitize the title to be a valid HTML attribute value
+                                                                    $sanitizedTitle = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $term->title);
+                                                                @endphp
+                                                                <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                    {{-- <input class="form-check-input" type="checkbox" value="1" name="term_{{$sanitizedTitle}}" id="term_{{$sanitizedTitle}}"> --}}
+                                                                    <input type="hidden" name="terms[{{ $sanitizedTitle }}][status]" value="0">
+                                                                    <input type="hidden" name="terms[{{ $sanitizedTitle }}][link]" value="{{ $term->link }}">
+                                                                    <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $sanitizedTitle }}][status]" id="term_{{ $sanitizedTitle }}">
+                                                                    <label class="form-check-label" for="term_{{$sanitizedTitle}}">
+                                                                        <h5>
+                                                                            @if(!empty($term->link))
+                                                                                <a href="{{ $term->link }}" target="_blank">{{ $term->title }}</a>
+                                                                            @else
+                                                                                {{ $term->title }}
+                                                                            @endif
+                                                                        </h5>
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                 </div>

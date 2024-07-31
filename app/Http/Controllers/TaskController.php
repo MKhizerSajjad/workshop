@@ -21,6 +21,7 @@ use App\Models\TaskMedia;
 use App\Models\TaskService;
 use App\Models\TaskProduct;
 use App\Models\SerivceLocation;
+use App\Models\Setting;
 use App\Models\TaskLeavePart;
 use Symfony\Component\VarDumper\VarDumper;
 
@@ -47,6 +48,7 @@ class TaskController extends Controller
         $data->services = Service::orderBy('name')->get(); // where('status', '!=', 3)->
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
+        $data->terms = Setting::where('type', 'term')->pluck('data')->first();
         return view('case.create', compact('data'));
     }
 
@@ -93,15 +95,18 @@ class TaskController extends Controller
             $customer
         );
 
-        // Extract confirmation checkboxes
-        $checkboxes = [
-            'read_service_term' => isset($request['read_service_term']),
-            'read_service_pricing' => isset($request['read_service_pricing']),
-            'receive_newsletter' => isset($request['receive_newsletter']),
-            'read_gdr' => isset($request['read_gdr']),
-        ];
-        // Convert to JSON array
-        $confirmation = json_encode($checkboxes);
+        $terms = [];
+        if ($request->has('terms')) {
+            foreach ($request->input('terms') as $key => $termData) {
+                $terms[] = [
+                    'title' => str_replace('_', ' ', $key),
+                    'name' => $key,
+                    'link' => $termData['link'] ?? null,
+                    'is_check' => $termData['status'] ?? '0'
+                ];
+            }
+        }
+        $confirmation = json_encode($terms);
 
         $invoce = $this->generateInvoiceCode();
         $data = [
