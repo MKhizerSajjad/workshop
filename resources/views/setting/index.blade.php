@@ -31,13 +31,13 @@
 
             @php
                 // Check if $data[type] is not null
-                $taxData = $data['tax'] ?? ['type' => 'tax', 'data' => [['name' => '', 'percentage' => '', 'tax_status' => '']]];
+                $taxData = $data['tax'] ?? ['type' => 'tax', 'data' => [['name' => '', 'percentage' => '', 'status' => '']]];
                 $termsData = $data['term'] ?? ['type' => 'term', 'data' => [['title' => '', 'link' => '', 'status' => '']]];
                 // Check if 'data' is a JSON string that needs to be decoded
                 if (is_string($taxData['data'])) {
                     $taxDecodedData = json_decode($taxData['data'], true); // true to get an associative array
                 } else {
-                    $taxDecodedData = $termsData['data']; // If 'data' is already an array or object
+                    $taxDecodedData = $taxData['data']; // If 'data' is already an array or object
                 }
                 // Check if 'data' is a JSON string that needs to be decoded
                 if (is_string($termsData['data'])) {
@@ -69,7 +69,7 @@
                                                         <label for="percentage">Percentage (%)</label>
                                                     </div>
                                                     <div class="mb-3 col-lg-3">
-                                                        <label for="tax_status">Status</label>
+                                                        <label for="status">Status</label>
                                                     </div>
                                                     <div class="mb-3 col-lg-1">
                                                     </div>
@@ -78,7 +78,7 @@
                                                 @foreach ($taxDecodedData as $tax)
                                                     <div data-repeater-item class="row taxTemplateRow">
                                                         <div class="mb-3 col-lg-4">
-                                                            <input type="text" name="name[]" class="form-control name @error('name.*') is-invalid @enderror" placeholder="Enter Name" value="{{ $tax['name'] }}">
+                                                            <input type="text" name="name[]" class="form-control name @error('name.*') is-invalid @enderror" placeholder="Enter Name" value="{{ $tax['name'] }}" required>
                                                             @error('name.*')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -86,7 +86,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="mb-3 col-lg-4">
-                                                            <input type="text" name="percentage[]" class="form-control percentage @error('percentage.*') is-invalid @enderror" placeholder="Enter Place Holder" value="{{ $tax['percentage'] }}">
+                                                            <input type="text" name="percentage[]" class="form-control percentage @error('percentage.*') is-invalid @enderror" placeholder="Enter Place Holder" value="{{ $tax['percentage'] }}" required>
                                                             @error('percentage.*')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -94,13 +94,13 @@
                                                             @enderror
                                                         </div>
                                                         <div class="mb-3 col-lg-3">
-                                                            <select id="tax_status" name="tax_status[]" class="form-control @error('tax_status.*') is-invalid @enderror">
+                                                            <select id="tax_status" name="status[]" class="form-control @error('status.*') is-invalid @enderror" required>
                                                                 <option value="">Select status </option>
                                                                 @foreach (getGenStatus('general') as $key => $status)
-                                                                    <option value="{{ ++$key }}" @if($key == $tax['tax_status']) selected @endif>{{ $status }}</option>
+                                                                    <option value="{{ ++$key }}" @if($key == $tax['status']) selected @endif>{{ $status }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            @error('tax_status.*')
+                                                            @error('status.*')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
                                                                 </span>
@@ -161,7 +161,7 @@
                                                 @foreach ($termDecodedData as $term)
                                                     <div data-repeater-item class="row termTemplateRow">
                                                         <div class="mb-3 col-lg-4">
-                                                            <input type="text" name="title[]" class="form-control title @error('title.*') is-invalid @enderror" placeholder="Enter title" value="{{ $term['title'] }}">
+                                                            <input type="text" name="title[]" class="form-control title @error('title.*') is-invalid @enderror" placeholder="Enter title" value="{{ $term['title'] }}" required>
                                                             @error('title.*')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -169,7 +169,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="mb-3 col-lg-4">
-                                                            <input type="text" name="link[]" class="form-control link @error('link.*') is-invalid @enderror" placeholder="Enter Place Holder" value="{{ $term['link'] }}">
+                                                            <input type="text" name="link[]" class="form-control link @error('link.*') is-invalid @enderror" placeholder="Enter Place Holder" value="{{ $term['link'] }}" required>
                                                             @error('link.*')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -177,7 +177,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="mb-3 col-lg-3">
-                                                            <select id="is_required" name="is_required[]" class="form-control @error('is_required.*') is-invalid @enderror">
+                                                            <select id="is_required" name="is_required[]" class="form-control @error('is_required.*') is-invalid @enderror" required>
                                                                 <option value="">Select Option </option>
                                                                 @foreach (getGenStatus('bool') as $key => $status)
                                                                     <option value="{{ ++$key }}" @if($key == $term['is_required']) selected @endif>{{ $status }}</option>

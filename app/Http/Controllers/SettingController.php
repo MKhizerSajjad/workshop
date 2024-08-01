@@ -22,19 +22,23 @@ class SettingController extends Controller
         return view('setting.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        if($request->type == 'tax') {
+            $this->validate($request, [
+                'name.*' => 'required',
+                'percentage.*' => 'required',
+                'status.*' => 'required',
+            ]);
+        }
+
+        if($request->type == 'term') {
+            $this->validate($request, [
+                'title.*' => 'required',
+                'link.*' => 'required',
+                'is_required.*' => 'required',
+            ]);
+        }
 
         $inputs = $request->except(['_token', 'type']);
 
@@ -57,37 +61,5 @@ class SettingController extends Controller
         );
 
         return redirect()->route('setting.index')->with('success','Updated successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Setting $setting)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Setting $setting)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Setting $setting)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Setting $setting)
-    {
-        //
     }
 }
