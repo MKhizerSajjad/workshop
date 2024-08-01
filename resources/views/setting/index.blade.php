@@ -32,7 +32,7 @@
             @php
                 // Check if $data[type] is not null
                 $taxData = $data['tax'] ?? ['type' => 'tax', 'data' => [['name' => '', 'percentage' => '', 'status' => '']]];
-                $termsData = $data['term'] ?? ['type' => 'term', 'data' => [['title' => '', 'link' => '', 'status' => '']]];
+                $termsData = $data['term'] ?? ['type' => 'term', 'data' => [['title' => '', 'link' => '', 'is_required' => '']]];
                 // Check if 'data' is a JSON string that needs to be decoded
                 if (is_string($taxData['data'])) {
                     $taxDecodedData = json_decode($taxData['data'], true); // true to get an associative array
