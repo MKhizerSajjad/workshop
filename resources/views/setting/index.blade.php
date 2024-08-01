@@ -58,7 +58,7 @@
                                 <input type="hidden" name="type" value="tax">
                                 <div class="row">
                                     <div class="row">
-                                        <div class="col-12 mb-5">
+                                        <div class="col-12 mb-3">
                                             <div data-repeater-list="group-a">
                                                 <!-- Initial template for a single row -->
                                                 <div class="row">
@@ -125,7 +125,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
-                                        <button type="submit" class="btn btn-primary waves-effect waves-light w-10">Update Tax</button>
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light w-100">Update Tax</button>
                                     </div>
                                 </div>
                             </form>
@@ -142,7 +142,7 @@
                                 <input type="hidden" name="type" value="term">
                                 <div class="row">
                                     <div class="row">
-                                        <div class="col-12 mb-5">
+                                        <div class="col-12 mb-3">
                                             <div data-repeater-list="group-b">
                                                 <!-- Initial template for a single row -->
                                                 <div class="row">
@@ -153,7 +153,7 @@
                                                         <label for="link">Link</label>
                                                     </div>
                                                     <div class="mb-3 col-lg-3">
-                                                        <label for="type">Status</label>
+                                                        <label for="required">Required</label>
                                                     </div>
                                                     <div class="mb-3 col-lg-1">
                                                     </div>
@@ -177,10 +177,10 @@
                                                             @enderror
                                                         </div>
                                                         <div class="mb-3 col-lg-3">
-                                                            <select id="term_status" name="status[]" class="form-control @error('status.*') is-invalid @enderror">
-                                                                <option value="">Select Status </option>
-                                                                @foreach (getGenStatus('general') as $key => $status)
-                                                                    <option value="{{ ++$key }}" @if($key == $term['status']) selected @endif>{{ $status }}</option>
+                                                            <select id="is_required" name="is_required[]" class="form-control @error('is_required.*') is-invalid @enderror">
+                                                                <option value="">Select Option </option>
+                                                                @foreach (getGenStatus('bool') as $key => $status)
+                                                                    <option value="{{ ++$key }}" @if($key == $term['is_required']) selected @endif>{{ $status }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('type.*')
@@ -208,7 +208,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
-                                        <button type="submit" class="btn btn-primary waves-effect waves-light w-10">Update Terms</button>
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light w-100">Update Terms</button>
                                     </div>
                                 </div>
                             </form>

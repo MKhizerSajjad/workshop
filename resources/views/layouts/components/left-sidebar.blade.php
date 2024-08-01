@@ -77,6 +77,7 @@
                             <span key="t-settings">Settings</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ route('setting.index') }}" key="t-products">General</a></li>
                             <li><a href="{{ route('priority.index') }}" key="t-products">Priority</a></li>
                             <li><a href="{{ route('service-location.index') }}" key="t-orders">Service Location</a></li>
                         </ul>
