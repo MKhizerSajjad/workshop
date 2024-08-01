@@ -401,27 +401,29 @@
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
                                                         <div class="row">
-                                                            @foreach (json_decode($data->terms) as $term)
-                                                                @php
-                                                                    // Sanitize the title to be a valid HTML attribute value
-                                                                    $sanitizedTitle = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $term->title);
-                                                                @endphp
-                                                                <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                    {{-- <input class="form-check-input" type="checkbox" value="1" name="term_{{$sanitizedTitle}}" id="term_{{$sanitizedTitle}}"> --}}
-                                                                    <input type="hidden" name="terms[{{ $sanitizedTitle }}][status]" value="0">
-                                                                    <input type="hidden" name="terms[{{ $sanitizedTitle }}][link]" value="{{ $term->link }}">
-                                                                    <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $sanitizedTitle }}][status]" id="term_{{ $sanitizedTitle }}" {{ $term->status == "1" ? 'required' : '' }}>
-                                                                    <label class="form-check-label" for="term_{{$sanitizedTitle}}">
-                                                                        <h5>
-                                                                            @if(!empty($term->link))
-                                                                                <a href="{{ $term->link }}" target="_blank">{{ $term->title }}</a>
-                                                                            @else
-                                                                                {{ $term->title }}
-                                                                            @endif
-                                                                        </h5>
-                                                                    </label>
-                                                                </div>
-                                                            @endforeach
+                                                            @if (!empty($data->terms))
+                                                                @foreach (json_decode($data->terms) as $term)
+                                                                    @php
+                                                                        // Sanitize the title to be a valid HTML attribute value
+                                                                        $sanitizedTitle = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $term->title);
+                                                                    @endphp
+                                                                    <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                        {{-- <input class="form-check-input" type="checkbox" value="1" name="term_{{$sanitizedTitle}}" id="term_{{$sanitizedTitle}}"> --}}
+                                                                        <input type="hidden" name="terms[{{ $sanitizedTitle }}][status]" value="0">
+                                                                        <input type="hidden" name="terms[{{ $sanitizedTitle }}][link]" value="{{ $term->link }}">
+                                                                        <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $sanitizedTitle }}][status]" id="term_{{ $sanitizedTitle }}" {{ $term->status == "1" ? 'required' : '' }}>
+                                                                        <label class="form-check-label" for="term_{{$sanitizedTitle}}">
+                                                                            <h5>
+                                                                                @if(!empty($term->link))
+                                                                                    <a href="{{ $term->link }}" target="_blank">{{ $term->title }}</a>
+                                                                                @else
+                                                                                    {{ $term->title }}
+                                                                                @endif
+                                                                            </h5>
+                                                                        </label>
+                                                                    </div>
+                                                                @endforeach
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -455,10 +457,7 @@
     </div>
 @endsection
 
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const showAllButton = document.getElementById('showAllServices');
@@ -538,7 +537,6 @@
         });
     });
 
-
     function handleLocationChange(radio) {
         // Get the selected value
         // var locationId = radio.value;
@@ -548,7 +546,6 @@
 
         // You can add more JavaScript logic here as needed
     }
-
 
     function showFieldsConfiguration(serviceLocationId) {
         // Get the selected service location object from PHP data
@@ -601,7 +598,6 @@
             console.error('fields is not an array or is empty.');
         }
     }
-
 
     $(document).ready(function() {
         // Show the initially selected form on page load

@@ -48,7 +48,7 @@ class TaskController extends Controller
         $data->services = Service::orderBy('name')->get(); // where('status', '!=', 3)->
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
-        $data->terms = Setting::where('type', 'term')->pluck('data')->first();
+        $data->terms = Setting::where('type', 'term')->pluck('data')->first() ?? null;
         return view('case.create', compact('data'));
     }
 
