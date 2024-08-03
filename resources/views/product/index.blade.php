@@ -51,7 +51,7 @@
                                                 <th>Qty</th>
                                                 <th>Status</th>
                                                 {{-- <th>Status</th> --}}
-                                                {{-- <th class="text-center">Options</th> --}}
+                                                <th class="text-center">Options</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -65,7 +65,7 @@
                                                     <td>{{ $product->stock_quantity }}</td>
                                                     <td>{!! getStockStatus('woocommerce', $product->stock_status, 'badge') !!}</td>
                                                     {{-- <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td> --}}
-                                                    {{-- <td class="text-center"> <a href="{{ route('product.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td> --}}
+                                                    <td class="text-center"> <a href="{{ route('product.edit', $product->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

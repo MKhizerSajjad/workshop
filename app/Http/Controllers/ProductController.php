@@ -89,17 +89,19 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $this->validate($request, [
-            'name' => 'required|max:200',
+            // 'name' => 'required|max:200',
             'price' => 'required',
-            'tax' => 'required',
+            'stock' => 'required',
+            // 'tax' => 'required',
         ]);
 
         $data = [
-            'status' => $request->status ?? 1,
-            'name' => $request->name,
+            // 'status' => $request->status ?? 1,
+            // 'name' => $request->name,
             'price' => $request->price,
-            'tax' => $request->tax,
-            'detail' => $request->detail,
+            'stock_quantity' => $request->stock,
+            // 'tax' => $request->tax,
+            // 'detail' => $request->detail,
         ];
 
         $updated = Product::find($product->id)->update($data);
