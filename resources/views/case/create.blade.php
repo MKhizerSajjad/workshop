@@ -411,7 +411,7 @@
                                                                         {{-- <input class="form-check-input" type="checkbox" value="1" name="term_{{$sanitizedTitle}}" id="term_{{$sanitizedTitle}}"> --}}
                                                                         <input type="hidden" name="terms[{{ $sanitizedTitle }}][status]" value="0">
                                                                         <input type="hidden" name="terms[{{ $sanitizedTitle }}][link]" value="{{ $term->link }}">
-                                                                        <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $sanitizedTitle }}][status]" id="term_{{ $sanitizedTitle }}" {{ $term->status == "1" ? 'required' : '' }}>
+                                                                        <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $sanitizedTitle }}][status]" id="term_{{ $sanitizedTitle }}" {{ $term->is_required == "1" ? 'required' : '' }}>
                                                                         <label class="form-check-label" for="term_{{$sanitizedTitle}}">
                                                                             <h5>
                                                                                 @if(!empty($term->link))
