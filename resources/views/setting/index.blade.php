@@ -265,7 +265,7 @@
         // Function to bind events to a row
         function termBindRowEvents(row) {
             row.find('.term-remove-btn').on('click', function() {
-                removetermRow(row);
+                removetermRow($(this).closest('.termTemplateRow'));
             });
         }
 
