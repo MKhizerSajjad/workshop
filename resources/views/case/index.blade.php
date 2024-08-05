@@ -62,7 +62,7 @@
                                                     <td>{{ $task->model .' '. $task->year }}</td>
                                                     {{-- <td>{{ $task->manufacturer }}</td> --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
-                                                    <td></td>
+                                                    <td>{{ $task->total ? number_format($task->total, 2, '.', ',') : ''}}</td>
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>
                                                     <td>{!! getPayment('status', $task->payment_status, 'badge') !!}</td>
                                                     <td class="text-center">

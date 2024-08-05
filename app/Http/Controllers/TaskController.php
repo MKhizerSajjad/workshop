@@ -331,42 +331,6 @@ class TaskController extends Controller
             $customer
         );
 
-
-        // Merge Product Scenario
-        $row_count = $request->input("row_count");
-        $product = [];
-        $productsTotal = 0;
-        for ($count=1; $count <= $row_count; $count++) {
-            if (($request->input("merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
-                $mergeProduct = $request->input("name_$count")[0];
-            } else {
-                $mergeProduct = $request->input("merge_name_$count");
-            }
-            if(($mergeProduct == null || $mergeProduct == '') && count($request->input("product_$count")) == 0) {
-                continue;
-            }
-            $productArray = $request->input("product_$count");
-            $priceArray = $request->input("price_$count");
-            $qtyArray = $request->input("qty_$count");
-            $rowTotal = 0;
-            foreach((array)$productArray as $key => $value) {
-                if($value == null || $value == ''){
-                    continue;
-                }
-                $product[$mergeProduct]['child'][] = [
-                    'id' => $value,
-                    'qty' => $qtyArray[$key],
-                    'price' => $priceArray[$key],
-                    'total' =>  $priceArray[$key]*$qtyArray[$key]
-                ];
-                $rowTotal += $priceArray[$key];
-            }
-            $product[$mergeProduct]['name'] = $mergeProduct;
-            $product[$mergeProduct]['qty'] = 1;
-            $product[$mergeProduct]['total'] = $rowTotal;
-            $productsTotal += $rowTotal;
-        }
-
         // Terms & Condition / Confirmations
         $terms = [];
         if ($request->has('terms')) {
@@ -400,8 +364,49 @@ class TaskController extends Controller
         $taskId = $task->id;
         $task = Task::updateOrCreate(['id' => $taskId], $data);
 
-
         $taxPercentage = getTax();
+
+        // Merge Product Scenario
+        $row_count = $request->input("row_count");
+        $product = [];
+        $totalProductAmount = 0;
+        for ($count=1; $count <= $row_count; $count++) {
+            if (($request->input("merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
+                $mergeProduct = $request->input("name_$count")[0];
+            } else {
+                $mergeProduct = $request->input("merge_name_$count");
+            }
+            if(($mergeProduct == null || $mergeProduct == '') && count($request->input("product_$count")) == 0) {
+                continue;
+            }
+            $productArray = $request->input("product_$count");
+            $priceArray = $request->input("price_$count");
+            $qtyArray = $request->input("qty_$count");
+            $totalItemsAmount = 0;
+            foreach((array)$productArray as $key => $value) {
+                if($value == null || $value == ''){
+                    continue;
+                }
+
+                $productTaxAmount = $taxPercentage * $priceArray[$key] / 100;
+                $productWithTax = $priceArray[$key] + $productTaxAmount;
+                $totalItemPrice = $productWithTax * $qtyArray[$key];
+                $totalItemsAmount += $totalItemPrice;
+
+                $product[$mergeProduct]['child'][] = [
+                    'id' => $value,
+                    'qty' => $qtyArray[$key],
+                    'price' => $priceArray[$key],
+                    'total' =>  $totalItemPrice,
+                    'tax' =>  $taxPercentage
+                ];
+            }
+            $product[$mergeProduct]['name'] = $mergeProduct;
+            $product[$mergeProduct]['qty'] = 1;
+            $product[$mergeProduct]['total'] = $totalItemsAmount;
+            $totalProductAmount += $totalItemsAmount;
+        }
+
         // Parent Product
         TaskItemProduct::where('task_id', $taskId)->delete();
         TaskProduct::where('task_id', $taskId)->delete();
@@ -483,17 +488,24 @@ class TaskController extends Controller
             }
         }
 
-
         // Services
-        $test = [];
+        $totalServiceAmount = 0;
         if ($request->input('services')) {
             foreach ($request->input('services') as $service) {
                 $dbService = Service::where('id', $service)->select('id', 'price', 'tax')->first();
+
+                $qty = $service['qty'] ?? 1;
+                $price = $dbService->price ?? null;
+                $tax = $dbService->tax ?? null;
+                $serviceTaxAmount = $tax * $price / 100;
+                $serviceWithTax = $price + $serviceTaxAmount;
+                $servicePrice = $serviceWithTax * $qty;
+                $totalServiceAmount += $servicePrice;
                 $data = [
                     'service_id' => $service,
-                    'qty' => $service['qty'] ?? 1,
-                    'unit_price' => $dbService->price ?? null,
-                    'tax_perc' => $dbService->tax ?? null,
+                    'qty' => $qty,
+                    'unit_price' => $price,
+                    'tax_perc' => $tax
                 ];
 
                 TaskService::updateOrCreate(
@@ -505,6 +517,11 @@ class TaskController extends Controller
                 );
             }
         }
+
+        $totalAmount = 0;
+        $totalAmount = $totalServiceAmount + $totalProductAmount;
+
+        $task->update(['total' => $totalAmount]);
 
         $task->leaveParts()->sync($request->input('parts', []));
         // $task->services()->sync($request->input('services', []));
