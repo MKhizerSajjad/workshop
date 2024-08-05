@@ -457,8 +457,8 @@
                                                                             <div class="mb-3 col-lg-1">
                                                                             </div>
                                                                         </div>
-                                                                        @foreach ($parentProduct->taskItemProducts as $indexP => $chilProduct)
-                                                                            <div class="newRow_{{$index}}">
+                                                                        <div class="newRow_{{$index}}">
+                                                                            @foreach ($parentProduct->taskItemProducts as $indexP => $chilProduct)
                                                                                 <div data-repeater-item class="row templateRow rowAppend_{{$index}}">
                                                                                     <div class="mb-3 col-lg-3">
                                                                                         <select name="product_{{$index}}[]" class="select2 form-control product product_{{$index}}">
@@ -483,9 +483,9 @@
                                                                                         </button>
                                                                                     </div>
                                                                                 </div>
+                                                                                @endforeach
                                                                             </div>
-                                                                        @endforeach
-                                                                    </div>
+                                                                        </div>
                                                                     <!-- Button to add new rows -->
                                                                     <div class="row">
                                                                         <div class="col-lg-1 offset-lg-11">
