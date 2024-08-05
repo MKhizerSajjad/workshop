@@ -151,12 +151,9 @@
                                         <tbody>
                                             @foreach ($task->taskServices as $service)
                                                 @php
-                                                    $service->qty;
-                                                    $service->unit_price;
-                                                    $service->tax_perc;
                                                     $unit_tax = ($service->tax_perc * $service->unit_price) / 100;
                                                     $price = $service->qty * $service->unit_price;
-                                                    $tax = $service->qty * $service->unit_tax;
+                                                    $tax = $service->qty * $unit_tax;
                                                     $service_price = $price + $tax;
                                                     $totalServicePrice = $totalServicePrice + $service_price;
                                                     $totalServiceTax = $totalServiceTax + $tax;
@@ -198,14 +195,7 @@
                                         <tbody>
                                             @foreach ($task->taskProducts as $product)
                                                 @php
-                                                    // $product->qty;
-                                                    // $product->total;
-                                                    // $product->unit_price;
-                                                    // $product->tax_perc;
-                                                    // $unit_tax = ($product->tax_perc * $product->unit_price) / 100;
-                                                    // $price = $product->qty * $product->unit_price;
-
-                                                    // $tax = $product->qty * $product->unit_tax;
+                                                    $tax = $product->qty * $product->unit_tax;
                                                     $productTax = ($product->total * getTax()) / 100;
                                                     $productPrice = $product->total + $productTax;
                                                     $totalProductPrice += $productPrice;
@@ -215,7 +205,7 @@
                                                     <td>{{ $product->name }}</td>
                                                     {{-- <td>{{ $product->qty }}</td> --}}
                                                     <td>{{ $product->total }}</td>
-                                                    <td>{{ $productTax }}</td>
+                                                    <td>{{ getTax() }}%</td>
                                                     <td class="text-end">{{ $productPrice }}</td>
                                                 </tr>
                                             @endforeach

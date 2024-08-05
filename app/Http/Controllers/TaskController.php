@@ -383,6 +383,7 @@ class TaskController extends Controller
             $priceArray = $request->input("price_$count");
             $qtyArray = $request->input("qty_$count");
             $totalItemsAmount = 0;
+            $totalItemsAmountExTax = 0;
             foreach((array)$productArray as $key => $value) {
                 if($value == null || $value == ''){
                     continue;
@@ -392,6 +393,7 @@ class TaskController extends Controller
                 $productWithTax = $priceArray[$key] + $productTaxAmount;
                 $totalItemPrice = $productWithTax * $qtyArray[$key];
                 $totalItemsAmount += $totalItemPrice;
+                $totalItemsAmountExTax += $priceArray[$key] * $qtyArray[$key];
 
                 $product[$mergeProduct]['child'][] = [
                     'id' => $value,
@@ -403,7 +405,7 @@ class TaskController extends Controller
             }
             $product[$mergeProduct]['name'] = $mergeProduct;
             $product[$mergeProduct]['qty'] = 1;
-            $product[$mergeProduct]['total'] = $totalItemsAmount;
+            $product[$mergeProduct]['total'] = $totalItemsAmountExTax;
             $totalProductAmount += $totalItemsAmount;
         }
 
