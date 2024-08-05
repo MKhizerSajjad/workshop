@@ -710,7 +710,7 @@
                             </select>
                         </div>
                         <div class="mb-3 col-lg-3">
-                            <input type="text" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
+                            <input type="hidden" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                             <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
                         </div>
                         <div class="mb-3 col-lg-3">
@@ -748,7 +748,7 @@
                 </select>
             </div>
             <div class="mb-3 col-lg-3">
-                <input type="text" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
+                <input type="hidden" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                 <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
             </div>
             <div class="mb-3 col-lg-3">
