@@ -1,4 +1,6 @@
 <?php
+use App\Models\Setting;
+
 function statusReturn($prefix, $statuses, $status = null, $type = null)
 {
     if(isset($statuses[$prefix])) {
@@ -167,4 +169,10 @@ function getFileTypeFromExtension($extension) {
     else {
         return '0'; // Default type or handle other types as needed
     }
+}
+
+function getTax() {
+
+    $tax = Setting::where('type', 'tax')->pluck('data')->first();
+    return json_decode($tax)[0]->percentage;
 }

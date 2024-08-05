@@ -462,9 +462,9 @@
                                                                                 <div data-repeater-item class="row templateRow rowAppend_{{$index}}">
                                                                                     <div class="mb-3 col-lg-3">
                                                                                         <select name="product_{{$index}}[]" class="select2 form-control product product_{{$index}}">
-                                                                                            <option data-price="0" value="">Choose Product</option>
+                                                                                            <option data-name="" data-price="0" value="">Choose Product</option>
                                                                                             @foreach ($data->products as $product)
-                                                                                                <option data-price="{{ $product->price }}" value="{{ $product->id }}" @if($product->id == $chilProduct->product_id) selected @endif>{{ $product->name }}</option>
+                                                                                                <option data-name="{{ $product->name }}" data-price="{{ $product->price }}" value="{{ $product->id }}" @if($product->id == $chilProduct->product_id) selected @endif>{{ $product->name }}</option>
                                                                                             @endforeach
                                                                                         </select>
                                                                                     </div>
@@ -703,13 +703,14 @@
                     <div data-repeater-item class="row templateRow rowAppend_INDEX">
                         <div class="mb-3 col-lg-3">
                             <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
-                                <option data-price="0" value="">Choose Product</option>
+                                <option data-name="" data-price="0" value="">Choose Product</option>
                                 @foreach ($data->products as $product)
-                                    <option data-price="{{ $product->price }}" value="{{ $product->id }}">{{ $product->name }}</option>
+                                    <option data-name="{{ $product->name }}" data-price="{{ $product->price }}" value="{{ $product->id }}">{{ $product->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="mb-3 col-lg-3">
+                            <input type="text" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                             <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
                         </div>
                         <div class="mb-3 col-lg-3">
@@ -740,13 +741,14 @@
         <div data-repeater-item class="row templateRow">
             <div class="mb-3 col-lg-3">
                 <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
-                    <option data-price="0" value="">Choose Product</option>
+                    <option data-name="" data-price="0" value="">Choose Product</option>
                     @foreach ($data->products as $product)
-                        <option data-price="{{ $product->price }}" value="{{ $product->id }}">{{ $product->name }}</option>
+                        <option data-name="{{ $product->name }}" data-price="{{ $product->price }}" value="{{ $product->id }}">{{ $product->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3 col-lg-3">
+                <input type="text" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                 <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
             </div>
             <div class="mb-3 col-lg-3">
@@ -889,11 +891,14 @@
 
         $(document).on('change', '.product', function(){
             var productPrice = $(this).find(':selected').data('price');
+            var productName = $(this).find(':selected').data('name');
 
+            var name = $(this).closest('.templateRow').find('.name')
             var price = $(this).closest('.templateRow').find('.price')
             var qty = $(this).closest('.templateRow').find('.qty')
             var total = $(this).closest('.templateRow').find('.total')
 
+            name.val(productName);
             rowTotal = parseFloat(productPrice)*parseInt(1);
             total.val(parseFloat(rowTotal));
             price.val(productPrice);

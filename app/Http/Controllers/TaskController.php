@@ -331,41 +331,18 @@ class TaskController extends Controller
             $customer
         );
 
-        // Extract confirmation checkboxes
-        $checkboxes = [
-            'read_service_term' => isset($request['read_service_term']),
-            'read_service_pricing' => isset($request['read_service_pricing']),
-            'receive_newsletter' => isset($request['receive_newsletter']),
-            'read_gdr' => isset($request['read_gdr']),
-        ];
-        // Convert to JSON array
-        $confirmation = json_encode($checkboxes);
-
-        $data = [
-            'customer_id' => $customerAdd->id ?? null,
-            'details' => $confirmation,
-            'item_id' => $request->input('item'),
-            'technician_id' => $request->input('technician_id'),
-            'manufacturer' => $request->input('manufacturer'),
-            'model' => $request->input('model'),
-            'year' => $request->input('year'),
-            'color' => $request->input('color'),
-            'additional_info' => $request->input('additional_info'),
-            'problem_description' => $request->input('problem_description'),
-            'priority_id' => $request->input('priority'),
-            'inspection_diagnose' => $request->input('inspection'),
-            'services_location' => $request->input('services_location'),
-        ];
-
-        $taskId = $task->id;
-        $task = Task::updateOrCreate(['id' => $taskId], $data);
 
         // Merge Product Scenario
         $row_count = $request->input("row_count");
         $product = [];
+        $productsTotal = 0;
         for ($count=1; $count <= $row_count; $count++) {
-            $mergeProduct = $request->input("merge_name_$count");
-            if($mergeProduct == null || $mergeProduct == ''){
+            if (($request->input("merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
+                $mergeProduct = $request->input("name_$count")[0];
+            } else {
+                $mergeProduct = $request->input("merge_name_$count");
+            }
+            if(($mergeProduct == null || $mergeProduct == '') && count($request->input("product_$count")) == 0) {
                 continue;
             }
             $productArray = $request->input("product_$count");
@@ -387,8 +364,44 @@ class TaskController extends Controller
             $product[$mergeProduct]['name'] = $mergeProduct;
             $product[$mergeProduct]['qty'] = 1;
             $product[$mergeProduct]['total'] = $rowTotal;
+            $productsTotal += $rowTotal;
         }
 
+        // Terms & Condition / Confirmations
+        $terms = [];
+        if ($request->has('terms')) {
+            foreach ($request->input('terms') as $key => $termData) {
+                $terms[] = [
+                    'title' => str_replace('_', ' ', $key),
+                    'name' => $key,
+                    'link' => $termData['link'] ?? null,
+                    'is_check' => $termData['status'] ?? '0'
+                ];
+            }
+        }
+        $confirmation = json_encode($terms);
+
+        $data = [
+            'customer_id' => $customerAdd->id ?? null,
+            'details' => $confirmation,
+            'item_id' => $request->input('item'),
+            'technician_id' => $request->input('technician_id'),
+            'manufacturer' => $request->input('manufacturer'),
+            'model' => $request->input('model'),
+            'year' => $request->input('year'),
+            'color' => $request->input('color'),
+            'additional_info' => $request->input('additional_info'),
+            'problem_description' => $request->input('problem_description'),
+            'priority_id' => $request->input('priority'),
+            'inspection_diagnose' => $request->input('inspection'),
+            'services_location' => $request->input('services_location'),
+        ];
+
+        $taskId = $task->id;
+        $task = Task::updateOrCreate(['id' => $taskId], $data);
+
+
+        $taxPercentage = getTax();
         // Parent Product
         TaskItemProduct::where('task_id', $taskId)->delete();
         TaskProduct::where('task_id', $taskId)->delete();
@@ -418,7 +431,7 @@ class TaskController extends Controller
                         'qty' => $childData['qty'],
                         'unit_price' => $childData['price'],
                         'total' => $childData['total'],
-                        'tax_perc' => 0,
+                        'tax_perc' => $taxPercentage,
                     ];
 
                     TaskItemProduct::updateOrCreate(
@@ -471,8 +484,30 @@ class TaskController extends Controller
         }
 
 
-        $task->services()->sync($request->input('services', []));
+        // Services
+        $test = [];
+        if ($request->input('services')) {
+            foreach ($request->input('services') as $service) {
+                $dbService = Service::where('id', $service)->select('id', 'price', 'tax')->first();
+                $data = [
+                    'service_id' => $service,
+                    'qty' => $service['qty'] ?? 1,
+                    'unit_price' => $dbService->price ?? null,
+                    'tax_perc' => $dbService->tax ?? null,
+                ];
+
+                TaskService::updateOrCreate(
+                    [
+                        'task_id' => $taskId,
+                        'service_id' => $service,
+                    ],
+                    $data
+                );
+            }
+        }
+
         $task->leaveParts()->sync($request->input('parts', []));
+        // $task->services()->sync($request->input('services', []));
         // $task->products()->sync($request->input('products', []));
 
         // if(isset($request->services)) {

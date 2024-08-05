@@ -47,7 +47,8 @@
                                                 <th>Picture</th>
                                                 <th>Name</th>
                                                 <th>Price</th>
-                                                {{-- <th>Tax</th> --}}
+                                                <th>Tax</th>
+                                                <th>Total</th>
                                                 <th>Qty</th>
                                                 <th>Status</th>
                                                 {{-- <th>Status</th> --}}
@@ -56,12 +57,16 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($data as $key => $product)
+                                                @php
+                                                    $taxAmount = ($product->price * getTax()) / 100;
+                                                @endphp
                                                 <tr>
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td><img src=" {{ $product->img_url }}" alt="{{ $product->name }}" width="50px" height="50px" onerror="this.onerror=null;this.src='{{ asset('images/brands/bitbucket.png') }}'"></td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->price }}</td>
-                                                    {{-- <td>{{ $product->tax }}</td> --}}
+                                                    <td>{{ ($taxAmount) }}</td>
+                                                    <td>{{ ($product->price + $taxAmount) }}</td>
                                                     <td>{{ $product->stock_quantity }}</td>
                                                     <td>{!! getStockStatus('woocommerce', $product->stock_status, 'badge') !!}</td>
                                                     {{-- <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td> --}}

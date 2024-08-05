@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PrioritySeeder::class);
         $this->call(PartsSeeder::class);
         $this->call(ServiceLocationsSeeder::class);
+        $this->call(SettingsSeeder::class);
     }
 }

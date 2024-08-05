@@ -68,17 +68,17 @@
                                                     <div class="mb-3 col-lg-4">
                                                         <label for="percentage">Percentage (%)</label>
                                                     </div>
-                                                    <div class="mb-3 col-lg-3">
+                                                    <div class="mb-3 col-lg-4">
                                                         <label for="status">Status</label>
                                                     </div>
-                                                    <div class="mb-3 col-lg-1">
-                                                    </div>
+                                                    {{-- <div class="mb-3 col-lg-1">
+                                                    </div> --}}
                                                 </div>
 
                                                 @foreach ($taxDecodedData as $tax)
                                                     <div data-repeater-item class="row taxTemplateRow">
                                                         <div class="mb-3 col-lg-4">
-                                                            <input type="text" name="name[]" class="form-control name @error('name.*') is-invalid @enderror" placeholder="Enter Name" value="{{ $tax['name'] }}" required>
+                                                            <input type="text" name="name[]" class="form-control name @error('name.*') is-invalid @enderror" placeholder="Enter Name" value="{{ $tax['name'] }}" required readonly>
                                                             @error('name.*')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -93,8 +93,8 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                        <div class="mb-3 col-lg-3">
-                                                            <select id="tax_status" name="status[]" class="form-control @error('status.*') is-invalid @enderror" required>
+                                                        <div class="mb-3 col-lg-4">
+                                                            <select id="tax_status" name="status[]" class="form-control @error('status.*') is-invalid @enderror" required readonly>
                                                                 <option value="">Select status </option>
                                                                 @foreach (getGenStatus('general') as $key => $status)
                                                                     <option value="{{ ++$key }}" @if($key == $tax['status']) selected @endif>{{ $status }}</option>
@@ -106,22 +106,22 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-lg-1">
+                                                        {{-- <div class="col-lg-1">
                                                             <button type="button" class="btn btn-danger tax-remove-btn">
                                                                 <i class="bx bx-minus-circle me-1"></i>
                                                             </button>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 @endforeach
                                             </div>
                                             <!-- Button to add new rows -->
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <div class="col-lg-1 offset-lg-11">
                                                     <button type="button" class="btn btn-success tax-add-btn text-bold">
                                                         <i class="bx bx-plus-circle me-1"></i>
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
