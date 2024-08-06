@@ -33,11 +33,43 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Products List</h4>
                             {{-- <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
                                 <a href="{{ route('product.create') }}" class="btn btn-primary waves-effect waves-light"> <i class="bx bx-plus me-1"></i> Add New</a>
                             </div> --}}
-                            {{-- <div class="card-title-desc card-subtitle" bis_skin_checked="1">Create responsive tables by wrapping any <code>.table</code> in <code>.table-responsive</code>to make them scroll horizontally on small devices (under 768px).</div> --}}
+
+                            <div class="row mb-3">
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="mt-2">
+                                        <h4 class="card-title">Products List</h4>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 col-sm-12">
+                                    <form class="mt-4 mt-sm-0 float-sm-end d-sm-flex align-items-center" method="GET">
+                                        <div class="search-box me-2">
+                                            <div class="position-relative">
+                                                <input type="text" class="form-control border-1" name="product" id="searchProductList" autocomplete="off" placeholder="Search..." value="{{ request()->get('product') }}">
+                                                <i class="bx bx-search-alt search-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="me-2">
+                                            <div class="position-relative">
+                                                <select name="limit" id="limit" class="form-select border-1 mr-3" style="width: 70px; border-radius: 30px">
+                                                    @php
+                                                        $limit = request()->get('limit') ?? 10;
+                                                    @endphp
+                                                    <option value="10" @if($limit == 10) selected @endif>10</option>
+                                                    <option value="25" @if($limit == 25) selected @endif>25</option>
+                                                    <option value="50" @if($limit == 50) selected @endif>50</option>
+                                                    <option value="100" @if($limit == 100) selected @endif>100</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-rounded waves-effect waves-light"><i class="bx bx-filter-alt me-1"></i> Search</button>
+                                        <a href="{{ route('product.index') }}" class="btn btn-secondary btn-rounded waves-effect waves-light mx-2"><i class="bx bx-crosshair me-1"></i> Clear</a>
+                                    </form>
+                                </div>
+                            </div>
+
                             @if (count($data) > 0)
                                 <div class="table-responsive" bis_skin_checked="1">
                                     <table class="table mb-0 table">
@@ -64,9 +96,9 @@
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td><img src=" {{ $product->img_url }}" alt="{{ $product->name }}" width="50px" height="50px" onerror="this.onerror=null;this.src='{{ asset('images/brands/bitbucket.png') }}'"></td>
                                                     <td>{{ $product->name }}</td>
-                                                    <td>{{ $product->price }}</td>
-                                                    <td>{{ ($taxAmount) }}</td>
-                                                    <td>{{ ($product->price + $taxAmount) }}</td>
+                                                    <td>{{ numberFormat($product->price, 'euro') }}</td>
+                                                    <td>{{ numberFormat($taxAmount, 'euro') }}</td>
+                                                    <td>{{  numberFormat(($product->price + $taxAmount), 'euro') }}</td>
                                                     <td>{{ $product->stock_quantity }}</td>
                                                     <td>{!! getStockStatus('woocommerce', $product->stock_status, 'badge') !!}</td>
                                                     {{-- <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td> --}}

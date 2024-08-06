@@ -12,7 +12,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Product::orderBy('name')->paginate(10);
+        $limit = $request->limit ?? 10;
+        $data = Product::orderBy('name')->where('name', 'LIKE', '%'.$request->product.'%')->paginate($limit);
 
         return view('product.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 10);

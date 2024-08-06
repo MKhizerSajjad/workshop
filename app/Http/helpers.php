@@ -172,7 +172,19 @@ function getFileTypeFromExtension($extension) {
 }
 
 function getTax() {
-
     $tax = Setting::where('type', 'tax')->pluck('data')->first();
     return json_decode($tax)[0]->percentage;
+}
+
+function numberFormat($amount, $type=null) {
+    $formatted = number_format($amount, 2, '.', ',');
+
+    switch ($type) {
+        case 'euro':
+            return $formatted . '€';
+        case 'percentage':
+            return $formatted . '%';
+        default:
+            return $formatted;
+    }
 }

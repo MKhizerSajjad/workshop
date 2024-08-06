@@ -48,6 +48,7 @@
                                                 <th>Sort Order</th>
                                                 <th>Price</th>
                                                 <th>Tax</th>
+                                                <th>Total</th>
                                                 <th>Time</th>
                                                 <th>Parent</th>
                                                 <th>Show Price</th>
@@ -59,11 +60,15 @@
                                         <tbody>
                                             @foreach ($data as $key => $product)
                                                 <tr>
+                                                    @php
+                                                        $taxAmount = ($product->price * $product->tax) / 100;
+                                                    @endphp
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->sort_order }}</td>
-                                                    <td>{{ $product->price }}</td>
-                                                    <td>{{ $product->tax }}</td>
+                                                    <td>{{ numberFormat($product->price, 'euro') }}</td>
+                                                    <td>{{ numberFormat($product->tax, 'percentage') }}</td>
+                                                    <td>{{  numberFormat(($product->price + $taxAmount), 'euro') }}</td>
                                                     <td>{{ $product->time }}</td>
                                                     <td>{{ $product->service->name ?? '' }}</td>
                                                     <td>{!! getGenStatus('bool', $product->show_price, 'badge') !!}</td>
