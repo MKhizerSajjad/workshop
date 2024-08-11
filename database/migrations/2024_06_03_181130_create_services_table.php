@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('time', 100);
             $table->string('picture')->nullable();
             $table->boolean('show_price')->default(1);
+            $table->boolean('add_tax')->default(2);
             $table->boolean('prioritized')->default(1)->comment('to show in main');
             $table->text('detail')->nullable();
             $table->timestamps();

@@ -31,8 +31,9 @@ class ServiceController extends Controller
      */
     public function create()
     {
+        $tax = getTax();
         $services = Service::where('service_id', null)->select('id', 'name')->orderBy('name')->get();
-        return view('service.create', compact('services'));
+        return view('service.create', compact('services', 'tax'));
     }
 
     /**
@@ -58,6 +59,7 @@ class ServiceController extends Controller
             'tax' => $request->tax,
             'time' => $request->time,
             'show_price' => $request->show_price,
+            'add_tax' => $request->add_tax,
             // 'prioritized' => $request->prioritized ?? 2,
             'detail' => $request->detail,
         ];
@@ -89,8 +91,9 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
+        $tax = getTax();
         $services = Service::where([['service_id', null],['id', '!=', $service['id']]])->select('id', 'name')->orderBy('name')->get();
-        return view('service.edit', compact('service', 'services'));
+        return view('service.edit', compact('service', 'services', 'tax'));
     }
 
     /**
@@ -101,7 +104,7 @@ class ServiceController extends Controller
         $this->validate($request, [
             'name' => 'required|max:200',
             'price' => 'required',
-            'tax' => 'required',
+            'add_tax' => 'required',
             'time' => 'required',
         ]);
 
@@ -114,6 +117,7 @@ class ServiceController extends Controller
             'tax' => $request->tax,
             'time' => $request->time,
             'show_price' => $request->show_price,
+            'add_tax' => $request->add_tax,
             'detail' => $request->detail,
         ];
 

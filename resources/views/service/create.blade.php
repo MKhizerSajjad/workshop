@@ -112,7 +112,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    {{-- <div class="col-sm-4">
                                         <div class="mb-3">
                                             <label for="tax">Tax <span class="text text-danger"> *</span></label>
                                             <input id="tax" name="tax" type="number" step="any" class="form-control cal @error('tax') is-invalid @enderror" placeholder="Tax" value="{{ old('tax') }}">
@@ -122,10 +122,26 @@
                                                 </span>
                                             @enderror
                                         </div>
+                                    </div> --}}
+                                    <div class="col-sm-4">
+                                        <div class="mb-3">
+                                            <label for="add_tax">Add Tax <span class="text text-danger"> *</span></label>
+                                            <select id="add_tax" name="add_tax" class="select2 form-control @error('add_tax') is-invalid @enderror">
+                                                <option value="">Add Tax </option>
+                                                @foreach (getGenStatus('bool') as $key => $price)
+                                                    <option value="{{ ++$key }}">{{ $price }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('add_tax')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="mb-3">
-                                            <label for="total">Total Price</label>
+                                            <label for="total">Total Price </label>
                                             <input id="total" name="total" type="number" step="any" class="form-control" placeholder="Total" readonly>
                                         </div>
                                     </div>
@@ -155,12 +171,30 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var priceInput = document.getElementById('price');
-        var taxInput = document.getElementById('tax');
+        // var taxInput = document.getElementById('tax');
+        var addTax = document.getElementById('add_tax');
         var totalInput = document.getElementById('total');
 
         if (priceInput && taxInput) {
-            priceInput.addEventListener('keyup', calculateSum);
-            taxInput.addEventListener('keyup', calculateSum);
+            // priceInput.addEventListener('keyup', calculateSum);
+            // taxInput.addEventListener('keyup', calculateSum);
+            priceInput.addEventListener('keyup', calculateTotal);
+            addTax.addEventListener('change', calculateTotal);
+        }
+
+        function calculateTotal() {
+            var price = parseFloat(priceInput.value) || 0;
+            var tax = parseFloat(addTax.value) || 0;
+            var taxAmount = 0;
+            var taxPercentage = 0;
+
+            if (tax === 1) {
+                taxPercentage = {{ $tax }}
+                taxAmount = (price * taxPercentage) / 100;
+            }
+
+            var total = price + taxAmount;
+            totalInput.value = total.toFixed(2);
         }
 
         function calculateSum() {

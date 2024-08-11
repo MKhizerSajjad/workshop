@@ -163,7 +163,7 @@
 
                                                 <div>
                                                     @foreach ($data->parts as $part)
-                                                        <div class="form-check form-check-inline font-size-16">
+                                                        <div class="form-check form-check-inline font-size-16 mt-1">
                                                             <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}">
                                                             <label class="form-check-label" for="part-{{ $part->id }}">
                                                                 <h5>{{ $part->name }}</h5>
@@ -171,8 +171,13 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
+                                                <div class="mt-2">
+                                                    <label for="extra-parts">More Leaving Parts</label>
+                                                    <p class="card-title-desc font-size-10 mb-0">Each part should be comma (<code><b>,</b></code>) seprated </p>
+                                                    <textarea name="extra-parts" id="extra-parts" class="input form-control">{{ request()->input('extra-parts') }}</textarea><br>
+                                                </div>
 
-                                                <h4 class="card-title mt-5">Medias</h4>
+                                                <h4 class="card-title mt-2">Medias</h4>
                                                 {{-- <p class="card-title-desc">Pictures and videos of product</p> --}}
                                                 {{-- <div>
                                                     <label class="form-label">Attached Files</label>
@@ -308,7 +313,8 @@
                                                 <div class="mb-5">
                                                     @foreach ($data->services->where('status', 1) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}">
+                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" onchange="updateServiceTotal()">
+                                                            <input class="form-check-input" type="text" name="serviceprices[]" value="{{ $service->id }}" name="serviceprices[]" id="serviceprices{{ $service->id }}">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
@@ -318,13 +324,15 @@
                                                         </div>
                                                     @endforeach
 
-                                                    <div class="text-align-center mt-3 mb-3">
-                                                        <h3 type="button" id="showAllServices" class="btn btn-primary show-more"><i class="bx bx-show"></i> Show More</button>
-                                                    </div>
+                                                    @if (count($data->services->where('status', 2)) > 0)
+                                                        <div class="text-align-center mt-3 mb-3">
+                                                            <h3 type="button" id="showAllServices" class="btn btn-primary show-more"><i class="bx bx-show"></i> Show More</button>
+                                                        </div>
+                                                    @endif
 
                                                     @foreach ($data->services->where('status', 2) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16 hidden-services d-none">
-                                                            <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}">
+                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" onchange="updateServiceTotal()">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
@@ -338,6 +346,15 @@
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                     @enderror
+
+                                                    <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
+                                                        <label>Selected Services Total (€)</label>
+                                                        <input type="number" name="service_total" id="service-total" class="form-control" placeholder="Total Services Amount" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
+                                                        <label>Give your's if price is over (€)</label>
+                                                        <input type="text" name="service_desired_total" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control" placeholder="Your Desired Amount" value="{{ old('service_desired_total') }}">
+                                                    </div>
                                                 </div>
 
                                                 {{-- </form> --}}
@@ -459,6 +476,22 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+    // Total of All Selected Services
+    function updateServiceTotal() {
+        let total = 0;
+
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][service-price]');
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseFloat(checkbox.getAttribute('service-price'));
+            }
+        });
+
+        document.getElementById('service-total').value = total.toFixed(2);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const showAllButton = document.getElementById('showAllServices');
 
@@ -480,6 +513,7 @@
                 showAllButton.classList.add('show-more');
             }
         });
+
     });
 
     $(document).ready(function() {

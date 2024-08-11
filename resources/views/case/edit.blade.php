@@ -164,7 +164,7 @@
                                                         @php
                                                             $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id);
                                                         @endphp
-                                                        <div class="form-check form-check-inline font-size-16">
+                                                        <div class="form-check form-check-inline font-size-16 mt-1">
                                                             <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ $isChecked ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="part-{{ $part->id }}">
                                                                 <h5>{{ $part->name }}</h5>
@@ -227,7 +227,9 @@
                                                         @endphp
                                                         <div class="preview-image">
                                                             {!! $previewContent !!}
-                                                            <span class="delete-image deleteCaseMedia" data-href="{{ route('case.destroyMedia', $media->id) }}" data-nxame="' + theFile.name + '"><i class="fa fa-trash text-danger"></i></span>
+                                                            @if ($media->customer_choice == 2)
+                                                                <span class="delete-image deleteCaseMedia" data-href="{{ route('case.destroyMedia', $media->id) }}" data-nxame="' + theFile.name + '"><i class="fa fa-trash text-danger"></i></span>
+                                                            @endif
                                                         </div>
 
                                                     @endforeach
@@ -327,6 +329,9 @@
                                                 <p class="card-title-desc">Do you want to avail professional diagniostic serves?</p>
                                                 {{-- <form> --}}
 
+                                                @php
+                                                    $totalServicesPrice = 0;
+                                                @endphp
                                                 <div class="mb-4 row">
                                                     <div class="col-md-6">
                                                         <div class="form-check form-check-inline font-size-16">
@@ -356,9 +361,13 @@
                                                     @foreach ($data->services->where('status', 1) as $service)
                                                         @php
                                                             $isChecked = $data->task->taskServices->contains('service_id', $service->id);
+
+                                                            if ($isChecked) {
+                                                                $totalServicesPrice += $service->price;
+                                                            }
                                                         @endphp
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ $isChecked ? 'checked' : '' }} onchange="updateServiceTotal()">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
@@ -368,16 +377,21 @@
                                                         </div>
                                                     @endforeach
 
-                                                    <div class="text-align-center mt-3 mb-3">
-                                                        <h3 type="button" id="showAllServices" class="btn btn-primary show-more"><i class="bx bx-show"></i> Show More</button>
-                                                    </div>
+                                                    @if (count($data->services->where('status', 2)) > 0)
+                                                        <div class="text-align-center mt-3 mb-3">
+                                                            <h3 type="button" id="showAllServices" class="btn btn-primary show-more"><i class="bx bx-show"></i> Show More</button>
+                                                        </div>
+                                                    @endif
 
                                                     @foreach ($data->services->where('status', 2) as $service)
                                                         @php
                                                             $isChecked = $data->task->taskServices->contains('service_id', $service->id);
+                                                            if ($isChecked) {
+                                                                $totalServicesPrice += $service->price;
+                                                            }
                                                         @endphp
                                                         <div class="mb-2 form-check form-check-inline font-size-16 hidden-services d-none">
-                                                            <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ $isChecked ? 'checked' : '' }}  onchange="updateServiceTotal()">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
@@ -391,6 +405,15 @@
                                                             <strong>{{ $message }}</strong>
                                                         </span>
                                                     @enderror
+
+                                                    <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
+                                                        <label>Selected Services Total (€)</label>
+                                                        <input type="number" name="service_total" id="service-total" class="form-control" placeholder="Total Services Amount" value="{{ $totalServicesPrice }}" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
+                                                        <label>Give your's if price is over (€)</label>
+                                                        <input type="text" name="service_desired_total" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control" placeholder="Your Desired Amount" value="{{ $data->task->service_desired_total }}">
+                                                    </div>
                                                 </div>
 
                                                 <h4 class="card-title mt-5">Products</h4>
@@ -769,6 +792,21 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    // Total of All Selected Services
+    function updateServiceTotal() {
+        let total = 0;
+
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][service-price]');
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseFloat(checkbox.getAttribute('service-price'));
+            }
+        });
+
+        document.getElementById('service-total').value = total.toFixed(2);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const showAllButton = document.getElementById('showAllServices');
 

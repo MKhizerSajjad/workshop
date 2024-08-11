@@ -61,13 +61,13 @@
                                             @foreach ($data as $key => $product)
                                                 <tr>
                                                     @php
-                                                        $taxAmount = ($product->price * $product->tax) / 100;
+                                                        $taxAmount = ($product->price * getTax()) / 100;
                                                     @endphp
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->sort_order }}</td>
                                                     <td>{{ numberFormat($product->price, 'euro') }}</td>
-                                                    <td>{{ numberFormat($product->tax, 'percentage') }}</td>
+                                                    <td>{{ numberFormat($taxAmount, 'euro') }}</td>
                                                     <td>{{  numberFormat(($product->price + $taxAmount), 'euro') }}</td>
                                                     <td>{{ $product->time }}</td>
                                                     <td>{{ $product->service->name ?? '' }}</td>

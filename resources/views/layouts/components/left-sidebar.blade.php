@@ -34,7 +34,7 @@
                 <li class="menu-title" key="t-menu">Menu</li>
 
                 <li>
-                    <a href="home" class="waves-effect">
+                    <a href="{{ route('index') }}" class="waves-effect">
                         <i class="bx bx-home-circle"></i>
                         <span key="t-dashboards">Dashboards</span>
                     </a>

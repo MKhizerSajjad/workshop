@@ -125,6 +125,7 @@ class TaskController extends Controller
             'priority_id' => $request->input('priority'),
             'inspection_diagnose' => $request->input('inspection'),
             'services_location' => $request->input('services_location'),
+            'service_desired_total' => $request->input('service_desired_total') ?? null,
         ];
 
         $task = Task::create($data);
@@ -167,18 +168,50 @@ class TaskController extends Controller
         }
 
         if(isset($request->services)) {
-            foreach ($request->input('services') as $service_id) {
+            foreach ($request->input('services') as $key => $service_id) {
+
+                $dbService = Service::where('id', $service_id)->select('id', 'price', 'tax')->first();
+
+                $qty = $service['qty'] ?? 1;
+                $price = $dbService->price ?? null;
+                $tax = ($dbService->add_tax == 1 ? getTax() : 0) ?? null;
+                $serviceTaxAmount = $tax * $price / 100;
+                $serviceWithTax = $price + $serviceTaxAmount;
+                $servicePrice = $serviceWithTax * $qty;
+
                 TaskService::create([
                     'task_id' => $task->id,
                     'service_id' => $service_id,
-                    'service_id' => $service_id,
-                    'customer_choice' => $isCustomerChoice
+                    'customer_choice' => $isCustomerChoice,
+                    'qty' => $qty,
+                    'unit_price' => $price,
+                    'tax_perc' => $tax,
                 ]);
             }
         }
 
-        if(isset($request->parts)) {
-            foreach ($request->input('parts') as $part_id) {
+        // Get extra-parts from request and process them
+        $extraParts = $request->input('extra-parts', '');
+        $extraPartsArray = array_map('trim', explode(',', $extraParts));
+        $extraPartsArray = array_filter($extraPartsArray); // Remove empty values
+
+        foreach ($extraPartsArray as $field) {
+            $added = Part::updateOrCreate(
+                ['name' => $field],
+                ['status' => 2],
+            );
+
+            $parts[] = $added->id;
+        }
+
+        $mergedParts = array_merge($parts, $request->input('parts'));
+        logger('mergedParts : ' . json_encode($mergedParts));
+        $uniqueMergedParts = array_unique($mergedParts);
+
+        logger('uniqueMergedParts : ' . json_encode($uniqueMergedParts));
+
+        if(isset($uniqueMergedParts)) {
+            foreach ($uniqueMergedParts as $part_id) {
                 TaskLeavePart::create([
                     'task_id' => $task->id,
                     'part_id' => $part_id,
@@ -275,7 +308,7 @@ class TaskController extends Controller
         $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskItemProducts')->first();
         $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
         $data->items = Item::where('status', 1)->orderBy('name')->get();
-        $data->parts = Part::where('status', 1)->orderBy('name')->get();
+        $data->parts = Part::orderBy('name')->get();
         $data->services = Service::orderBy('name')->get(); // where('status', 1)->
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
         $data->products = Product::where('status', 1)->orderBy('name')->get();
@@ -498,7 +531,7 @@ class TaskController extends Controller
 
                 $qty = $service['qty'] ?? 1;
                 $price = $dbService->price ?? null;
-                $tax = $dbService->tax ?? null;
+                $tax = ($dbService->add_tax == 1 ? getTax() : 0) ?? null;
                 $serviceTaxAmount = $tax * $price / 100;
                 $serviceWithTax = $price + $serviceTaxAmount;
                 $servicePrice = $serviceWithTax * $qty;

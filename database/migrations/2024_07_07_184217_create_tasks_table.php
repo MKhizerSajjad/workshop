@@ -35,6 +35,7 @@ return new class extends Migration
             $table->decimal('total', 10, 2)->nullable();
             $table->decimal('paid', 10, 2)->nullable();
             $table->decimal('pending', 10, 2)->nullable();
+            $table->decimal('service_desired_total', 10, 2)->nullable();
             $table->text('details');
             $table->text('notes')->nullable();
             $table->timestamps();

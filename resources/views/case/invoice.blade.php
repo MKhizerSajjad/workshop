@@ -126,6 +126,7 @@
                             </div>
 
                             @php
+                                $settingTax = getTax();
                                 $totalServiceTax = 0;
                                 $totalServicePrice = 0;
                                 $totalProductTax = 0;
@@ -162,9 +163,9 @@
                                                     <td>{{ $service->service->name }}</td>
                                                     <td>{{ $service->comment }}</td>
                                                     <td>{{ $service->qty }}</td>
-                                                    <td>{{ $service->unit_price }}</td>
-                                                    <td>{{ $service->tax_perc }}</td>
-                                                    <td class="text-end">{{ $service_price }}</td>
+                                                    <td>{{ numberFormat($service->unit_price, 'euro') }}</td>
+                                                    <td>{{ numberFormat($service->tax_perc, 'percentage') }}</td>
+                                                    <td class="text-end">{{ numberFormat($service_price, 'percentage') }}</td>
                                                 </tr>
                                             @endforeach
 
@@ -196,7 +197,7 @@
                                             @foreach ($task->taskProducts as $product)
                                                 @php
                                                     $tax = $product->qty * $product->unit_tax;
-                                                    $productTax = ($product->total * getTax()) / 100;
+                                                    $productTax = ($product->total * $settingTax) / 100;
                                                     $productPrice = $product->total + $productTax;
                                                     $totalProductPrice += $productPrice;
                                                     $totalProductTax += $productTax;
@@ -205,7 +206,7 @@
                                                     <td>{{ $product->name }}</td>
                                                     {{-- <td>{{ $product->qty }}</td> --}}
                                                     <td>{{ $product->total }}</td>
-                                                    <td>{{ getTax() }}%</td>
+                                                    <td>{{ $settingTax }}%</td>
                                                     <td class="text-end">{{ $productPrice }}</td>
                                                 </tr>
                                             @endforeach
