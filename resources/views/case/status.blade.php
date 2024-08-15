@@ -14,7 +14,7 @@
                         <h4 class="mb-sm-0 font-size-18">Case Status</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class=""><a href="javascript: void(0);">Cases</a></li>
+                                <li class=""><a href="javascript: void(0);">Case</a></li>
                                 <li class="mx-1"><a href="javascript: void(0);"> > </a></li>
                                 <li class="breadcrumb-item active">Case Status</li>
                             </ol>
@@ -35,7 +35,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Cases Status</h4>
+                            <h4 class="card-title">Case Status</h4>
                             <p class="card-title-desc">Put the given below information to check the status of your Case</p>
                             <form method="GET" action="{{ route('bookingStatusSearch') }}">
                                 @csrf

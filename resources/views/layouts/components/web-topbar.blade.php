@@ -99,7 +99,7 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" id="topnav-dashboard" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" href="{{route('takeBack')}}" id="topnav-dashboard" role="button">
                             {{-- <i class="bx bx-bot me-1"></i> take backk--}}
                             <span key="t-aitool">Atsiėmimas</span>
                         </a>

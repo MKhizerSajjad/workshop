@@ -73,10 +73,10 @@ function getPayment($prefix, $status = null, $type = null)
 {
     $statuses = [
         'status'=> [
-            '1' => ['Paid', '<span class="badge bg-success">Paid</span>'],
-            '2' => ['Partially Paid', '<span class="badge bg-primary">Partially Paid</span>'],
-            '3' => ['Pending', '<span class="badge bg-warning">Pending</span>'],
-            '4' => ['Unpaid', '<span class="badge bg-danger">Unpaid</span>']
+            '1' => ['Paid', '<span class="badge bg-success font-size-18"> <i class="bx bx-euro"></i> Paid</span>'],
+            '2' => ['Partially Paid', '<span class="badge bg-primary font-size-18"> <i class="bx bx-euro"></i> Partially Paid</span>'],
+            '3' => ['Pending', '<span class="badge bg-warning font-size-18"> <i class="bx bx-euro"></i> Pending</span>'],
+            '4' => ['Unpaid', '<span class="badge bg-danger font-size-18"> <i class="bx bx-euro"></i> Unpaid</span>']
         ],
         'via'=> [
             '1' => ['Cash', '<span class="badge bg-primary">Cash</span>'],

@@ -41,6 +41,9 @@ Route::get('/booking', [TaskController::class, 'create'])->name('bookingCreate')
 Route::post('/save-booking', [TaskController::class, 'store'])->name('bookingSave');
 Route::get('/booking/status', [TaskController::class, 'status'])->name('bookingStatus');
 Route::get('/booking/status_search', [TaskController::class, 'statusSearch'])->name('bookingStatusSearch');
+Route::get('/booking/takeback', [TaskController::class, 'takeBack'])->name('takeBack');
+Route::get('/booking/takeback/details', [TaskController::class, 'takeBackDetails'])->name('takeBackDetails');
+Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('caseInvoice');
 // Route::get('service-location/{locationId}/fields', [SerivceLocationController::class, 'locationDetail']);
 
 Route::get('products', [ProductController::class, 'list'])->name('productsList');
