@@ -638,6 +638,43 @@ class TaskController extends Controller
         return view('case.status',compact('data'));
     }
 
+    public function takeBack()
+    {
+        return view('case.take_back');
+    }
+
+    public function takeBackDetails(Request $request)
+    {
+        $request->validate([
+            'case_number' => 'required|string',
+            'phone' => 'required|string',
+        ]);
+
+        $caseNumber = $request->input('case_number');
+        $phone = $request->input('phone');
+
+        $task = Task::where('code', $caseNumber)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts')
+                    ->whereHas('customer', function ($query) use ($phone) {
+                        $query->where('phone', $phone);
+                    })->first();
+
+        $data = $task;
+        if(isset($task)) {
+            $data = json_decode('{}');
+            $data->task = $task;
+            $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
+            $data->items = Item::where('status', 1)->orderBy('name')->get();
+            $data->parts = Part::where('status', 1)->orderBy('name')->get();
+            $data->services = Service::orderBy('name')->get(); // where('status', 1)->
+            $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
+            $data->products = Product::where('status', 1)->orderBy('name')->get();
+            $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
+            $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
+        }
+
+        return view('case.take_back',compact('data'));
+    }
+
     public function generateInvoiceCode() {
         $code = Carbon::now()->format('Ymd');
         $todaysCount = Task::where('code', 'LIKE', $code.'%')->count();
