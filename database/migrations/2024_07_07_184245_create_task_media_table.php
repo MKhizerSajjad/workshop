@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('type')->nullable();
             $table->string('media');
             $table->boolean('customer_choice')->default(0);
+            $table->boolean('leave_receive')->nullable();
             $table->timestamps();
         });
     }

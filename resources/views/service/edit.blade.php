@@ -48,7 +48,7 @@
                                             <select id="service_id" name="service_id" class="select2 form-control">
                                                 <option value="">Select Parent Service </option>
                                                 @foreach ($services as $key => $loopService)
-                                                    <option value="{{ $loopService->id }}" @if($loopService->id == $service->id) selected @endif>{{ $loopService->name }}</option>
+                                                    <option value="{{ $loopService->id }}" @if($loopService->id == old('service_id', $service->id)) selected @endif>{{ $loopService->name }}</option>
                                                 @endforeach
                                             </select>
 
@@ -77,7 +77,7 @@
                                             <select id="service_status" name="status" class="select2 form-control @error('status') is-invalid @enderror">
                                                 <option value="">Select Status </option>
                                                 @foreach (getGenStatus('service') as $key => $price)
-                                                    <option value="{{ ++$key }}" @if($key == $service->status) selected @endif>{{ $price }}</option>
+                                                    <option value="{{ ++$key }}" @if($key == old('status', $service->status)) selected @endif>{{ $price }}</option>
                                                 @endforeach
                                                 @error('status')
                                                     <span class="invalid-feedback" role="alert">
@@ -93,7 +93,7 @@
                                             <select id="show_price" name="show_price" class="select2 form-control @error('show_price') is-invalid @enderror">
                                                 <option value="">Select Show Price </option>
                                                 @foreach (getGenStatus('bool') as $key => $price)
-                                                    <option value="{{ ++$key }}" @if($key == $service->show_price) selected @endif>{{ $price }}</option>
+                                                    <option value="{{ ++$key }}" @if($key == old('show_price', $service->show_price)) selected @endif>{{ $price }}</option>
                                                 @endforeach
                                             </select>
                                             @error('show_price')
@@ -120,7 +120,7 @@
                                             <select id="add_tax" name="add_tax" class="select2 form-control @error('add_tax') is-invalid @enderror">
                                                 <option value="">Add Tax </option>
                                                 @foreach (getGenStatus('bool') as $key => $price)
-                                                    <option value="{{ ++$key }}" @if($key == $service->add_tax) selected @endif>{{ $price }}</option>
+                                                    <option value="{{ ++$key }}" @if($key == old('add_tax', $service->add_tax)) selected @endif>{{ $price }}</option>
                                                 @endforeach
                                             </select>
                                             @error('add_tax')

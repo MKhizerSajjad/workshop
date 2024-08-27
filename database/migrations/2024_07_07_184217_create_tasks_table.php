@@ -36,6 +36,9 @@ return new class extends Migration
             $table->decimal('paid', 10, 2)->nullable();
             $table->decimal('pending', 10, 2)->nullable();
             $table->decimal('service_desired_total', 10, 2)->nullable();
+            $table->bigInteger('pickup_point_id')->unsigned()->nullable();
+            $table->boolean('is_servised')->nullable();
+            $table->boolean('is_satisfied')->nullable();
             $table->text('details');
             $table->text('notes')->nullable();
             $table->timestamps();
@@ -46,6 +49,7 @@ return new class extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('item_id')->references('id')->on('items')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('priority_id')->references('id')->on('priorities')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('pickup_point_id')->references('id')->on('pickup_points')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

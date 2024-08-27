@@ -165,12 +165,13 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-6 mt-2">
-                                                            <label class="col-form-label">Location</label>
-                                                            <select class="form-control select2" title="Item" name="item">
-                                                                <option value="">Select Location </option>
-                                                                @foreach (getService('location') as $key => $status)
-                                                                    <option value="{{ $key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                        <div class="col-md-6 mt-2 mb-2">
+                                                            <label class="col-form-label">Pickup Point</label>
+                                                            <select class="form-control select2" title="pickup_ponint_id" name="pickup_ponint_id">
+                                                                <option value="">Select Pickup Point </option>
+                                                                @foreach ($data->pickupPoints as $pickupPoint)
+                                                                    {{-- @if($pickupPoint->id == $data->task->payment_status) selected @endif --}}
+                                                                    <option value="{{ $pickupPoint->id }}">{{ $pickupPoint->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -187,7 +188,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="col-md-12 mb-3">
-                                                            <h4 class="card-title mt-5">Medias</h4>
+                                                            <h4 class="card-title mt-2">Medias</h4>
                                                             <label for="uploadImage" class="custom-file-upload">
                                                                 <span><i class="ti-cloud-up"></i> Pictures, files and videos of product</span>
                                                                 <input type="file" name="files[]" id="uploadImage" class="form-control-file" multiple>
@@ -286,7 +287,7 @@
         border: 2px dashed #ccc;
         border-radius: 5px;
         display: inline-block;
-        padding: 20px 200px;
+        padding: 20px;
         cursor: pointer;
         text-align: center;
         width: 100%;

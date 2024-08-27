@@ -114,6 +114,7 @@
                             @php
                                 $productsTotal = 0;
                                 $servicesTotal = 0;
+                                $taskItemProductsTotal = 0;
                             @endphp
 
                             <div class="card">
@@ -230,8 +231,7 @@
                                             <div>
                                                 <h4 class="card-title mt-5">Uploaded By Customer</h4>
                                                 <div id="imagesBody">
-
-                                                    @foreach ($data->task->media as $media)
+                                                    @foreach ($data->task->media->where('customer_choice', 1) as $media)
                                                         @php
                                                             $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
                                                             $previewContent = '';
@@ -242,7 +242,7 @@
                                                                 case 'jpeg':
                                                                 case 'png':
                                                                 case 'gif':
-                                                                    $previewContent = '<img class="thumb" src="' . asset('storage/app/public/task/media/test.png') . '" title="' . $media->media . '">';
+                                                                    $previewContent = '<img class="thumb" src="' . asset('/task/media/'. $media->media) . '" title="' . $media->media . '">';
                                                                     break;
                                                                 case 'mp4':
                                                                 case 'avi':
@@ -261,14 +261,13 @@
                                                             {!! $previewContent !!}
                                                             <span class="delete-image" data-nxame="' + theFile.name + '"></span>
                                                         </div>
-
                                                     @endforeach
                                                 </div>
                                                 <hr>
                                                 <h4 class="card-title mt-5">Uploaded By Service Center</h4>
                                                 <div id="imagesBody">
 
-                                                    @foreach ($data->task->media as $media)
+                                                    @foreach ($data->task->media->where('customer_choice', 2) as $media)
                                                         @php
                                                             $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
                                                             $previewContent = '';
@@ -279,7 +278,7 @@
                                                                 case 'jpeg':
                                                                 case 'png':
                                                                 case 'gif':
-                                                                    $previewContent = '<img class="thumb" src="' . asset('storage/app/public/task/media/test.png') . '" title="' . $media->media . '">';
+                                                                    $previewContent = '<img class="thumb" src="' . asset('/task/media/'. $media->media) . '" title="' . $media->media . '">';
                                                                     break;
                                                                 case 'mp4':
                                                                 case 'avi':
@@ -298,7 +297,6 @@
                                                             {!! $previewContent !!}
                                                             <span class="delete-image" data-nxame="' + theFile.name + '"></span>
                                                         </div>
-
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -362,6 +360,8 @@
                                                                 @foreach ($data->task->taskProducts as $index => $parentProduct)
                                                                     @php
                                                                         $productsTotal +=  ($parentProduct->unit_price * $parentProduct->qty);
+                                                                        $taskItemProduct = $parentProduct->taskItemProducts->first();
+                                                                        $taskItemProductsTotal += $taskItemProduct->total;
                                                                     @endphp
                                                                     <div data-repeater-list="group-a">
                                                                         <div class="row">
@@ -369,17 +369,21 @@
                                                                                 <label for="name">Name</label>
                                                                                 <input type="text" name="name" id="name" class="form-control" readonly placeholder="Product Name" value="{{ $parentProduct->name }}">
                                                                             </div>
-                                                                            <div class="mb-3 col-lg-3">
+                                                                            <div class="mb-3 col-lg-2">
                                                                                 <label for="place_holder">Price</label>
-                                                                                <input type="text" name="price" class="form-control price price_INDEX" readonly placeholder="Enter Price" value="{{ $parentProduct->unit_price }}">
+                                                                                <input type="text" name="price" class="form-control price price_INDEX" readonly placeholder="Enter Price" value="{{ $taskItemProduct->unit_price }}">
                                                                             </div>
-                                                                            <div class="mb-3 col-lg-3">
+                                                                            <div class="mb-3 col-lg-2">
                                                                                 <label for="place_holder">Qty</label>
-                                                                                <input type="text" name="qty" class="form-control" readonly placeholder="Enter Quantity" value="{{ $parentProduct->qty }}">
+                                                                                <input type="text" name="qty" class="form-control" readonly placeholder="Enter Quantity" value="{{ $taskItemProduct->qty }}">
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-2">
+                                                                                <label for="place_holder">Tax</label>
+                                                                                <input type="text" name="tax" class="form-control" readonly placeholder="Enter Tax %" value="{{ $taskItemProduct->tax_perc }}">
                                                                             </div>
                                                                             <div class="mb-3 col-lg-3">
                                                                                 <label for="place_holder">Total</label>
-                                                                                <input type="text" name="total" class="form-control" readonly placeholder="Total" value="{{ $parentProduct->unit_price * $parentProduct->qty }}">
+                                                                                <input type="text" name="total" class="form-control" readonly placeholder="Total" value="{{ $taskItemProduct->total }}">
                                                                             </div>
                                                                         </div>
                                                                         {{-- @foreach ($parentProduct->taskChildProducts as $index => $chilProduct)
@@ -416,7 +420,7 @@
                                                                 <div class="row">
                                                                     <div class="mb-3 col-lg-3 offset-md-9">
                                                                         <label for="place_holder"><b>Products Total</b></label>
-                                                                        <input type="text" name="products_total" class="form-control" readonly placeholder="Products Total" value="{{ $productsTotal }}">
+                                                                        <input type="text" name="products_total" class="form-control" readonly placeholder="Products Total" value="{{ $taskItemProductsTotal }}">
                                                                     </div>
                                                                 </div>
                                                             @else

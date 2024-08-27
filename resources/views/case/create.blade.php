@@ -314,7 +314,7 @@
                                                     @foreach ($data->services->where('status', 1) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
                                                             <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" onchange="updateServiceTotal()">
-                                                            <input class="form-check-input" type="text" name="serviceprices[]" value="{{ $service->id }}" name="serviceprices[]" id="serviceprices{{ $service->id }}">
+                                                            <input class="form-check-input" type="hidden" name="serviceprices[]" value="{{ $service->id }}" name="serviceprices[]" id="serviceprices{{ $service->id }}">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}

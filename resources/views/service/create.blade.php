@@ -47,7 +47,7 @@
                                             <select id="service_id" name="service_id" class="select2 form-control">
                                                 <option value="">Select Parent Service </option>
                                                 @foreach ($services as $key => $loopService)
-                                                    <option value="{{ $loopService->id }}">{{ $loopService->name }}</option>
+                                                    <option value="{{ $loopService->id }}" {{ old('service_id') == $loopService->id ? 'selected' : '' }}>{{ $loopService->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -75,7 +75,7 @@
                                             <select id="service_status" name="status" class="select2 form-control @error('status') is-invalid @enderror">
                                                 <option value="">Select Status </option>
                                                 @foreach (getGenStatus('service') as $key => $price)
-                                                    <option value="{{ ++$key }}">{{ $price }}</option>
+                                                    <option value="{{ ++$key }}" {{ old('status') == $key ? 'selected' : '' }}>{{ $price }}</option>
                                                 @endforeach
                                                 @error('status')
                                                     <span class="invalid-feedback" role="alert">
@@ -91,7 +91,7 @@
                                             <select id="show_price" name="show_price" class="select2 form-control @error('show_price') is-invalid @enderror">
                                                 <option value="">Select Show Price </option>
                                                 @foreach (getGenStatus('bool') as $key => $price)
-                                                    <option value="{{ ++$key }}">{{ $price }}</option>
+                                                    <option value="{{ ++$key }}" {{ old('show_price') == $key ? 'selected' : '' }}>{{ $price }}</option>
                                                 @endforeach
                                             </select>
                                             @error('show_price')
@@ -129,7 +129,7 @@
                                             <select id="add_tax" name="add_tax" class="select2 form-control @error('add_tax') is-invalid @enderror">
                                                 <option value="">Add Tax </option>
                                                 @foreach (getGenStatus('bool') as $key => $price)
-                                                    <option value="{{ ++$key }}">{{ $price }}</option>
+                                                    <option value="{{ ++$key }}" {{ old('add_tax', 1) == $key ? 'selected' : '' }}>{{ $price }}</option>
                                                 @endforeach
                                             </select>
                                             @error('add_tax')
@@ -175,12 +175,12 @@
         var addTax = document.getElementById('add_tax');
         var totalInput = document.getElementById('total');
 
-        if (priceInput && taxInput) {
+        // if (priceInput && taxInput) {
             // priceInput.addEventListener('keyup', calculateSum);
             // taxInput.addEventListener('keyup', calculateSum);
             priceInput.addEventListener('keyup', calculateTotal);
             addTax.addEventListener('change', calculateTotal);
-        }
+        // }
 
         function calculateTotal() {
             var price = parseFloat(priceInput.value) || 0;

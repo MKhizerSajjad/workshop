@@ -45,7 +45,7 @@ class ServiceController extends Controller
             'status' => 'required',
             'name' => 'required|max:200',
             'price' => 'required',
-            'tax' => 'required',
+            'add_tax' => 'required',
             'time' => 'required',
             'show_price' => 'required'
         ]);

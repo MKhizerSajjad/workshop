@@ -17,6 +17,7 @@ use App\Models\Service;
 use App\Models\Product;
 use App\Models\Priority;
 use App\Models\Customer;
+use App\Models\PickupPoint;
 use App\Models\TaskMedia;
 use App\Models\TaskService;
 use App\Models\TaskProduct;
@@ -154,6 +155,7 @@ class TaskController extends Controller
                         'type' => getFileTypeFromExtension($extension),
                         'media' => $fileNameToStore,
                         'customer_choice' => $isCustomerChoice,
+                        'leave_receive' => 1,
                     ];
                     $media = TaskMedia::create($data);
 
@@ -670,9 +672,60 @@ class TaskController extends Controller
             $data->products = Product::where('status', 1)->orderBy('name')->get();
             $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
             $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
+            $data->pickupPoints = PickupPoint::where('status', 1)->get();
         }
 
         return view('case.take_back',compact('data'));
+    }
+
+    public function saveTakeBack(Request $request, Task $task)
+    {
+        $data = [
+            'pickup_point_id' => $request->input('pickup_ponint_id'),
+            'is_servised' => $request->input('is_servised'),
+            'is_satisfied' => $request->input('is_satisfied'),
+        ];
+
+        $taskId = $task->id;
+        $task = Task::updateOrCreate(['id' => $taskId], $data);
+
+        $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
+        if ($request->hasFile('files')) {
+
+            $index = 0; // Initialize the index variable
+            foreach ($request->file('files') as $file) {
+                try {
+
+                    // $path = $file->store('task/images', 'public'); // 'images' is a folder inside 'public' disk
+                    // $url = asset('storage/' . $path);
+
+                    $filenameWithExt = $file->getClientOriginalName();
+                    $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                    $extension = $file->getClientOriginalExtension();
+                    $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
+                    $file->move(base_path('/public/task/media/'), $fileNameToStore);
+                    // $path = $file->store('task/media', $fileNameToStore); // 'images' is a folder inside 'public' disk
+                    // $url = asset('storage/' . $path);
+                    // $file->storeAs('public/media', $fileNameToStore);
+
+                    $data = [
+                        'task_id' => $task->id,
+                        'type' => getFileTypeFromExtension($extension),
+                        'media' => $fileNameToStore,
+                        'customer_choice' => $isCustomerChoice,
+                        'leave_receive' => 2,
+                    ];
+                    $media = TaskMedia::create($data);
+
+                    logger('File saved successfully: ' . $fileNameToStore);
+                    $index++;
+
+                } catch (\Exception $e) {
+                    logger('Error saving file: ' . $e->getMessage());
+
+                }
+            }
+        }
     }
 
     public function generateInvoiceCode() {
