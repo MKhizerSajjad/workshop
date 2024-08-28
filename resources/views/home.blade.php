@@ -13,13 +13,13 @@
                         </div>
                     @endif
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">User Dashboard</h4>
+                        <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Layouts</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">{{ config('app.name', '') }}</a></li>
                                 <li class="px-1"> > </li>
-                                <li class="breadcrumb-item active">User Dashboard</li>
+                                <li class="breadcrumb-item active">Dashboard</li>
                             </ol>
                         </div>
 
@@ -35,7 +35,7 @@
                                 <div class="col-7">
                                     <div class="text-primary p-3">
                                         <h5 class="text-primary">Welcome Back !</h5>
-                                        <p>Killnet Dashboard</p>
+                                        <p>{{ config('app.name', '') }} Dashboard</p>
                                     </div>
                                 </div>
                                 <div class="col-5 align-self-end">
@@ -45,71 +45,143 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-12">
                                     @php
                                         $userPicture = Auth::user()->picture ? asset('images/users/' . Auth::user()->picture) : asset('images/users/default.jpg');
                                     @endphp
                                     <div class="avatar-md profile-user-wid mb-4">
                                         <img  src="{{ $userPicture }}" alt="{{Auth::user()->first_name}}" class="img-thumbnail rounded-circle" onerror="{{ $userPicture}}">
                                     </div>
-                                    <h5 class="font-size-15 text-truncate">{{ Auth::user()->first_name .' '. Auth::user()->last_name }}</h5>
-                                    {{-- <p class="text-muted mb-0 text-truncate">UI/UX Designer</p> --}}
+                                    <h5 class="font-size-15">{{ Auth::user()->first_name .' '. Auth::user()->last_name }}</h5>
+                                    <p class="text-muted mb-0 text-truncate">{{ getUsertype('all', Auth::user()->user_type) }} </p>
                                 </div>
-
-                                <div class="col-sm-12">
+                                {{-- <div class="col-sm-8">
                                     <div class="pt-4">
+
                                         <div class="row">
                                             <div class="col-6">
-                                                <p class="text-muted mb-0">IP</p>
-                                                <h5 class="font-size-15">{{$data['client_ip']}}</h5>
+                                                <h5 class="font-size-15">125</h5>
+                                                <p class="text-muted mb-0">Projects</p>
                                             </div>
                                             <div class="col-6">
-                                                <p class="text-muted mb-0">DNS IP</p>
-                                                <h5 class="font-size-15">{{$data['dns_server']}}</h5>
+                                                <h5 class="font-size-15">$1245</h5>
+                                                <p class="text-muted mb-0">Revenue</p>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <p class="text-muted mb-0">Ping Latency(s)</p>
-                                                <h5 class="font-size-15">{{$data['ping_latency']}}s</h5>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="text-muted mb-0">Country</p>
-                                                <h5 class="font-size-15">{{$data['country']}}</h5>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <p class="text-muted mb-0">Region</p>
-                                                <h5 class="font-size-15">{{$data['client_isp']}}</h5>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <p class="text-muted mb-0">ISP</p>
-                                                <h5 class="font-size-15">{{$data['client_isp']}}</h5>
-                                            </div>
-                                            <div class="col-12">
-                                                <p class="text-muted mb-0">ASN Host </p>
-                                                <h5 class="font-size-15">47-72-253-252.dsl.dyn.ihug.co.nz</h5>
-                                            </div>
-                                            <div class="col-12">
-                                                <p class="text-muted mb-0">ASN Org </p>
-                                                <h5 class="font-size-15">AS9500 One New Zealand Group Limited</h5>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="mt-4">
+                                        <div class="mt-4">
                                             <a href="javascript: void(0);" class="btn btn-primary waves-effect waves-light btn-sm">View Profile <i class="mdi mdi-arrow-right ms-1"></i></a>
-                                        </div> -->
+                                        </div>
+                                    </div>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Monthly Earning</h4>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="text-muted">This month</p>
+                                    <h3>$34,252</h3>
+                                    <p class="text-muted"><span class="text-success me-2"> 12% <i class="mdi mdi-arrow-up"></i> </span> From previous period</p>
+
+                                    <div class="mt-4">
+                                        <a href="javascript: void(0);" class="btn btn-primary waves-effect waves-light btn-sm">View More <i class="mdi mdi-arrow-right ms-1"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mt-4 mt-sm-0">
+                                        <div id="radialBar-chart" data-colors='["--bs-primary"]' class="apex-charts"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-0">We craft digital, graphic and dimensional thinking.</p>
+                        </div>
+                    </div> --}}
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Usage</h4>
+                            <div id="tab3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card mini-stats-wid">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1">
+                                            <p class="text-muted fw-medium">Number of Orders</p>
+                                            <h4 class="mb-0">{{ $data['case_count'] }}</h4>
+                                        </div>
+
+                                        <div class="flex-shrink-0 align-self-center">
+                                            <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                                <span class="avatar-title rounded-circle bg-primary">
+                                                    <i class="bx bx-copy-alt font-size-24"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mini-stats-wid">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1">
+                                            <p class="text-muted fw-medium">Total Amount</p>
+                                            <h4 class="mb-0">{{ numberFormat($data['case_total'], 'euro') }}</h4>
+                                        </div>
+
+                                        <div class="flex-shrink-0 align-self-center">
+                                            <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                                <span class="avatar-title rounded-circle bg-primary">
+                                                    <i class="bx bx-archive-in font-size-24"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mini-stats-wid">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1">
+                                            <p class="text-muted fw-medium">Average Price</p>
+                                            <h4 class="mb-0">{{ numberFormat($data['case_average'], 'euro') }}</h4>
+                                        </div>
+
+                                        <div class="flex-shrink-0 align-self-center">
+                                            <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                                <span class="avatar-title rounded-circle bg-primary">
+                                                    <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xl-8">
                     <div class="row">
-
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    {{-- <h4 class="card-title mb-4">Realtime Monitor</h4> --}}
+                                    {{-- <div class="text-muted text-center">
+                                    </div> --}}
+                                    <div id="chart1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="row">
                         <div class="col-xl-6">
                             <div class="card">
                                 <div class="card-body">
@@ -130,7 +202,7 @@
                                                 <tr>
                                                     <td>
                                                         <h1 class="font-size-14 mb-1">Memory</h1>
-                                                        <!-- <p class="text-muted mb-0">7.9% used</p> -->
+                                                        <p class="text-muted mb-0">7.9% used</p>
                                                     </td>
 
                                                     <td>
@@ -144,7 +216,7 @@
                                                 <tr>
                                                     <td>
                                                         <h1 class="font-size-14 mb-1">Disk</h1>
-                                                        <!-- <p class="text-muted mb-0">24.9% used</p> -->
+                                                        <p class="text-muted mb-0">24.9% used</p>
                                                     </td>
 
                                                     <td>
@@ -158,7 +230,7 @@
                                                 <tr>
                                                     <td>
                                                         <h1 class="font-size-14 mb-1">CPU</h1>
-                                                        <!-- <p class="text-muted mb-0">10.5% used</p> -->
+                                                        <p class="text-muted mb-0">10.5% used</p>
                                                     </td>
                                                     <td>
                                                         <div id="radialchart-3" data-colors='["--bs-success"]' class="apex-charts"></div>
@@ -175,10 +247,7 @@
                             </div>
                         </div>
 
-
                         <div class="col-xl-6">
-
-
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title mb-4">CPU Information</h4>
@@ -240,119 +309,169 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <!-- end row -->
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title mb-4">NETWORK ADAPTER STATISTICS(NOTE THAT lo IS THE LOOPBACK ADAPTER)</h4>
-                            <div class="table-responsive">
-                                <table class="table align-middle table-nowrap mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th class="align-middle">Sr#</th>
-                                            <th class="align-middle">Adapter</th>
-                                            <th class="align-middle">Data Sent</th>
-                                            <th class="align-middle">Data Received</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>lo</td>
-                                            <td>{{$data['network_info']['lo']['data_sent']}} </td>
-                                            <td>{{$data['network_info']['lo']['data_received']}} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>eth0</td>
-                                            <td>{{$data['network_info']['eth0']['data_sent']}} </td>
-                                            <td>{{$data['network_info']['eth0']['data_received']}} </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>wlan0</td>
-                                            <td>{{$data['network_info']['wlan0']['data_sent']}} </td>
-                                            <td>{{$data['network_info']['wlan0']['data_received']}} </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- end table-responsive -->
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // var options = {
-        //     series: [92.1],
-        //     chart: {
-        //         height: 100,
-        //         type: 'radialBar',
-        //     },
-        //     plotOptions: {
-        //         radialBar: {
-        //             hollow: {
-        //                 size: '35%',
-        //             }
-        //         },
-        //     },
-        //     colors: ['#FF5733'],
-        //     labels: [''],
-        // };
+<script>
+    var statusCount = @json($data['status_count']);
 
-        // // Initialize the chart
-        // var chart = new ApexCharts(document.querySelector("#chartTesting"), options);
-        // chart.render();
-        var available = {{$data['cpu_info']['cpu_percent']}};
-        var used = {{100 - $data['cpu_info']['cpu_percent']}};
-        var options = {
-        series: [ available, used],
+    // Extract labels and series data from the statusCount object
+    var labels = Object.keys(statusCount);
+    var series = Object.values(statusCount);
+
+    // Options for ApexCharts
+    var options = {
+        series: series,
         chart: {
-        width: 305,
-        type: 'donut',
+            width: 370,
+            type: 'donut',
         },
         plotOptions: {
-        pie: {
-            // startAngle: -90,
-            // endAngle: 270
-        }
+            pie: {
+                // Optional settings
+            }
         },
         dataLabels: {
-        enabled: false
+            enabled: false
         },
         fill: {
-        //   type: 'gradient',
+            // Optional settings
         },
         legend: {
-        formatter: function(val, opts) {
-            return val + " - " + opts.w.globals.series[opts.seriesIndex]
-        }
+            formatter: function(val, opts) {
+                return val + " - " + opts.w.globals.series[opts.seriesIndex]
+            }
         },
         responsive: [{
-        breakpoint: 480,
-        options: {
-            chart: {
-            width: 200
-            },
-            legend: {
-            position: 'bottom'
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
             }
-        }
         }],
-        colors: ['#86ea7e', '#f17f7f'],
-        labels: ['Available', 'Used']
-        };
+        // colors: ['#86ea7e', '#f17f7f', '#fcc429',], // Customize colors if needed
+        labels: labels, // Set the labels dynamically
+    };
 
-        var chart = new ApexCharts(document.querySelector("#tab3"), options);
-        chart.render();
+    // Create and render the chart
+    var chart = new ApexCharts(document.querySelector("#tab3"), options);
+    chart.render();
 
-    </script>
+
+    // Pass the PHP data to JavaScript FOR Monthly chart
+    var months = @json($data['months']);
+    var productCounts = @json($data['products']);
+    var serviceCounts = @json($data['services']);
+
+    var options = {
+        series: [
+            {
+                name: 'Products',
+                type: 'column',
+                data: productCounts
+            },
+            {
+                name: 'Services',
+                type: 'column',
+                data: serviceCounts
+            },
+            // Uncomment and use if you have a line series
+            // {
+            //     name: 'Revenue',
+            //     type: 'line',
+            //     data: [/* your data here */]
+            // }
+        ],
+        chart: {
+            height: 350,
+            type: 'line',
+            stacked: false
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            width: [1, 1, 4]
+        },
+        title: {
+            text: 'Monthly Products and Services Count',
+            align: 'left',
+            offsetX: 110
+        },
+        xaxis: {
+            categories: months,
+        },
+        yaxis: [
+            {
+                seriesName: 'Products',
+                axisTicks: {
+                    show: true,
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#008FFB'
+                },
+                labels: {
+                    style: {
+                        colors: '#008FFB',
+                    }
+                },
+                title: {
+                    text: "Count",
+                    style: {
+                        color: '#008FFB',
+                    }
+                },
+                tooltip: {
+                    enabled: true
+                }
+            },
+            {
+                seriesName: 'Services',
+                opposite: true,
+                axisTicks: {
+                    show: true,
+                },
+                axisBorder: {
+                    show: true,
+                    color: '#00E396'
+                },
+                labels: {
+                    style: {
+                        colors: '#00E396',
+                    }
+                },
+                title: {
+                    text: "Count",
+                    style: {
+                        color: '#00E396',
+                    }
+                },
+            }
+        ],
+        tooltip: {
+            fixed: {
+                enabled: true,
+                position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+                offsetY: 30,
+                offsetX: 60
+            },
+        },
+        legend: {
+            horizontalAlign: 'left',
+            offsetX: 40
+        }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart1"), options);
+    chart.render();
+</script>
 @endsection
