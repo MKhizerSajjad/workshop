@@ -99,12 +99,17 @@
                                     <div class="col-sm-6">
                                         <div class="mb-3">
                                             <label for="time">Status <span class="text text-danger"> *</span></label>
-                                            <select id="user_status" name="status" class="select2 form-control">
+                                            <select id="user_status" name="status" class="select2 form-control @error('status') is-invalid @enderror">
                                                 <option value="">Select Status </option>
                                                 @foreach (getGenStatus('general') as $key => $priority)
                                                     <option value="{{ ++$key }}">{{ $priority }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('status')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">

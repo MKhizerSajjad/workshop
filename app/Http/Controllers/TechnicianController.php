@@ -27,6 +27,7 @@ class TechnicianController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'status' => 'required',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:150'],
@@ -75,6 +76,7 @@ class TechnicianController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
+            'status' => 'required',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:150'],
