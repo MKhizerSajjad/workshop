@@ -79,6 +79,7 @@
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{ route('setting.index') }}" key="t-products">General</a></li>
                             <li><a href="{{ route('priority.index') }}" key="t-products">Priority</a></li>
+                            <li><a href="{{ route('pickup-point.index') }}" key="t-orders">Pickup Points</a></li>
                             <li><a href="{{ route('service-location.index') }}" key="t-orders">Service Location</a></li>
                         </ul>
                     </li>
