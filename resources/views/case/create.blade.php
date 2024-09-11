@@ -59,7 +59,7 @@
                                         @endif
                                         <div class="tab-pane fade show active" id="v-pills-item" role="tabpanel" aria-labelledby="v-pills-item-tab">
                                             <div>
-                                                <h4 class="card-title">Itme information</h4>
+                                                <h4 class="card-title">Item information</h4>
                                                 <p class="card-title-desc">Fill all information below</p>
                                                 {{-- <form> --}}
                                                     {{-- @foreach ($data->items as $item)
@@ -74,7 +74,7 @@
                                                             <select class="form-control select2" title="Item" name="item">
                                                                 <option value="">Select Item </option>
                                                                 @foreach ($data->items as $item)
-                                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                                    <option value="{{ $item->id }}" {{ old('item') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('item')
@@ -87,7 +87,7 @@
                                                     <div class="form-group row mb-2">
                                                         <div class="col-md-6">
                                                             <label for="manufacturer" class="form-label">Manufacturer</label>
-                                                            <input type="text" name="manufacturer" class="form-control" id="manufacturer" placeholder="Enter Manufacturer">
+                                                            <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ old('manufacturer') }}" placeholder="Enter Manufacturer">
                                                             @error('manufacturer')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -96,7 +96,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="model" class="form-label">Model</label>
-                                                            <input type="text" name="model" class="form-control" id="model" placeholder="Enter Model">
+                                                            <input type="text" name="model" class="form-control" id="model" value="{{ old('model') }}" placeholder="Enter Model">
                                                             @error('model')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -107,7 +107,7 @@
                                                     <div class="form-group row mb-2">
                                                         <div class="col-md-6">
                                                             <label for="year" class="form-label">Year</label>
-                                                            <input type="text" name="year" class="form-control" id="year" placeholder="Enter Year">
+                                                            <input type="text" name="year" class="form-control" id="year" value="{{ old('year') }}" placeholder="Enter Year">
                                                             @error('year')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -116,7 +116,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="color" class="form-label">Color</label>
-                                                            <input type="text" name="color" class="form-control" id="color" placeholder="Enter Color">
+                                                            <input type="text" name="color" class="form-control" id="color" value="{{ old('color') }}" placeholder="Enter Color">
                                                             @error('color')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -127,13 +127,13 @@
                                                     <div class="form-group row mb-3">
                                                         <label for="additional_info" class="form-label">Additional Information</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information"></textarea>
+                                                            <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ old('additional_info') }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row mb-3">
                                                         <label for="problem_description" class="form-label">Description of Problem / Failure</label>
                                                         <div class="col-md-12">
-                                                            <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure"></textarea>
+                                                            <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ old('problem_description') }}</textarea>
                                                             @error('problem_description')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -164,7 +164,7 @@
                                                 <div>
                                                     @foreach ($data->parts as $part)
                                                         <div class="form-check form-check-inline font-size-16 mt-1">
-                                                            <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}">
+                                                            <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ in_array($part->id, old('parts', [])) ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="part-{{ $part->id }}">
                                                                 <h5>{{ $part->name }}</h5>
                                                             </label>
@@ -174,7 +174,7 @@
                                                 <div class="mt-2">
                                                     <label for="extra-parts">More Leaving Parts</label>
                                                     <p class="card-title-desc font-size-10 mb-0">Each part should be comma (<code><b>,</b></code>) seprated </p>
-                                                    <textarea name="extra-parts" id="extra-parts" class="input form-control">{{ request()->input('extra-parts') }}</textarea><br>
+                                                    <textarea name="extra-parts" id="extra-parts" class="input form-control">{{ old('extra-parts') }}</textarea><br>
                                                 </div>
 
                                                 <h4 class="card-title mt-2">Medias</h4>
@@ -259,7 +259,7 @@
                                                 <div>
                                                     @foreach ($data->priorities as $priority)
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="priority" value="{{$priority->id}}" id="priority-{{$priority->id}}" {{ $priority->id == 1 ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="radio" name="priority" value="{{$priority->id}}" id="priority-{{$priority->id}}" {{ old('priority') == $priority->id ? 'checked' : ($priority->id == 1 ? 'checked' : '') }}>
                                                             <label class="form-check-label font-size-13" for="priority-{{$priority->id}}">
                                                                 {{ $priority->name }} - {{ number_format($priority->price, 0) }}€
                                                             </label>
@@ -288,7 +288,7 @@
                                                 <div class="mb-4 row">
                                                     <div class="col-md-6">
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" value="1" name="inspection" id="inspection" checked>
+                                                            <input class="form-check-input" type="radio" value="1" name="inspection" id="inspection"  {{ (old('inspection', '1') == '1' || old('inspection', '1') != '2')? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="inspection">
                                                                 <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
                                                                 Inspection and diagnostics - <b class="font-size-16">35€</b>
@@ -298,7 +298,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" value="2" name="inspection" id="withoutinspection2">
+                                                            <input class="form-check-input" type="radio" value="2" name="inspection" id="withoutinspection2" {{ old('inspection', '1') == '2' ? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="withoutinspection2">
                                                                 <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
                                                                 Without diagnostics - <b class="font-size-16">0€</b>
@@ -313,7 +313,7 @@
                                                 <div class="mb-5">
                                                     @foreach ($data->services->where('status', 1) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" onchange="updateServiceTotal()">
+                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }} onchange="updateServiceTotal()">
                                                             <input class="form-check-input" type="hidden" name="serviceprices[]" value="{{ $service->id }}" name="serviceprices[]" id="serviceprices{{ $service->id }}">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
@@ -332,7 +332,7 @@
 
                                                     @foreach ($data->services->where('status', 2) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16 hidden-services d-none">
-                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" onchange="updateServiceTotal()">
+                                                            <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }} onchange="updateServiceTotal()">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
@@ -349,7 +349,7 @@
 
                                                     <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
                                                         <label>Selected Services Total (€)</label>
-                                                        <input type="number" name="service_total" id="service-total" class="form-control" placeholder="Total Services Amount" readonly>
+                                                        <input type="number" name="service_total" id="service-total" class="form-control" placeholder="Total Services Amount" value="{{ old('service_total') }}" readonly>
                                                     </div>
                                                     <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
                                                         <label>Give your's if price is over (€)</label>
@@ -367,12 +367,12 @@
                                                 <br>
                                                 <div>
                                                     @foreach ($data->serviceLocations as $location)
-                                                    <div class="mb-2 form-check form-check-inline font-size-16">
-                                                        <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == 1 ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="loc-{{ $location->id }}">
-                                                            <h5>{{ $location->title }}</h5>
-                                                        </label>
-                                                    </div>
+                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                            <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ old('services_location') == $location->id ? 'checked' : ($location->id == 1 ? 'checked' : '') }}>
+                                                            <label class="form-check-label" for="loc-{{ $location->id }}">
+                                                                <h5>{{ $location->title }}</h5>
+                                                            </label>
+                                                        </div>
                                                     @endforeach
                                                 </div>
                                                 @foreach ($data->serviceLocations as $location)
@@ -389,9 +389,9 @@
                                                                     <div class="mb-3">
                                                                         <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
                                                                         @if ($field->type === 'textarea')
-                                                                        <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}"></textarea>
+                                                                        <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ old($location->id .'-'. $field->name) }}</textarea>
                                                                         @else
-                                                                        <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">
+                                                                        <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ old($location->id .'-'. $field->name) }}">
                                                                         @endif
                                                                     </div>
                                                                 </div>
@@ -428,7 +428,7 @@
                                                                         {{-- <input class="form-check-input" type="checkbox" value="1" name="term_{{$sanitizedTitle}}" id="term_{{$sanitizedTitle}}"> --}}
                                                                         <input type="hidden" name="terms[{{ $sanitizedTitle }}][status]" value="0">
                                                                         <input type="hidden" name="terms[{{ $sanitizedTitle }}][link]" value="{{ $term->link }}">
-                                                                        <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $sanitizedTitle }}][status]" id="term_{{ $sanitizedTitle }}" {{ $term->is_required == "1" ? 'required' : '' }}>
+                                                                        <input class="form-check-input" type="checkbox" value="1" name="terms[{{ $sanitizedTitle }}][status]" id="term_{{ $sanitizedTitle }}" {{ $term->is_required == "1" ? 'required' : '' }} {{ old("terms[{$sanitizedTitle}][status]", '0') == '1' ? 'checked' : '' }}>
                                                                         <label class="form-check-label" for="term_{{$sanitizedTitle}}">
                                                                             <h5>
                                                                                 @if(!empty($term->link))
