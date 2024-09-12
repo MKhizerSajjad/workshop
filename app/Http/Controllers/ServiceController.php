@@ -109,7 +109,7 @@ class ServiceController extends Controller
         ]);
 
         $data = [
-            'status' => $request->status ?? 1,
+            'status' => $request->status ?? $service->status,
             'service_id' => $request->service_id ?? null,
             'sort_order' => $request->sort_order ?? null,
             'name' => $request->name,

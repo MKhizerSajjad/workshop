@@ -27,7 +27,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Edit Item</h4>
-                            <form method="POST" action="{{ route('service-location.update', 'id='.$serivceLocation->id) }}">
+                            <form method="POST" action="{{ route('service-location.update', $serivceLocation->id) }}">
                                 @csrf
                                 @method('PUT')
                                 <div class="row">
@@ -48,7 +48,7 @@
                                             <select id="loc_status" name="status" class="form-control @error('status') is-invalid @enderror">
                                                 <option value="">Select Status</option>
                                                 @foreach (getGenStatus('general') as $key => $status)
-                                                    <option value="{{ $key }}" @if($key == $serivceLocation->status) selected @endif>{{ $status }}</option>
+                                                    <option value="{{ ++$key }}" @if($key == $serivceLocation->status) selected @endif>{{ $status }}</option>
                                                 @endforeach
                                             </select>
                                             @error('status')
@@ -70,14 +70,17 @@
                                             <div data-repeater-list="group-a">
                                                 <!-- Initial template for a single row -->
                                                 <div class="row">
-                                                    <div class="mb-3 col-lg-4">
+                                                    <div class="mb-3 col-lg-3">
                                                         <label for="name">Input Field Name</label>
                                                     </div>
-                                                    <div class="mb-3 col-lg-4">
+                                                    <div class="mb-3 col-lg-3">
                                                         <label for="placeholder">Input Field Place Holder</label>
                                                     </div>
                                                     <div class="mb-3 col-lg-3">
                                                         <label for="type">Input Field Type</label>
+                                                    </div>
+                                                    <div class="mb-3 col-lg-2">
+                                                        <label for="type">Is Manadorty</label>
                                                     </div>
                                                     <div class="mb-3 col-lg-1">
                                                     </div>
@@ -85,7 +88,7 @@
 
                                                 @foreach (json_decode($serivceLocation->fields) as $field)
                                                     <div data-repeater-item class="row templateRow">
-                                                        <div class="mb-3 col-lg-4">
+                                                        <div class="mb-3 col-lg-3">
                                                             <input type="text" name="name[]" class="form-control name @error('name.*') is-invalid @enderror" placeholder="Enter Name" value="{{ $field->title }}">
                                                             @error('name.*')
                                                                 <span class="invalid-feedback" role="alert">
@@ -93,7 +96,7 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                        <div class="mb-3 col-lg-4">
+                                                        <div class="mb-3 col-lg-3">
                                                             <input type="text" name="place_holder[]" class="form-control place_holder @error('place_holder.*') is-invalid @enderror" placeholder="Enter Place Holder" value="{{ $field->place_holder ?? '' }}">
                                                             @error('place_holder.*')
                                                                 <span class="invalid-feedback" role="alert">
@@ -109,6 +112,19 @@
                                                                 @endforeach
                                                             </select>
                                                             @error('type.*')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="mb-3 col-lg-2">
+                                                            <select id="type" name="is_mandatory[]" class="form-control @error('is_mandatory.*') is-invalid @enderror">
+                                                                <option value="">Is Input Mandatory?  </option>
+                                                                @foreach (getGenStatus('bool') as $key => $status)
+                                                                    <option value="{{ ++$key }}" @if($key == $field->is_mandatory) selected @endif>{{ $status }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('is_mandatory.*')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
                                                                 </span>

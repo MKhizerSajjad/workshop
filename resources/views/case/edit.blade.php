@@ -14,7 +14,7 @@
             </div>
             <div class="checkout-tabs">
                 <div class="row">
-                    <div class="col-xl-2 col-sm-3">
+                    <div class="col-xl-2 col-sm-2">
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link active" id="v-pills-item-tab" data-bs-toggle="pill" href="#v-pills-item" role="tab" aria-controls="v-pills-item" aria-selected="true">
                                 <i class= "fa fa-wrench d-block check-nav-icon mt-4 mb-2"></i>
@@ -38,7 +38,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-xl-10 col-sm-9">
+                    <div class="col-xl-8 col-sm-8">
                         <form method="POST" action="{{ route('case.update', $data->task->id) }}" class="form" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -46,7 +46,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="tab-content" id="v-pills-tabContent">
-                                        @if ($errors->any())
+                                        {{-- @if ($errors->any())
                                             <div class="alert alert-danger">
                                                 <ul>
                                                     @foreach ($errors->all() as $error)
@@ -54,7 +54,7 @@
                                                     @endforeach
                                                 </ul>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                         <div class="tab-pane fade show active" id="v-pills-item" role="tabpanel" aria-labelledby="v-pills-item-tab">
                                             <div>
                                                 <h4 class="card-title">Item information</h4>
@@ -406,6 +406,73 @@
                                                         </span>
                                                     @enderror
 
+
+                                                    <div class="col-12 mb-5">
+                                                        @foreach ($data->task->taskProducts as $index => $parentProduct)
+                                                            @php $index++ @endphp
+                                                            <div data-repeater-list="group-a">
+                                                                <!-- Initial template for a single row -->
+                                                                <div class="row">
+                                                                    <div class="mb-3 col-lg-6">
+                                                                        <label for="name">Merge Product Name</label>
+                                                                        <input type="text" class="form-control merge_name_{{$index}} merge_name" name="merge_name_{{$index}}" id="merge_name_{{$index}}" value="{{ $parentProduct->name }}" placeholder="Merge Product Name" >
+                                                                    </div>
+                                                                    <div class="mb-3 col-lg-6"></div>
+                                                                    <div class="mb-3 col-lg-3">
+                                                                        <label for="place_holder">Product Name</label>
+                                                                    </div>
+                                                                    <div class="mb-3 col-lg-3">
+                                                                        <label for="place_holder">Product Price</label>
+                                                                    </div>
+                                                                    <div class="mb-3 col-lg-3">
+                                                                        <label for="place_holder">Product Qty</label>
+                                                                    </div>
+                                                                    <div class="mb-3 col-lg-2">
+                                                                        <label for="place_holder">Product Total</label>
+                                                                    </div>
+                                                                    <div class="mb-3 col-lg-1">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="newRow_{{$index}}">
+                                                                    @foreach ($parentProduct->taskItemProducts as $indexP => $chilProduct)
+                                                                        <div data-repeater-item class="row templateRow rowAppend_{{$index}}">
+                                                                            <div class="mb-3 col-lg-3">
+                                                                                <select name="product_{{$index}}[]" class="select2 form-control product product_{{$index}}">
+                                                                                    <option data-name="" data-price="0" value="">Choose Product</option>
+                                                                                    @foreach ($data->products as $product)
+                                                                                        <option data-name="{{ $product->name }}" data-price="{{ $product->price }}" value="{{ $product->id }}" @if($product->id == $chilProduct->product_id) selected @endif>{{ $product->name }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-3">
+                                                                                <input type="text" name="price_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_{{$index}}" placeholder="Enter Price" value="{{ $chilProduct->unit_price }}">
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-3">
+                                                                                <input type="text" name="qty_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_{{$index}}" placeholder="Enter Quantity" value="{{ $chilProduct->qty }}">
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-2">
+                                                                                <input type="text" name="total_{{$index}}[]" class="form-control total total_{{$index}}" readonly placeholder="Total" value="{{ $chilProduct->unit_price * $chilProduct->qty }}">
+                                                                            </div>
+                                                                            <div class="col-lg-1">
+                                                                                <button type="button" class="btn btn-danger remove-btn">
+                                                                                    <i class="bx bx-minus-circle me-1"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+                                                            <!-- Button to add new rows -->
+                                                            <div class="row">
+                                                                <div class="col-lg-1 offset-lg-11">
+                                                                    <button type="button" class="btn btn-success add-btn-row text-bold" data-index="{{$index}}">
+                                                                        <i class="bx bx-plus-circle me-1"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
                                                     <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
                                                         <label>Selected Services Total (€)</label>
                                                         <input type="number" name="service_total" id="service-total" class="form-control" placeholder="Total Services Amount" value="{{ $totalServicesPrice }}" readonly>
@@ -418,11 +485,11 @@
 
                                                 <h4 class="card-title mt-5">Products</h4>
                                                 <p class="card-title-desc">Products consumed in this case</p>
-                                                <div class="mb-5">
+                                                {{-- <div class="mb-5"> --}}
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="row">
-                                                                <div class="col-lg-6 mb-5">
+                                                                <div class="col-lg-6">
                                                                     <button type="button" class="btn btn-success add-btn text-bold add_panel_button">
                                                                         <i class="bx bx-plus-circle me-1"></i> Add Merge Product Panel
                                                                     </button>
@@ -456,7 +523,7 @@
                                                         {{-- <div class="row template_row"> --}}
                                                             <div class="col-12 mb-5">
                                                                 @foreach ($data->task->taskProducts as $index => $parentProduct)
-                                                                @php $index++ @endphp
+                                                                    @php $index++ @endphp
                                                                     <div data-repeater-list="group-a">
                                                                         <!-- Initial template for a single row -->
                                                                         <div class="row">
@@ -523,7 +590,7 @@
                                                         <input type="hidden" name="row_count" id="row_count" value="{{count($data->task->taskProducts)}}">
                                                         <div class="col-md-12 add_template_area"></div>
                                                     </div>
-                                                </div>
+                                                {{-- </div> --}}
 
                                                 {{-- </form> --}}
                                             </div>
@@ -689,6 +756,55 @@
                             </div> <!-- end row --> --}}
 
                         </form>
+                    </div>
+                    <div class="col-xl-2 col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="POST" action="{{ route('case.update', $data->task->id) }}" class="form" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <h4 class="card-title">Overview</h4>
+                                    {{-- <p class="card-title-desc">Fill all information below</p> --}}
+                                    <div>
+                                        {{-- <h4 class="card-title">Leaving Parts</h4>
+                                        <p class="card-title-desc">The parts you want to leave</p> --}}
+                                        {{-- <form> --}}
+
+                                        <div class="mt-1">
+                                            <label class="col-form-label">Case Status</label>
+                                            <select class="form-control select2" title="Item" name="item">
+                                                <option value="">Select Case Status </option>
+                                                @foreach (getCaseStatus('general') as $key => $status)
+                                                    <option value="{{ $key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mt-1">
+                                            <label class="col-form-label">Payment Status</label>
+                                            <select class="form-control select2" title="Item" name="item">
+                                                <option value="">Select Payment Status </option>
+                                                @foreach (getPayment('status') as $key => $status)
+                                                    <option value="{{ $key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mt-1">
+                                            <label class="col-form-label">Payment Method</label>
+                                            <select class="form-control select2" title="Item" name="item">
+                                                <option value="">Select Payment Method </option>
+                                                @foreach (getPayment('via') as $key => $status)
+                                                    <option value="{{ $key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="d-grid gap-2 mt-3">
+                                            <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
+                                        </div>
+                                    <div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

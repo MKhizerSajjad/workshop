@@ -78,7 +78,8 @@ class TaskController extends Controller
         $rules = [];
         foreach ($fieldsArray as $field) {
             $fieldName = $serviceLocationID . '-' . $field->name;
-            $rules[$fieldName] = 'required';
+            $isMandatory = $field->is_mandatory == 1 ? 'required' : 'nullable';
+            $rules[$fieldName] = $isMandatory;
         }
         $rules = array_merge($additionalRules, $rules);
 
@@ -159,7 +160,7 @@ class TaskController extends Controller
                     ];
                     $media = TaskMedia::create($data);
 
-                    logger('File saved successfully: ' . $fileNameToStore);
+                    // logger('File saved successfully: ' . $fileNameToStore);
                     $index++;
 
                 } catch (\Exception $e) {
@@ -207,10 +208,10 @@ class TaskController extends Controller
         }
 
         $mergedParts = array_merge($parts, $request->input('parts'));
-        logger('mergedParts : ' . json_encode($mergedParts));
+        // logger('mergedParts : ' . json_encode($mergedParts));
         $uniqueMergedParts = array_unique($mergedParts);
 
-        logger('uniqueMergedParts : ' . json_encode($uniqueMergedParts));
+        // logger('uniqueMergedParts : ' . json_encode($uniqueMergedParts));
 
         if(isset($uniqueMergedParts)) {
             foreach ($uniqueMergedParts as $part_id) {
@@ -515,7 +516,7 @@ class TaskController extends Controller
                     ];
                     $media = TaskMedia::create($data);
 
-                    logger('File saved successfully: ' . $fileNameToStore);
+                    // logger('File saved successfully: ' . $fileNameToStore);
                     $index++;
 
                 } catch (\Exception $e) {
@@ -717,7 +718,7 @@ class TaskController extends Controller
                     ];
                     $media = TaskMedia::create($data);
 
-                    logger('File saved successfully: ' . $fileNameToStore);
+                    // logger('File saved successfully: ' . $fileNameToStore);
                     $index++;
 
                 } catch (\Exception $e) {

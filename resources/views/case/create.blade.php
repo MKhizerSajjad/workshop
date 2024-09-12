@@ -385,16 +385,16 @@
                                                             @endif
                                                             <div class="row">
                                                                 @foreach (json_decode($location->fields) as $field)
-                                                                <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
-                                                                    <div class="mb-3">
-                                                                        <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
-                                                                        @if ($field->type === 'textarea')
-                                                                        <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ old($location->id .'-'. $field->name) }}</textarea>
-                                                                        @else
-                                                                        <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ old($location->id .'-'. $field->name) }}">
-                                                                        @endif
+                                                                    <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
+                                                                        <div class="mb-3">
+                                                                            <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
+                                                                            @if ($field->type === 'textarea')
+                                                                                <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ old($location->id .'-'. $field->name) }}</textarea>
+                                                                            @else
+                                                                                <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ old($location->id .'-'. $field->name) }}">
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
-                                                                </div>
                                                                 @endforeach
                                                             </div>
                                                         </div>

@@ -23,43 +23,50 @@ class ServiceLocationsSeeder extends Seeder
                             'name' => 'first_name',
                             'title' => 'First Name',
                             'type' => 'text',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter First Name'
                         ],
                         [
                             'name' => 'last_name',
                             'title' => 'Last Name',
                             'type' => 'text',
-                            'placeholder' => 'Enter Last Name'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Last Name'
                         ],
                         [
                             'name' => 'phone',
                             'title' => 'Phone Number',
                             'type' => 'text',
-                            'placeholder' => 'Enter Phone Number'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Phone Number'
                         ],
                         [
                             'name' => 'email',
                             'title' => 'Email',
                             'type' => 'email',
-                            'placeholder' => 'Enter Email'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Email'
                         ],
                         [
                             'name' => 'city',
                             'title' => 'City',
                             'type' => 'text',
-                            'placeholder' => 'Enter City'
+                            'is_mandatory' => 2,
+                            'place_holder' => 'Enter City'
                         ],
                         [
                             'name' => 'company',
                             'title' => 'Company',
                             'type' => 'text',
-                            'placeholder' => 'Enter Company'
+                            'is_mandatory' => 2,
+                            'place_holder' => 'Enter Company'
                         ],
                         [
                             'name' => 'address',
                             'title' => 'Address',
                             'type' => 'textarea',
-                            'placeholder' => 'Enter Address'
+                            'is_mandatory' => 2,
+                            'place_holder' => 'Enter Address'
                         ]
                     ])
                 ],
@@ -79,43 +86,50 @@ class ServiceLocationsSeeder extends Seeder
                             'name' => 'first_name',
                             'title' => 'First Name',
                             'type' => 'text',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter First Name'
                         ],
                         [
                             'name' => 'last_name',
                             'title' => 'Last Name',
                             'type' => 'text',
-                            'placeholder' => 'Enter Last Name'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Last Name'
                         ],
                         [
                             'name' => 'phone',
                             'title' => 'Phone Number',
                             'type' => 'text',
-                            'placeholder' => 'Enter Phone Number'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Phone Number'
                         ],
                         [
                             'name' => 'email',
                             'title' => 'Email',
                             'type' => 'email',
-                            'placeholder' => 'Enter Email'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Email'
                         ],
                         [
                             'name' => 'city',
                             'title' => 'City',
                             'type' => 'text',
-                            'placeholder' => 'Enter City'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter City'
                         ],
                         [
                             'name' => 'company',
                             'title' => 'Company',
                             'type' => 'text',
-                            'placeholder' => 'Enter Company'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Company'
                         ],
                         [
                             'name' => 'address',
                             'title' => 'Address',
                             'type' => 'textarea',
-                            'placeholder' => 'Enter Address'
+                            'is_mandatory' => 1,
+                            'place_holder' => 'Enter Address'
                         ]
                     ])
                 ],
@@ -127,42 +141,49 @@ class ServiceLocationsSeeder extends Seeder
                             'name' => 'first_name',
                             'title' => 'First Name',
                             'type' => 'text',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter First Name'
                         ],
                         [
                             'name' => 'last_name',
                             'title' => 'Last Name',
                             'type' => 'text',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter Last Name'
                         ],
                         [
                             'name' => 'phone',
                             'title' => 'Phone Number',
                             'type' => 'text',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter Phone Number'
                         ],
                         [
                             'name' => 'email',
                             'title' => 'Email',
                             'type' => 'email',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter Email'
                         ],
                         [
                             'name' => 'city',
                             'title' => 'City',
                             'type' => 'text',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter City'
                         ],
                         [
                             'name' => 'company',
                             'title' => 'Company',
                             'type' => 'text',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter Company'
                         ],
                         [
                             'name' => 'address',
                             'title' => 'Address',
                             'type' => 'textarea',
+                            'is_mandatory' => 1,
                             'place_holder' => 'Enter Address'
                         ]
                     ])

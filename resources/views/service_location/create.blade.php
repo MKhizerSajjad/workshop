@@ -57,7 +57,7 @@
                                             <select id="loc_status" name="status" class="form-control @error('status') is-invalid @enderror">
                                                 <option value="">Select Status</option>
                                                 @foreach (getGenStatus('general') as $key => $status)
-                                                    <option value="{{ $key }}">{{ $status }}</option>
+                                                    <option value="{{ ++$key }}" {{ old('status') == $status ? 'selected' : '' }}>{{ $status }}</option>
                                                 @endforeach
                                             </select>
                                             @error('status')
@@ -79,55 +79,129 @@
                                             <div data-repeater-list="group-a">
                                                 <!-- Initial template for a single row -->
                                                 <div class="row">
-                                                    <div class="mb-3 col-lg-4">
+                                                    <div class="mb-3 col-lg-3">
                                                         <label for="name">Input Field Name</label>
                                                     </div>
-                                                    <div class="mb-3 col-lg-4">
+                                                    <div class="mb-3 col-lg-3">
                                                         <label for="place_holder">Input Field Place Holder</label>
                                                     </div>
                                                     <div class="mb-3 col-lg-3">
                                                         <label for="type">Input Field Type</label>
                                                     </div>
-                                                    <div class="mb-3 col-lg-1">
+                                                    <div class="mb-3 col-lg-2">
+                                                        <label for="is_mandatory">Is Mandatory</label>
                                                     </div>
+                                                    <div class="mb-3 col-lg-1"></div>
                                                 </div>
-                                                <div data-repeater-item class="row templateRow">
-                                                    <div class="mb-3 col-lg-4">
-                                                        <input type="text" name="name[]" class="form-control name @error('name.*') is-invalid @enderror" placeholder="Enter Name" value="{{ old('name') }}">
-                                                        @error('name.*')
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong>{{ $message }}</strong>
-                                                            </span>
-                                                        @enderror
+                                                @if (!old('name') || (is_array(old('name')) && count(old('name')) == 0))
+                                                    <div data-repeater-item class="row templateRow">
+                                                        <div class="mb-3 col-lg-3">
+                                                            <input type="text" name="name[]" class="form-control @error('name.*') is-invalid @enderror" placeholder="Enter Name" value="{{ old('name.0', '') }}">
+                                                            @error('name.*')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="mb-3 col-lg-3">
+                                                            <input type="text" name="place_holder[]" class="form-control @error('place_holder.*') is-invalid @enderror" placeholder="Enter Place Holder" value="{{ old('place_holder.0', '') }}">
+                                                            @error('place_holder.*')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="mb-3 col-lg-3">
+                                                            <select name="type[]" class="form-control @error('type.*') is-invalid @enderror">
+                                                                <option value="">Select Field Type</option>
+                                                                @foreach (getFields('types') as $key => $status)
+                                                                    <option value="{{ $status }}" {{ old('type.0') == $status ? 'selected' : '' }}>{{ $status }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('type.*')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="mb-3 col-lg-2">
+                                                            <select name="is_mandatory[]" class="form-control @error('is_mandatory.*') is-invalid @enderror">
+                                                                <option value="">Is Input Mandatory?</option>
+                                                                @foreach (getGenStatus('bool') as $key => $status)
+                                                                    <option value="{{ ++$key }}" {{ old('is_mandatory.0') == $key ? 'selected' : '' }}>{{ $status }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('is_mandatory.*')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="col-lg-1">
+                                                            <button type="button" class="btn btn-danger remove-btn">
+                                                                <i class="bx bx-minus-circle me-1"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div class="mb-3 col-lg-4">
-                                                        <input type="text" name="place_holder[]" class="form-control place_holder @error('place_holder.*') is-invalid @enderror" placeholder="Enter Place Holder" value="{{ old('place_holder') }}">
-                                                        @error('place_holder.*')
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong>{{ $message }}</strong>
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="mb-3 col-lg-3">
-                                                        <select id="type" name="type[]" class="form-control @error('type.*') is-invalid @enderror">
-                                                            <option value="">Select Fields Type </option>
-                                                            @foreach (getFields('types') as $key => $status)
-                                                                <option value="{{ $status }}">{{ $status }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('type.*')
-                                                            <span class="invalid-feedback" role="alert">
-                                                                <strong>{{ $message }}</strong>
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="col-lg-1">
-                                                        <button type="button" class="btn btn-danger remove-btn">
-                                                            <i class="bx bx-minus-circle me-1"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                                @endif
+
+                                                <!-- Loop through existing rows -->
+                                                @if (old('name') && count(old('name')) > 0)
+                                                    @foreach(old('name', []) as $index => $name)
+                                                        <div data-repeater-item class="row templateRow">
+                                                            <div class="mb-3 col-lg-3">
+                                                                <input type="text" name="name[]" class="form-control @error('name.' . $index) is-invalid @enderror" placeholder="Enter Name" value="{{ old('name.' . $index, '') }}">
+                                                                @error('name.' . $index)
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3 col-lg-3">
+                                                                <input type="text" name="place_holder[]" class="form-control @error('place_holder.' . $index) is-invalid @enderror" placeholder="Enter Place Holder" value="{{ old('place_holder.' . $index, '') }}">
+                                                                @error('place_holder.' . $index)
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3 col-lg-3">
+                                                                <select name="type[]" class="form-control @error('type.' . $index) is-invalid @enderror">
+                                                                    <option value="">Select Field Type</option>
+                                                                    @foreach (getFields('types') as $key => $status)
+                                                                        <option value="{{ $status }}" {{ old('type.' . $index) == $status ? 'selected' : '' }}>{{ $status }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('type.' . $index)
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3 col-lg-2">
+                                                                <select name="is_mandatory[]" class="form-control @error('is_mandatory.' . $index) is-invalid @enderror">
+                                                                    <option value="">Is Input Mandatory?</option>
+                                                                    @foreach (getGenStatus('bool') as $key => $status)
+                                                                        <option value="{{ ++$key }}" {{ old('is_mandatory.' . $index) == $key ? 'selected' : '' }}>{{ $status }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('is_mandatory.' . $index)
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="col-lg-1">
+                                                                <button type="button" class="btn btn-danger remove-btn">
+                                                                    <i class="bx bx-minus-circle me-1"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+
                                             </div>
+
                                             <!-- Button to add new rows -->
                                             <div class="row">
                                                 <div class="col-lg-1 offset-lg-11">
@@ -137,6 +211,9 @@
                                                 </div>
                                             </div>
                                         </div>
+
+
+
                                     </div>
                                     <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
                                         <button type="submit" class="btn btn-primary waves-effect waves-light w-10">Submit</button>
@@ -158,22 +235,21 @@
         // Function to duplicate a row
         function duplicateRow() {
             var template = $('.templateRow').first().clone();
+            template.find('input, select').val(''); // Clear the values of the new row
             template.appendTo('[data-repeater-list="group-a"]');
             bindRowEvents(template); // Bind events to new row
-            calculateTotalPrice();
         }
 
         // Function to bind events to a row
         function bindRowEvents(row) {
             row.find('.remove-btn').on('click', function() {
-                removeMaterial(row);
+                remove(row);
             });
         }
 
         // Function to remove a specific row
-        function removeMaterial(row) {
+        function remove(row) {
             row.remove();
-            calculateTotalPrice();
         }
         // Event listener for adding new row
         $('.add-btn').on('click', function() {
