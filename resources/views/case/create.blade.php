@@ -23,9 +23,9 @@
                                 <i class= "fa fa-wrench d-block check-nav-icon mt-4 mb-2"></i>
                                 <p class="fw-bold mb-4">Item Info</p>
                             </a>
-                            <a class="nav-link" id="v-parts-tab" data-bs-toggle="pill" href="#v-parts" role="tab" aria-controls="v-parts" aria-selected="false">
+                            <a class="nav-link" id="v-media-tab" data-bs-toggle="pill" href="#v-media" role="tab" aria-controls="v-media" aria-selected="false">
                                 <i class= "fa fa-th-large d-block check-nav-icon mt-4 mb-2"></i>
-                                <p class="fw-bold mb-4">Parts & Media</p>
+                                <p class="fw-bold mb-4">Media</p>
                             </a>
                             <a class="nav-link" id="v-services-tab" data-bs-toggle="pill" href="#v-services" role="tab" aria-controls="v-services" aria-selected="false">
                                 <i class= "fa fa-cog d-block check-nav-icon mt-4 mb-2"></i>
@@ -61,106 +61,83 @@
                                             <div>
                                                 <h4 class="card-title">Item information</h4>
                                                 <p class="card-title-desc">Fill all information below</p>
-                                                {{-- <form> --}}
-                                                    {{-- @foreach ($data->items as $item)
-                                                        <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="item" id="item-{{ $item->id }}" name="{{ $item->id }}">
-                                                            <label class="form-check-label font-size-13" for="item-{{ $item->id }}"> {{ $item->name }}</label>
-                                                        </div>
-                                                    @endforeach --}}
-                                                    <div class="form-group row mb-2">
-                                                        <label class="col-md-2 col-form-label">Select Item</label>
-                                                        <div class="col-md-12">
-                                                            <select class="form-control select2" title="Item" name="item">
-                                                                <option value="">Select Item </option>
-                                                                @foreach ($data->items as $item)
-                                                                    <option value="{{ $item->id }}" {{ old('item') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('item')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-2">
-                                                        <div class="col-md-6">
-                                                            <label for="manufacturer" class="form-label">Manufacturer</label>
-                                                            <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ old('manufacturer') }}" placeholder="Enter Manufacturer">
-                                                            @error('manufacturer')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="model" class="form-label">Model</label>
-                                                            <input type="text" name="model" class="form-control" id="model" value="{{ old('model') }}" placeholder="Enter Model">
-                                                            @error('model')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-2">
-                                                        <div class="col-md-6">
-                                                            <label for="year" class="form-label">Year</label>
-                                                            <input type="text" name="year" class="form-control" id="year" value="{{ old('year') }}" placeholder="Enter Year">
-                                                            @error('year')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="color" class="form-label">Color</label>
-                                                            <input type="text" name="color" class="form-control" id="color" value="{{ old('color') }}" placeholder="Enter Color">
-                                                            @error('color')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-3">
-                                                        <label for="additional_info" class="form-label">Additional Information</label>
-                                                        <div class="col-md-12">
-                                                            <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ old('additional_info') }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-3">
-                                                        <label for="problem_description" class="form-label">Description of Problem / Failure</label>
-                                                        <div class="col-md-12">
-                                                            <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ old('problem_description') }}</textarea>
-                                                            @error('problem_description')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                {{-- </form> --}}
-                                            </div>
-                                            {{-- <div class="row mt-4">
-                                                <div class="offset-md-6 col-sm-6 text text-primary text-bold">
-                                                    <div class="text-end">
-                                                        <a id="v-parts-tab" data-bs-toggle="pill" href="#v-parts" role="tab" aria-controls="v-parts" aria-selected="false" class="d-none d-sm-inline-block nav-link">
-                                                            Proceed to Parts & Media
-                                                            <i class="mdi mdi-arrow-right me-1"></i>
-                                                        </a>
+                                                <div class="form-group row mb-2">
+                                                    <label class="col-md-2 col-form-label">Select Item</label>
+                                                    <div class="col-md-12">
+                                                        <select class="form-control select2" title="Item" name="item">
+                                                            <option value="">Select Item </option>
+                                                            @foreach ($data->items as $item)
+                                                                <option value="{{ $item->id }}" {{ old('item') == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('item')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
                                                     </div>
                                                 </div>
-                                            </div> --}}
-                                        </div>
-                                        <div class="tab-pane fade" id="v-parts" role="tabpanel" aria-labelledby="v-parts-tab">
-                                            <div>
+                                                <div class="form-group row mb-2">
+                                                    <div class="col-md-6">
+                                                        <label for="manufacturer" class="form-label">Manufacturer</label>
+                                                        <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ old('manufacturer') }}" placeholder="Enter Manufacturer">
+                                                        @error('manufacturer')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="model" class="form-label">Model</label>
+                                                        <input type="text" name="model" class="form-control" id="model" value="{{ old('model') }}" placeholder="Enter Model">
+                                                        @error('model')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mb-2">
+                                                    <div class="col-md-6">
+                                                        <label for="year" class="form-label">Year</label>
+                                                        <input type="text" name="year" class="form-control" id="year" value="{{ old('year') }}" placeholder="Enter Year">
+                                                        @error('year')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="color" class="form-label">Color</label>
+                                                        <input type="text" name="color" class="form-control" id="color" value="{{ old('color') }}" placeholder="Enter Color">
+                                                        @error('color')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mb-3">
+                                                    <label for="additional_info" class="form-label">Additional Information</label>
+                                                    <div class="col-md-12">
+                                                        <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ old('additional_info') }}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mb-3">
+                                                    <label for="problem_description" class="form-label">Description of Problem / Failure</label>
+                                                    <div class="col-md-12">
+                                                        <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ old('problem_description') }}</textarea>
+                                                        @error('problem_description')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+
                                                 <h4 class="card-title">Leaving Parts</h4>
                                                 <p class="card-title-desc">The parts you want to leave</p>
-                                                {{-- <form> --}}
-
                                                 <div>
                                                     @foreach ($data->parts as $part)
                                                         <div class="form-check form-check-inline font-size-16 mt-1">
@@ -176,86 +153,33 @@
                                                     <p class="card-title-desc font-size-10 mb-0">Each part should be comma (<code><b>,</b></code>) seprated </p>
                                                     <textarea name="extra-parts" id="extra-parts" class="input form-control">{{ old('extra-parts') }}</textarea><br>
                                                 </div>
-
-                                                <h4 class="card-title mt-2">Medias</h4>
-                                                {{-- <p class="card-title-desc">Pictures and videos of product</p> --}}
-                                                {{-- <div>
-                                                    <label class="form-label">Attached Files</label>
-                                                    <div class="fallback dropzone" id="myId" enctype="multipart/form-data">
-                                                        <div class="fallback">
-                                                            <input name="file" type="file" multiple />
-                                                        </div>
-
-                                                        <div class="dz-message needsclick">
-                                                            <div class="mb-3">
-                                                                <i class="display-4 text-muted bx bxs-cloud-upload"></i>
-                                                            </div>
-
-                                                            <h4>Drop files here or click to upload.</h4>
-                                                        </div>
+                                            </div>
+                                            {{-- <div class="row mt-4">
+                                                <div class="offset-md-6 col-sm-6 text text-primary text-bold">
+                                                    <div class="text-end">
+                                                        <a id="v-parts-tab" data-bs-toggle="pill" href="#v-parts" role="tab" aria-controls="v-parts" aria-selected="false" class="d-none d-sm-inline-block nav-link">
+                                                            Proceed to Parts & Media
+                                                            <i class="mdi mdi-arrow-right me-1"></i>
+                                                        </a>
                                                     </div>
-                                                </div> --}}
-
+                                                </div>
+                                            </div> --}}
+                                        </div>
+                                        <div class="tab-pane fade" id="v-media" role="tabpanel" aria-labelledby="v-media-tab">
+                                            <div>
+                                                <h4 class="card-title mt-2">Medias</h4>
                                                 <label for="uploadImage" class="custom-file-upload">
                                                     <span><i class="ti-cloud-up"></i> Pictures, files and videos of product</span>
                                                     <input type="file" name="files[]" id="uploadImage" class="form-control-file" multiple>
-                                                    {{-- <input type="file" id="uploadImage" name="file[]" class="form-control-file" multiple="multiple"> --}}
                                                 </label>
                                                 <div id="imagesBody">
                                                 </div>
-                                                {{-- <section>
-                                                    <div>
-                                                        <h5 class="font-size-14 mb-3">Upload document file for a verification</h5>
-                                                        <div class="dropzone">
-                                                            <div class="fallback">
-                                                                <input name="file[]" type="file" multiple="multiple">
-                                                            </div>
-                                                            <div class="dz-message needsclick">
-                                                                <div class="mb-3">
-                                                                    <i class="display-4 text-muted bx bxs-cloud-upload"></i>
-                                                                </div>
-
-                                                                <h4>Drop files here or click to upload.</h4>
-                                                            </div>
-                                                        </div>
-
-                                                        <ul class="list-unstyled mb-0" id="dropzone-preview">
-                                                            <li class="mt-2" id="dropzone-preview-list">
-                                                                <!-- This is used as the file preview template -->
-                                                                <div class="border rounded">
-                                                                    <div class="d-flex p-2">
-                                                                        <div class="flex-shrink-0 me-3">
-                                                                            <div class="avatar-sm bg-light rounded">
-                                                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src=" {{ asset('images/new-document.png') }}" alt="Dropzone-Image">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="flex-grow-1">
-                                                                            <div class="pt-1">
-                                                                                <h5 class="fs-md mb-1" data-dz-name>&nbsp;</h5>
-                                                                                <p class="fs-sm text-muted mb-0" data-dz-size></p>
-                                                                                <strong class="error text-danger" data-dz-errormessage></strong>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="flex-shrink-0 ms-3">
-                                                                            <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </section> --}}
-
-
-                                                {{-- </form> --}}
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="v-services" role="tabpanel" aria-labelledby="v-services-tab">
                                             <div>
                                                 <h4 class="card-title">Priority of Case</h4>
                                                 <p class="card-title-desc">How fast you wants get back?</p>
-                                                {{-- <form> --}}
-
                                                 <div>
                                                     @foreach ($data->priorities as $priority)
                                                         <div class="form-check form-check-inline font-size-16">
@@ -267,23 +191,8 @@
                                                     @endforeach
                                                 </div>
 
-                                                {{-- <div class="form-group row mb-2">
-                                                    <label class="col-md-2 col-form-label">Select Item</label>
-                                                    <div class="col-md-12">
-                                                        <select class="form-control select2" title="Country">
-                                                            <option value="">Select Item </option>
-                                                            @foreach ($data->priorities as $priority)
-                                                                <option value="{{ $priority->id }}">{{ $priority->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div> --}}
-
-
-
                                                 <h4 class="card-title mt-5">Inspection and diagnostics</h4>
                                                 <p class="card-title-desc">Do you want to avail professional diagniostic serves?</p>
-                                                {{-- <form> --}}
 
                                                 <div class="mb-4 row">
                                                     <div class="col-md-6">
@@ -356,8 +265,6 @@
                                                         <input type="text" name="service_desired_total" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control" placeholder="Your Desired Amount" value="{{ old('service_desired_total') }}">
                                                     </div>
                                                 </div>
-
-                                                {{-- </form> --}}
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="v-location" role="tabpanel" aria-labelledby="v-location-tab">
@@ -405,16 +312,6 @@
                                         <div class="tab-pane fade" id="v-confirmation" role="tabpanel" aria-labelledby="v-confirmation-tab">
                                             <div>
 
-                                                {{-- @foreach($data->serviceLocations as $serviceLocation)
-                                                    <div class="mb-2 form-check form-check-inline font-size-16">
-                                                        <input class="form-check-input" type="radio" id="location_{{ $serviceLocation->id }}" name="services_location" value="{{ $serviceLocation->id }}" {{ $loop->first ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="location_{{ $serviceLocation->id }}">
-                                                            <h5>{{ $serviceLocation->title }}</h5>
-                                                        </label>
-                                                    </div>
-                                                @endforeach --}}
-
-
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
                                                         <div class="row">
@@ -453,19 +350,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="row mt-4">
-                                <div class="col-sm-6">
-                                    <a href="ecommerce-cart.html" class="btn text-muted d-none d-sm-inline-block btn-link">
-                                        <i class="mdi mdi-arrow-left me-1"></i> Back to Shopping Cart </a>
-                                </div> <!-- end col -->
-                                <div class="col-sm-6">
-                                    <div class="text-end">
-                                        <a href="ecommerce-checkout.html" class="btn btn-success">
-                                            <i class="mdi mdi-truck-fast me-1"></i> Proceed to Shipping </a>
-                                    </div>
-                                </div> <!-- end col -->
-                            </div> <!-- end row --> --}}
-
                         </form>
                     </div>
                 </div>

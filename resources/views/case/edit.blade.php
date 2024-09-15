@@ -20,9 +20,9 @@
                                 <i class= "fa fa-wrench d-block check-nav-icon mt-4 mb-2"></i>
                                 <p class="fw-bold mb-4">Item Info</p>
                             </a>
-                            <a class="nav-link" id="v-parts-tab" data-bs-toggle="pill" href="#v-parts" role="tab" aria-controls="v-parts" aria-selected="false">
+                            <a class="nav-link" id="v-media-tab" data-bs-toggle="pill" href="#v-media" role="tab" aria-controls="v-media" aria-selected="false">
                                 <i class= "fa fa-th-large d-block check-nav-icon mt-4 mb-2"></i>
-                                <p class="fw-bold mb-4">Parts & Media</p>
+                                <p class="fw-bold mb-4">Media</p>
                             </a>
                             <a class="nav-link" id="v-services-tab" data-bs-toggle="pill" href="#v-services" role="tab" aria-controls="v-services" aria-selected="false">
                                 <i class= "fa fa-cog d-block check-nav-icon mt-4 mb-2"></i>
@@ -139,6 +139,22 @@
                                                             @enderror
                                                         </div>
                                                     </div>
+                                                    <h4 class="card-title">Leaving Parts</h4>
+                                                    <p class="card-title-desc">The parts you want to leave</p>
+
+                                                    <div>
+                                                        @foreach ($data->parts as $part)
+                                                            @php
+                                                                $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id);
+                                                            @endphp
+                                                            <div class="form-check form-check-inline font-size-16 mt-1">
+                                                                <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="part-{{ $part->id }}">
+                                                                    <h5>{{ $part->name }}</h5>
+                                                                </label>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
 
                                                 {{-- </form> --}}
                                             </div>
@@ -153,25 +169,8 @@
                                                 </div>
                                             </div> --}}
                                         </div>
-                                        <div class="tab-pane fade" id="v-parts" role="tabpanel" aria-labelledby="v-parts-tab">
+                                        <div class="tab-pane fade" id="v-media" role="tabpanel" aria-labelledby="v-media-tab">
                                             <div>
-                                                <h4 class="card-title">Leaving Parts</h4>
-                                                <p class="card-title-desc">The parts you want to leave</p>
-                                                {{-- <form> --}}
-
-                                                <div>
-                                                    @foreach ($data->parts as $part)
-                                                        @php
-                                                            $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id);
-                                                        @endphp
-                                                        <div class="form-check form-check-inline font-size-16 mt-1">
-                                                            <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ $isChecked ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="part-{{ $part->id }}">
-                                                                <h5>{{ $part->name }}</h5>
-                                                            </label>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
 
                                                 <h4 class="card-title mt-5">Medias</h4>
                                                 {{-- <p class="card-title-desc">Pictures and videos of product</p> --}}
@@ -489,7 +488,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="row">
-                                                                <div class="col-lg-6">
+                                                                <div class="col-lg-6 mb-2">
                                                                     <button type="button" class="btn btn-success add-btn text-bold add_panel_button">
                                                                         <i class="bx bx-plus-circle me-1"></i> Add Merge Product Panel
                                                                     </button>

@@ -50,7 +50,15 @@ class TaskController extends Controller
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         $data->terms = Setting::where('type', 'term')->pluck('data')->first() ?? null;
-        return view('case.create', compact('data'));
+
+        if(auth()->check() && Auth::user()->user_type != 4) {
+            $data->products = Product::where('status', 1)->orderBy('name')->get();
+            $data->case_number = $this->generateInvoiceCode();
+            $data->tax = getTax();
+            return view('case.add', compact('data'));
+        } else {
+            return view('case.create', compact('data'));
+        }
     }
 
     public function store(Request $request)
@@ -110,7 +118,7 @@ class TaskController extends Controller
         }
         $confirmation = json_encode($terms);
 
-        $invoce = $this->generateInvoiceCode();
+        $invoce = $request->input('case_number') ??$this->generateInvoiceCode();
         $data = [
             'code' => $invoce,
             'date_opened' => now(),
@@ -133,6 +141,97 @@ class TaskController extends Controller
         $task = Task::create($data);
         $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
 
+        $taskId = $task->id;
+        $taxPercentage = getTax();
+
+        // Merge Product Scenario
+        $row_count = $request->input("row_count");
+        $product = [];
+        $totalProductAmount = 0;
+        for ($count=1; $count <= $row_count; $count++) {
+            if (($request->input("merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
+                $mergeProduct = $request->input("name_$count")[0];
+            } else {
+                $mergeProduct = $request->input("merge_name_$count");
+            }
+            if(($mergeProduct == null || $mergeProduct == '') && count($request->input("product_$count")) == 0) {
+                continue;
+            }
+            $productArray = $request->input("product_$count");
+            $priceArray = $request->input("price_$count");
+            $qtyArray = $request->input("qty_$count");
+            $totalItemsAmount = 0;
+            $totalItemsAmountExTax = 0;
+            foreach((array)$productArray as $key => $value) {
+                if($value == null || $value == ''){
+                    continue;
+                }
+
+                $productTaxAmount = $taxPercentage * $priceArray[$key] / 100;
+                $productWithTax = $priceArray[$key] + $productTaxAmount;
+                $totalItemPrice = $productWithTax * $qtyArray[$key];
+                $totalItemsAmount += $totalItemPrice;
+                $totalItemsAmountExTax += $priceArray[$key] * $qtyArray[$key];
+
+                $product[$mergeProduct]['child'][] = [
+                    'id' => $value,
+                    'qty' => $qtyArray[$key],
+                    'price' => $priceArray[$key],
+                    'total' =>  $totalItemPrice,
+                    'tax' =>  $taxPercentage
+                ];
+            }
+            $product[$mergeProduct]['name'] = $mergeProduct;
+            $product[$mergeProduct]['qty'] = 1;
+            $product[$mergeProduct]['total'] = $totalItemsAmountExTax;
+            $totalProductAmount += $totalItemsAmount;
+        }
+
+        // Parent Product
+        TaskItemProduct::where('task_id', $taskId)->delete();
+        TaskProduct::where('task_id', $taskId)->delete();
+        foreach ($product as $key => $productData) {
+            $data = [
+                'task_id' => $taskId,
+                'name' => $productData['name'],
+                'total' => $productData['total'],
+            ];
+            $parentProduct = TaskProduct::updateOrCreate(
+                [
+                    'task_id' => $taskId,
+                    'name' => $productData['name']
+                ],
+                $data
+            );
+
+            // Child if available
+            if (isset($productData['child'])) {
+                foreach ($productData['child'] as $childData) {
+                    $productInfo = Product::whereId($childData['id'])->first();
+                    if(!isset($productInfo->id)){
+                        continue;
+                    }
+                    $data = [
+                        'product_id' => $childData['id'],
+                        'qty' => $childData['qty'],
+                        'unit_price' => $childData['price'],
+                        'total' => $childData['total'],
+                        'tax_perc' => $taxPercentage,
+                    ];
+
+                    TaskItemProduct::updateOrCreate(
+                        [
+                            'task_id' => $taskId,
+                            'product_id' => $childData['id'],
+                            'task_products_id' => $parentProduct->id
+                        ],
+                        $data
+                    );
+                }
+            }
+        }
+
+        // File Upload
         if ($request->hasFile('files')) {
 
             $index = 0; // Initialize the index variable
@@ -170,29 +269,55 @@ class TaskController extends Controller
             }
         }
 
-        if(isset($request->services)) {
-            foreach ($request->input('services') as $key => $service_id) {
+        // Services
+        $services_row_count = $request->input("services_row_count");
+        $product = [];
+        $totalServiceAmount = 0;
+        for ($count=1; $count <= $services_row_count; $count++) {
 
-                $dbService = Service::where('id', $service_id)->select('id', 'price', 'tax')->first();
+            $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
+            $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
+            $serviceWithTax = $servicePrice + $serviceTaxAmount;
+            $totalServiceAmount += $servicePrice;
 
-                $qty = $service['qty'] ?? 1;
-                $price = $dbService->price ?? null;
-                $tax = ($dbService->add_tax == 1 ? getTax() : 0) ?? null;
-                $serviceTaxAmount = $tax * $price / 100;
-                $serviceWithTax = $price + $serviceTaxAmount;
-                $servicePrice = $serviceWithTax * $qty;
-
-                TaskService::create([
-                    'task_id' => $task->id,
-                    'service_id' => $service_id,
-                    'customer_choice' => $isCustomerChoice,
-                    'qty' => $qty,
-                    'unit_price' => $price,
-                    'tax_perc' => $tax,
-                ]);
-            }
+            TaskService::create([
+                'task_id' => $taskId,
+                'service_id' => $request->input("service_$count"),
+                'customer_choice' => $isCustomerChoice,
+                'qty' => $request->input("service_qty_$count"),
+                'unit_price' => $request->input("service_price_$count"),
+                'tax_perc' => $request->input("service_tax_$count"),
+            ]);
         }
 
+        // if(isset($request->services)) {
+        //     foreach ($request->input('services') as $key => $service_id) {
+
+        //         $dbService = Service::where('id', $service_id)->select('id', 'price', 'tax')->first();
+
+        //         $qty = $service['qty'] ?? 1;
+        //         $price = $dbService->price ?? null;
+        //         $tax = ($dbService->add_tax == 1 ? getTax() : 0) ?? null;
+        //         $serviceTaxAmount = $tax * $price / 100;
+        //         $serviceWithTax = $price + $serviceTaxAmount;
+        //         $servicePrice = $serviceWithTax * $qty;
+        //         $totalServiceAmount += $servicePrice;
+
+        //         TaskService::create([
+        //             'task_id' => $task->id,
+        //             'service_id' => $service_id,
+        //             'customer_choice' => $isCustomerChoice,
+        //             'qty' => $qty,
+        //             'unit_price' => $price,
+        //             'tax_perc' => $tax,
+        //         ]);
+        //     }
+        // }
+
+        $totalAmount = 0;
+        $totalAmount = $totalServiceAmount + $totalProductAmount;
+
+        $task->update(['total' => $totalAmount]);
         // Get extra-parts from request and process them
         $extraParts = $request->input('extra-parts', '');
         $extraPartsArray = array_map('trim', explode(',', $extraParts));
@@ -407,7 +532,7 @@ class TaskController extends Controller
         $product = [];
         $totalProductAmount = 0;
         for ($count=1; $count <= $row_count; $count++) {
-            if (($request->input("merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
+            if (($request->input(",merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
                 $mergeProduct = $request->input("name_$count")[0];
             } else {
                 $mergeProduct = $request->input("merge_name_$count");
@@ -730,7 +855,8 @@ class TaskController extends Controller
     }
 
     public function generateInvoiceCode() {
-        $code = Carbon::now()->format('Ymd');
+        $currentYear = Carbon::now()->format('Y');
+        $code = intval(substr($currentYear, 2, 4));
         $todaysCount = Task::where('code', 'LIKE', $code.'%')->count();
         // Increment the max code number by 1, if null set it to 1
         return $code. str_pad(++$todaysCount, 5, '0', STR_PAD_LEFT);
