@@ -533,7 +533,7 @@ class TaskController extends Controller
         $product = [];
         $totalProductAmount = 0;
         for ($count=1; $count <= $row_count; $count++) {
-            if (($request->input(",merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
+            if (($request->input("merge_name_$count") == null) && count($request->input("product_$count")) == 1) {
                 $mergeProduct = $request->input("name_$count")[0];
             } else {
                 $mergeProduct = $request->input("merge_name_$count");
