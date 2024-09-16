@@ -322,6 +322,7 @@ class TaskController extends Controller
         $extraParts = $request->input('extra-parts', '');
         $extraPartsArray = array_map('trim', explode(',', $extraParts));
         $extraPartsArray = array_filter($extraPartsArray); // Remove empty values
+        $parts = [];
 
         foreach ($extraPartsArray as $field) {
             $added = Part::updateOrCreate(
