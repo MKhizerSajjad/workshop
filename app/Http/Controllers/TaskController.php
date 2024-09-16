@@ -708,7 +708,7 @@ class TaskController extends Controller
         //     }
         // }
 
-        return redirect()->route('case.index')->with('success','Record update successfully');
+        return redirect()->route('case.edit', $task->id)->with('success','Record update successfully');
     }
 
     public function destroy(Task $task)
