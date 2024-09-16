@@ -41,7 +41,7 @@
                             </a>
                         </div>
                     </div> --}}
-                    <div class="col-xl-10 col-sm-9">
+                    <div class="col-xl-12 col-sm-12">
 
                         <form method="POST" action="{{ route('bookingSave') }}" class="form" enctype="multipart/form-data">
                             @csrf
@@ -216,7 +216,7 @@
                                             <h4 class="card-title mt-5">Services</h4>
                                             <p class="card-title-desc">Please select your required services carefully</p>
                                             <div class="mb-5">
-                                                @foreach ($data->services->where('status', 1) as $service)
+                                                {{-- @foreach ($data->services->where('status', 1) as $service)
                                                     <div class="mb-2 form-check form-check-inline font-size-16">
                                                         <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }} onchange="updateServiceTotal()">
                                                         <input class="form-check-input" type="hidden" name="serviceprices[]" value="{{ $service->id }}" name="serviceprices[]" id="serviceprices{{ $service->id }}">
@@ -250,7 +250,7 @@
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>
-                                                @enderror
+                                                @enderror --}}
 
 
                                                 <div class="row">
