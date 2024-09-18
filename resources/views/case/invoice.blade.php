@@ -163,15 +163,15 @@
                                                     <td>{{ $service->service->name }}</td>
                                                     <td>{{ $service->comment }}</td>
                                                     <td>{{ $service->qty }}</td>
-                                                    <td>{{ numberFormat($service->unit_price, 'euro') }}</td>
+                                                    <td>{{ numberFormat($service->unit_price) }}</td>
                                                     <td>{{ numberFormat($service->tax_perc, 'percentage') }}</td>
-                                                    <td class="text-end">{{ numberFormat($service_price, 'percentage') }}</td>
+                                                    <td class="text-end">{{ numberFormat($service_price) }}</td>
                                                 </tr>
                                             @endforeach
 
                                             <tr>
                                                 <td colspan="5" class="text-end">Services Total</td>
-                                                <td class="text-end">{{ $totalServicePrice }}</td>
+                                                <td class="text-end">{{ numberFormat($totalServicePrice) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -205,14 +205,14 @@
                                                 <tr>
                                                     <td>{{ $product->name }}</td>
                                                     {{-- <td>{{ $product->qty }}</td> --}}
-                                                    <td>{{ $product->total }}</td>
-                                                    <td>{{ $settingTax }}%</td>
-                                                    <td class="text-end">{{ $productPrice }}</td>
+                                                    <td>{{ numberFormat($product->total) }}</td>
+                                                    <td>{{ numberFormat($settingTax, 'percentage') }}</td>
+                                                    <td class="text-end">{{ numberFormat($productPrice) }}</td>
                                                 </tr>
                                             @endforeach
                                             <tr>
                                                 <td colspan="3" class="text-end">Parts Total</td>
-                                                <td class="text-end">{{ $totalProductPrice }}</td>
+                                                <td class="text-end">{{ numberFormat($totalProductPrice) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -227,12 +227,12 @@
                                             <tr>
                                                 <td colspan="3" class="border-0 text-end">
                                                     <strong>Tax Total</strong></td>
-                                                <td class="border-0 text-end">{{ $totalServiceTax + $totalProductTax }}</td>
+                                                <td class="border-0 text-end">{{ numberFormat($totalServiceTax + $totalProductTax, 'euro') }}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="border-0 text-end">
                                                     <strong>Grand Total</strong></td>
-                                                <td class="border-0 text-end"><h4 class="m-0">{{ $totalServicePrice + $totalProductPrice }}</h4></td>
+                                                <td class="border-0 text-end"><h4 class="m-0">{{ numberFormat($totalServicePrice + $totalProductPrice, 'euro') }}</h4></td>
                                             </tr>
                                         </tbody>
                                     </table>
