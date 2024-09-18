@@ -229,6 +229,7 @@
                                                             @if ($media->customer_choice == 2)
                                                                 <span class="delete-image deleteCaseMedia" data-href="{{ route('case.destroyMedia', $media->id) }}" data-nxame="' + theFile.name + '"><i class="fa fa-trash text-danger"></i></span>
                                                             @endif
+                                                            <br> {{$media->media}}
                                                         </div>
 
                                                     @endforeach
