@@ -79,7 +79,7 @@ class TaskController extends Controller
             'priority' => 'required',
             'service.*' => 'required',
             'parts.*' => 'required',
-            // 'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
+            'files.*' => 'nullable|file|mimes:jpeg,png,pdf,docx|max:2048',
         ];
 
         // Merge dynamic field validation with additional rules
@@ -245,7 +245,9 @@ class TaskController extends Controller
                     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                     $extension = $file->getClientOriginalExtension();
                     $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
-                    $file->move(base_path('/public/task/media/'), $fileNameToStore);
+
+                    $file->move(public_path('task/media/'), $fileNameToStore);
+                    // $file->move(base_path('/public/task/media/'), $fileNameToStore);
                     // $path = $file->store('task/media', $fileNameToStore); // 'images' is a folder inside 'public' disk
                     // $url = asset('storage/' . $path);
                     // $file->storeAs('public/media', $fileNameToStore);
@@ -255,7 +257,7 @@ class TaskController extends Controller
                         'type' => getFileTypeFromExtension($extension),
                         'media' => $fileNameToStore,
                         'customer_choice' => $isCustomerChoice,
-                        'leave_receive' => 1,
+                        'leave_recieve' => 1
                     ];
                     $media = TaskMedia::create($data);
 
@@ -629,7 +631,9 @@ class TaskController extends Controller
                     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                     $extension = $file->getClientOriginalExtension();
                     $fileNameToStore = time() . '_' . $index . '_' . $task->id . '.' . $extension;
-                    $file->move(base_path('/public/task/media/'), $fileNameToStore);
+
+                    $file->move(public_path('task/media/'), $fileNameToStore);
+                    // $file->move(base_path('/public/task/media/'), $fileNameToStore);
                     // $path = $file->store('task/media', $fileNameToStore); // 'images' is a folder inside 'public' disk
                     // $url = asset('storage/' . $path);
                     // $file->storeAs('public/media', $fileNameToStore);
