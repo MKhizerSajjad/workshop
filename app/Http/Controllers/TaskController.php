@@ -335,18 +335,21 @@ class TaskController extends Controller
             $parts[] = $added->id;
         }
 
-        $mergedParts = array_merge($parts, $request->input('parts'));
-        // logger('mergedParts : ' . json_encode($mergedParts));
-        $uniqueMergedParts = array_unique($mergedParts);
+        if($request->input('parts')) {
 
-        // logger('uniqueMergedParts : ' . json_encode($uniqueMergedParts));
+            $mergedParts = array_merge($parts, $request->input('parts'));
+            // logger('mergedParts : ' . json_encode($mergedParts));
+            $uniqueMergedParts = array_unique($mergedParts);
 
-        if(isset($uniqueMergedParts)) {
-            foreach ($uniqueMergedParts as $part_id) {
-                TaskLeavePart::create([
-                    'task_id' => $task->id,
-                    'part_id' => $part_id,
-                ]);
+            // logger('uniqueMergedParts : ' . json_encode($uniqueMergedParts));
+
+            if(isset($uniqueMergedParts)) {
+                foreach ($uniqueMergedParts as $part_id) {
+                    TaskLeavePart::create([
+                        'task_id' => $task->id,
+                        'part_id' => $part_id,
+                    ]);
+                }
             }
         }
 
