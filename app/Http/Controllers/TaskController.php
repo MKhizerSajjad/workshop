@@ -257,7 +257,7 @@ class TaskController extends Controller
                         'type' => getFileTypeFromExtension($extension),
                         'media' => $fileNameToStore,
                         'customer_choice' => $isCustomerChoice,
-                        'leave_recieve' => 1
+                        'leave_receive' => 1
                     ];
                     $media = TaskMedia::create($data);
 
@@ -646,6 +646,7 @@ class TaskController extends Controller
                         'type' => getFileTypeFromExtension($extension),
                         'media' => $fileNameToStore,
                         'customer_choice' => $isCustomerChoice,
+                        'leave_receive' => 1,
                     ];
                     $media = TaskMedia::create($data);
 
