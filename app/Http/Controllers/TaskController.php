@@ -442,7 +442,7 @@ class TaskController extends Controller
         $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskItemProducts')->first();
         $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
         $data->items = Item::where('status', 1)->orderBy('name')->get();
-        $data->parts = Part::orderBy('name')->get();
+        $data->parts = Part::where('status', 1)->orderBy('name')->get();
         $data->services = Service::orderBy('name')->get(); // where('status', 1)->
         $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
         $data->products = Product::where('status', 1)->orderBy('name')->get();
@@ -451,6 +451,24 @@ class TaskController extends Controller
         // $data->taskProduct = TaskProduct::with('taskChildProducts')->where('task_id', $task->id)->where('task_products_id', null)->get();
 
         return view('case.edit',compact('data'));
+    }
+
+    public function edit1(Task $task)
+    {
+        $data = json_decode('{}');
+        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskItemProducts')->first();
+        $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
+        $data->items = Item::where('status', 1)->orderBy('name')->get();
+        $data->parts = Part::where('status', 1)->orderBy('name')->get();
+        $data->services = Service::orderBy('name')->get(); // where('status', 1)->
+        $data->priorities = Priority::where('status', 1)->orderBy('id')->get();
+        $data->products = Product::where('status', 1)->orderBy('name')->get();
+        $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
+        $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
+        $data->tax = getTax();
+        // $data->taskProduct = TaskProduct::with('taskChildProducts')->where('task_id', $task->id)->where('task_products_id', null)->get();
+
+        return view('case.edit1',compact('data'));
     }
 
     public function update(Request $request, Task $task)
@@ -471,7 +489,7 @@ class TaskController extends Controller
             'priority' => 'required',
             'service.*' => 'required',
             'parts.*' => 'required',
-            // 'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
+            'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
         ];
 
         // Merge dynamic field validation with additional rules
@@ -649,7 +667,6 @@ class TaskController extends Controller
                         'leave_receive' => 1,
                     ];
                     $media = TaskMedia::create($data);
-
                     // logger('File saved successfully: ' . $fileNameToStore);
                     $index++;
 
@@ -717,7 +734,36 @@ class TaskController extends Controller
         //     }
         // }
 
-        return redirect()->route('case.edit', $task->id)->with('success','Record update successfully');
+        return redirect()->route('case.edit1', $task->id)->with('success','Record update successfully');
+    }
+
+    public function statusUpdate(Request $request, Task $task)
+    {
+        $serviceLocationID = $request->input('services_location');
+        $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
+        $fieldsArray = json_decode($serviceLocationFields);
+
+        $additionalRules = [
+            'status' => 'required',
+            'payment_status' => 'required',
+            // 'model' => 'required',
+            // 'year' => 'required',
+            // 'color' => 'required',
+            // 'additional_info' => 'nullable',
+            // 'problem_description' => 'nullable',
+            // // 'description' => 'required',
+            // 'priority' => 'required',
+            // 'service.*' => 'required',
+            // 'parts.*' => 'required',
+            // 'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
+        ];
+
+        Task::where('id', $task->id)->update([
+            'status' => $request->input('status'),
+            'payment_status' => $request->input('payment_status')
+        ]);
+
+        return redirect()->route('case.edit1', $task->id)->with('success','Record update successfully');
     }
 
     public function destroy(Task $task)

@@ -66,7 +66,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store', [TaskController::class, 'store'])->name('case.store');
         Route::get('{task}', [TaskController::class, 'show'])->name('case.show');
         Route::get('{task}/edit', [TaskController::class, 'edit'])->name('case.edit');
+        Route::get('{task}/edit1', [TaskController::class, 'edit1'])->name('case.edit1');
         Route::put('{task}/update', [TaskController::class, 'update'])->name('case.update');
+        Route::put('{task}/status-update', [TaskController::class, 'statusUpdate'])->name('case.status-update');
         Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('case.destroy');
         Route::get('{task}/delete-media', [TaskController::class, 'destroyMedia'])->name('case.destroyMedia');
         Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('case.invoice');
