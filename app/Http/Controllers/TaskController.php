@@ -739,31 +739,20 @@ class TaskController extends Controller
 
     public function statusUpdate(Request $request, Task $task)
     {
-        $serviceLocationID = $request->input('services_location');
-        $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
-        $fieldsArray = json_decode($serviceLocationFields);
-
-        $additionalRules = [
+        $this->validate($request, [
             'status' => 'required',
             'payment_status' => 'required',
-            // 'model' => 'required',
-            // 'year' => 'required',
-            // 'color' => 'required',
-            // 'additional_info' => 'nullable',
-            // 'problem_description' => 'nullable',
-            // // 'description' => 'required',
-            // 'priority' => 'required',
-            // 'service.*' => 'required',
-            // 'parts.*' => 'required',
-            // 'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
-        ];
+        ]);
 
-        Task::where('id', $task->id)->update([
+        // dd( $request->input('status') .'-'. $request->input('payment_status'));
+
+        $taskId = $task->id;
+        $task = Task::where('id', $taskId)->update([
             'status' => $request->input('status'),
             'payment_status' => $request->input('payment_status')
         ]);
 
-        return redirect()->route('case.edit1', $task->id)->with('success','Record update successfully');
+        return redirect()->route('case.edit1', $taskId)->with('success','Record update successfully');
     }
 
     public function destroy(Task $task)

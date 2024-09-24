@@ -12,14 +12,26 @@
                     </div>
                 </div>
             </div>
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-border-left alert-dismissible fade show auto-colse-3" role="alert">
-                    <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success! </strong>
-                    {{ $message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
             <div class="checkout-tabs">
+
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success alert-border-left alert-dismissible fade show auto-colse-3" role="alert">
+                        <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success! </strong>
+                        {{ $message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <div class="row">
                     {{-- <div class="col-xl-2 col-sm-2">
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -708,20 +720,30 @@
 
                                         <div class="mt-1">
                                             <label class="col-form-label">Case Status</label>
-                                            <select class="form-control select2" title="Status" name="status">
+                                            <select class="form-control select2 @error('status') is-invalid @enderror" title="Status" name="status">
                                                 <option value="">Select Case Status </option>
                                                 @foreach (getCaseStatus('general') as $key => $status)
-                                                    <option value="{{ ++$key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                    <option value="{{ ++$key }}" @if($key == $data->task->status) selected @endif>{{ $status }}</option>
                                                 @endforeach
+                                                @error('status')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                             </select>
                                         </div>
                                         <div class="mt-1">
                                             <label class="col-form-label">Payment Status</label>
-                                            <select class="form-control select2" title="Payment Status" name="payment_status">
+                                            <select class="form-control select2 @error('payment_status') is-invalid @enderror" title="Payment Status" name="payment_status">
                                                 <option value="">Select Payment Status </option>
                                                 @foreach (getPayment('status') as $key => $status)
                                                     <option value="{{ ++$key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
                                                 @endforeach
+                                                @error('status')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                             </select>
                                         </div>
                                         {{-- <div class="mt-1">
