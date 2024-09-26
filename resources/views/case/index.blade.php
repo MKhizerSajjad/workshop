@@ -67,7 +67,7 @@
                                                     <td>{!! getPayment('status', $task->payment_status, 'badge') !!}</td>
                                                     <td class="text-center">
                                                         <a href="{{ route('case.invoice', $task->id) }}"><i class="bx bx-receipt"></i></a>
-                                                        <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-pencil"></i></a>
+                                                        {{-- <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-pencil"></i></a> --}}
                                                         <a href="{{ route('case.edit1', $task->id) }}"><i class="bx bx-pencil"></i></a>
                                                     </td>
                                                 </tr>

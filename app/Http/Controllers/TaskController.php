@@ -490,13 +490,16 @@ class TaskController extends Controller
             'service.*' => 'required',
             'parts.*' => 'required',
             'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
+            'status' => 'required',
+            'payment_status' => 'required',
         ];
 
         // Merge dynamic field validation with additional rules
         $rules = [];
         foreach ($fieldsArray as $field) {
             $fieldName = $serviceLocationID . '-' . $field->name;
-            $rules[$fieldName] = 'required';
+            $isMandatory = $field->is_mandatory == 1 ? 'required' : 'nullable';
+            $rules[$fieldName] = $isMandatory;
         }
         $rules = array_merge($additionalRules, $rules);
 
@@ -531,6 +534,9 @@ class TaskController extends Controller
         $confirmation = json_encode($terms);
 
         $data = [
+            'status' => $request->input('status'),
+            'payment_status' => $request->input('payment_status'),
+
             'customer_id' => $customerAdd->id ?? null,
             'details' => $confirmation,
             'item_id' => $request->input('item'),
