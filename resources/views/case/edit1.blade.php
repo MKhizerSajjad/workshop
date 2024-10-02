@@ -490,16 +490,19 @@
                                                                             </div>
                                                                             <div class="mb-3 col-lg-6"></div>
                                                                             <div class="mb-3 col-lg-3">
-                                                                                <label for="place_holder">Product Name</label>
-                                                                            </div>
-                                                                            <div class="mb-3 col-lg-3">
-                                                                                <label for="place_holder">Product Price</label>
-                                                                            </div>
-                                                                            <div class="mb-3 col-lg-3">
-                                                                                <label for="place_holder">Product Qty</label>
+                                                                                <label for="place_holder">Name</label>
                                                                             </div>
                                                                             <div class="mb-3 col-lg-2">
-                                                                                <label for="place_holder">Product Total</label>
+                                                                                <label for="place_holder">Price</label>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-2">
+                                                                                <label for="place_holder">Qty</label>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-2">
+                                                                                <label for="place_holder">Tax Perc.</label>
+                                                                            </div>
+                                                                            <div class="mb-3 col-lg-2">
+                                                                                <label for="place_holder">Total</label>
                                                                             </div>
                                                                             <div class="mb-3 col-lg-1">
                                                                             </div>
@@ -515,11 +518,14 @@
                                                                                             @endforeach
                                                                                         </select>
                                                                                     </div>
-                                                                                    <div class="mb-3 col-lg-3">
+                                                                                    <div class="mb-3 col-lg-2">
                                                                                         <input type="text" name="price_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_{{$index}}" placeholder="Enter Price" value="{{ $chilProduct->unit_price }}">
                                                                                     </div>
-                                                                                    <div class="mb-3 col-lg-3">
+                                                                                    <div class="mb-3 col-lg-2">
                                                                                         <input type="text" name="qty_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_{{$index}}" placeholder="Enter Quantity" value="{{ $chilProduct->qty }}">
+                                                                                    </div>
+                                                                                    <div class="mb-3 col-lg-2">
+                                                                                        <input type="text" name="tax_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control tax tax_{{$index}}" placeholder="Enter Tax Percentage" value="{{ $chilProduct->tax_perc }}">
                                                                                     </div>
                                                                                     <div class="mb-3 col-lg-2">
                                                                                         <input type="text" name="total_{{$index}}[]" class="form-control total total_{{$index}}" readonly placeholder="Total" value="{{ $chilProduct->unit_price * $chilProduct->qty }}">
@@ -709,7 +715,7 @@
 
                             {{-- </form> --}}
                         </div>
-                        <div class="col-xl-3 col-sm-3">
+                        <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 136px; padding-left: 60px; padding-right: 20px">
                             <div class="card">
                                 <div class="card-body">
                                     {{-- <form method="POST" action="{{ route('case.status-update', $data->task->id) }}" class="form" enctype="multipart/form-data">
@@ -721,6 +727,22 @@
                                             {{-- <h4 class="card-title">Leaving Parts</h4>
                                             <p class="card-title-desc">The parts you want to leave</p> --}}
                                             {{-- <form> --}}
+
+                                            <div style="margin-top: 0px;">
+                                                <label>Case Number : <span class="font-size-18">{{ $data->task->code }}</span></label>
+                                            </div>
+                                            <div style="margin-top: 0px;">
+                                                <label>Total : <span class="font-size-18">{{ $data->task->total }}</span></label>
+                                            </div>
+                                            <div style="margin-top: 0px;">
+                                                <label>Paid : <span class="font-size-18">{{ $data->task->paid ?? 0 }}</span></label>
+                                            </div>
+                                            <div style="margin-top: 0px;">
+                                                <label>Remaining : <span class="font-size-18">{{ $data->task->remaining ?? $data->task->total }}</span></label>
+                                            </div>
+                                            <div style="margin-top: 0px;">
+                                                {{-- <label>Services : <span class="font-size-18">{{$data->task->taskService->sum('unit_price') ?? 0}}</span></label> --}}
+                                            </div>
 
                                             <div class="mt-1">
                                                 <label class="col-form-label">Case Status</label>
@@ -825,7 +847,7 @@
         </div>
     </div>
     <div class="row template_row d-none">
-        <div class="col-12 mb-5">
+        <div class="col-12">
             {{-- <h4 class="card-title mb-4">Input Fields</h4> --}}
 
             <div data-repeater-list="group-a">
@@ -837,23 +859,26 @@
                     </div>
                     <div class="mb-3 col-lg-6"></div>
                     <div class="mb-3 col-lg-3">
-                        <label for="place_holder">Product Name</label>
-                    </div>
-                    <div class="mb-3 col-lg-3">
-                        <label for="place_holder">Product Price</label>
-                    </div>
-                    <div class="mb-3 col-lg-3">
-                        <label for="place_holder">Product Qty</label>
+                        <label for="place_holder">Name</label>
                     </div>
                     <div class="mb-3 col-lg-2">
-                        <label for="place_holder">Product Total</label>
+                        <label for="place_holder">Price</label>
+                    </div>
+                    <div class="mb-3 col-lg-2">
+                        <label for="place_holder">Qty</label>
+                    </div>
+                    <div class="mb-3 col-lg-2">
+                        <label for="place_holder">Tax (%)</label>
+                    </div>
+                    <div class="mb-3 col-lg-2">
+                        <label for="place_holder">Total</label>
                     </div>
                     <div class="mb-3 col-lg-1">
                     </div>
                 </div>
                 <div class="newRow_INDEX">
                     <div data-repeater-item class="row templateRow rowAppend_INDEX">
-                        <div class="mb-3 col-lg-3">
+                        <div class="mb-2 col-lg-3">
                             <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
                                 <option data-name="" data-price="0" value="">Choose Product</option>
                                 @foreach ($data->products as $product)
@@ -861,14 +886,17 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3 col-lg-3">
+                        <div class="mb-2 col-lg-2">
                             <input type="hidden" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                             <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
                         </div>
-                        <div class="mb-3 col-lg-3">
+                        <div class="mb-2 col-lg-2">
                             <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="0">
                         </div>
-                        <div class="mb-3 col-lg-2">
+                        <div class="mb-2 col-lg-2">
+                            <input type="text" name="tax_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control tax tax_INDEX" placeholder="Enter Tax Percentage" value="{{ $data->tax }}">
+                        </div>
+                        <div class="mb-2 col-lg-2">
                             <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="0">
                         </div>
                         <div class="col-lg-1">
@@ -891,7 +919,7 @@
     </div>
     <div class="template_row_append d-none">
         <div data-repeater-item class="row templateRow">
-            <div class="mb-3 col-lg-3">
+            <div class="mb-2 col-lg-3">
                 <select name="product_INDEX[]" class="select2 form-control product product_INDEX">
                     <option data-name="" data-price="0" value="">Choose Product</option>
                     @foreach ($data->products as $product)
@@ -899,14 +927,17 @@
                     @endforeach
                 </select>
             </div>
-            <div class="mb-3 col-lg-3">
+            <div class="mb-2 col-lg-2">
                 <input type="hidden" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                 <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
             </div>
-            <div class="mb-3 col-lg-3">
+            <div class="mb-2 col-lg-2">
                 <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="0">
             </div>
-            <div class="mb-3 col-lg-2">
+            <div class="mb-2 col-lg-2">
+                <input type="text" name="tax_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control tax tax_INDEX" placeholder="Enter Tax Percentage" value="{{ $data->tax }}">
+            </div>
+            <div class="mb-2 col-lg-2">
                 <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="0">
             </div>
             <div class="col-lg-1">

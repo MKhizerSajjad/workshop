@@ -160,6 +160,7 @@ class TaskController extends Controller
             $productArray = $request->input("product_$count");
             $priceArray = $request->input("price_$count");
             $qtyArray = $request->input("qty_$count");
+            $taxArray = $request->input("tax_$count");
             $totalItemsAmount = 0;
             $totalItemsAmountExTax = 0;
             foreach((array)$productArray as $key => $value) {
@@ -167,7 +168,7 @@ class TaskController extends Controller
                     continue;
                 }
 
-                $productTaxAmount = $taxPercentage * $priceArray[$key] / 100;
+                $productTaxAmount = $taxArray[$key] * $priceArray[$key] / 100;
                 $productWithTax = $priceArray[$key] + $productTaxAmount;
                 $totalItemPrice = $productWithTax * $qtyArray[$key];
                 $totalItemsAmount += $totalItemPrice;
@@ -178,7 +179,7 @@ class TaskController extends Controller
                     'qty' => $qtyArray[$key],
                     'price' => $priceArray[$key],
                     'total' =>  $totalItemPrice,
-                    'tax' =>  $taxPercentage
+                    'tax' =>  $taxArray[$key]
                 ];
             }
             $product[$mergeProduct]['name'] = $mergeProduct;
@@ -216,7 +217,7 @@ class TaskController extends Controller
                         'qty' => $childData['qty'],
                         'unit_price' => $childData['price'],
                         'total' => $childData['total'],
-                        'tax_perc' => $taxPercentage,
+                        'tax_perc' => $childData['tax'],
                     ];
 
                     TaskItemProduct::updateOrCreate(
@@ -466,6 +467,8 @@ class TaskController extends Controller
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
         $data->tax = getTax();
+
+        // dd($data->task);
         // $data->taskProduct = TaskProduct::with('taskChildProducts')->where('task_id', $task->id)->where('task_products_id', null)->get();
 
         return view('case.edit1',compact('data'));
@@ -573,6 +576,7 @@ class TaskController extends Controller
             $productArray = $request->input("product_$count");
             $priceArray = $request->input("price_$count");
             $qtyArray = $request->input("qty_$count");
+            $taxArray = $request->input("tax_$count");
             $totalItemsAmount = 0;
             $totalItemsAmountExTax = 0;
             foreach((array)$productArray as $key => $value) {
@@ -580,7 +584,7 @@ class TaskController extends Controller
                     continue;
                 }
 
-                $productTaxAmount = $taxPercentage * $priceArray[$key] / 100;
+                $productTaxAmount = $qtyArray[$key] * $priceArray[$key] / 100;
                 $productWithTax = $priceArray[$key] + $productTaxAmount;
                 $totalItemPrice = $productWithTax * $qtyArray[$key];
                 $totalItemsAmount += $totalItemPrice;
@@ -591,7 +595,7 @@ class TaskController extends Controller
                     'qty' => $qtyArray[$key],
                     'price' => $priceArray[$key],
                     'total' =>  $totalItemPrice,
-                    'tax' =>  $taxPercentage
+                    'tax' =>  $taxArray[$key]
                 ];
             }
             $product[$mergeProduct]['name'] = $mergeProduct;
@@ -629,7 +633,7 @@ class TaskController extends Controller
                         'qty' => $childData['qty'],
                         'unit_price' => $childData['price'],
                         'total' => $childData['total'],
-                        'tax_perc' => $taxPercentage,
+                        'tax_perc' => $childData['tax'],
                     ];
 
                     TaskItemProduct::updateOrCreate(

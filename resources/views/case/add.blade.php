@@ -455,16 +455,19 @@
                     </div>
                     <div class="col-lg-6"></div>
                     <div class="col-lg-3">
-                        <label for="place_holder">Product Name</label>
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="place_holder">Product Price</label>
-                    </div>
-                    <div class="col-lg-3">
-                        <label for="place_holder">Product Qty</label>
+                        <label for="place_holder">Name</label>
                     </div>
                     <div class="col-lg-2">
-                        <label for="place_holder">Product Total</label>
+                        <label for="place_holder">Price</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="place_holder">Qty</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="place_holder">Tax (%)</label>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="place_holder">Total</label>
                     </div>
                     <div class="col-lg-1">
                     </div>
@@ -479,12 +482,15 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-2 col-lg-3">
+                        <div class="mb-2 col-lg-2">
                             <input type="hidden" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                             <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
                         </div>
-                        <div class="mb-2 col-lg-3">
+                        <div class="mb-2 col-lg-2">
                             <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="0">
+                        </div>
+                        <div class="mb-2 col-lg-2">
+                            <input type="text" name="tax_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control tax tax_INDEX" placeholder="Enter Tax Percentage" value="{{ $data->tax }}">
                         </div>
                         <div class="mb-2 col-lg-2">
                             <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="0">
@@ -517,12 +523,15 @@
                     @endforeach
                 </select>
             </div>
-            <div class="mb-3 col-lg-3">
+            <div class="mb-3 col-lg-2">
                 <input type="hidden" name="name_INDEX[]" class="form-control name name_INDEX" placeholder="name">
                 <input type="text" name="price_INDEX[]" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control price price_INDEX" placeholder="Enter Price" value="0">
             </div>
-            <div class="mb-3 col-lg-3">
+            <div class="mb-3 col-lg-2">
                 <input type="text" name="qty_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control qty qty_INDEX" placeholder="Enter Quantity" value="0">
+            </div>
+            <div class="mb-2 col-lg-2">
+                <input type="text" name="tax_INDEX[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control tax tax_INDEX" placeholder="Enter Tax Percentage" value="{{ $data->tax }}">
             </div>
             <div class="mb-3 col-lg-2">
                 <input type="text" name="total_INDEX[]" class="form-control total total_INDEX" readonly placeholder="Total" value="0">
