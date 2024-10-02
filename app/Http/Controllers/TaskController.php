@@ -79,7 +79,7 @@ class TaskController extends Controller
             'priority' => 'required',
             'service.*' => 'required',
             'parts.*' => 'required',
-            'files.*' => 'nullable|file|mimes:jpeg,png,pdf,docx|max:2048',
+            'files.*' => 'nullable|file|mimes:jpeg,png,pdf,docx|max:10240000',
         ];
 
         // Merge dynamic field validation with additional rules
@@ -492,7 +492,7 @@ class TaskController extends Controller
             'priority' => 'required',
             'service.*' => 'required',
             'parts.*' => 'required',
-            'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:2048',
+            'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:10240000',
             'status' => 'required',
             'payment_status' => 'required',
         ];
