@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('task_payments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('task_id')->constrained()->onDelete('No Action');
             $table->tinyInteger('via')->default(1);
             $table->decimal('amount', 10, 2);
             $table->text('note')->nullable();

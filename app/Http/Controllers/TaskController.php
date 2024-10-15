@@ -21,6 +21,7 @@ use App\Models\PickupPoint;
 use App\Models\TaskMedia;
 use App\Models\TaskService;
 use App\Models\TaskProduct;
+use App\Models\TaskPayment;
 use App\Models\SerivceLocation;
 use App\Models\Setting;
 use App\Models\TaskLeavePart;
@@ -320,7 +321,7 @@ class TaskController extends Controller
         $totalAmount = 0;
         $totalAmount = $totalServiceAmount + $totalProductAmount;
 
-        $task->update(['total' => $totalAmount]);
+        $task->update(['total' => $totalAmount, 'pending' => $totalAmount]);
         // Get extra-parts from request and process them
         $extraParts = $request->input('extra-parts', '');
         $extraPartsArray = array_map('trim', explode(',', $extraParts));
@@ -493,8 +494,8 @@ class TaskController extends Controller
             'service.*' => 'required',
             'parts.*' => 'required',
             'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:10240000',
-            'status' => 'required',
-            'payment_status' => 'required',
+            // 'status' => 'required',
+            // 'payment_status' => 'required',
         ];
 
         // Merge dynamic field validation with additional rules
@@ -537,8 +538,8 @@ class TaskController extends Controller
         $confirmation = json_encode($terms);
 
         $data = [
-            'status' => $request->input('status'),
-            'payment_status' => $request->input('payment_status'),
+            // 'status' => $request->input('status'),
+            // 'payment_status' => $request->input('payment_status'),
 
             'customer_id' => $customerAdd->id ?? null,
             'details' => $confirmation,
@@ -687,40 +688,67 @@ class TaskController extends Controller
             }
         }
 
+
         // Services
+        $services_row_count = $request->input("services_row_count");
+        $product = [];
         $totalServiceAmount = 0;
-        if ($request->input('services')) {
-            foreach ($request->input('services') as $service) {
-                $dbService = Service::where('id', $service)->select('id', 'price', 'tax')->first();
+        for ($count=1; $count <= $services_row_count; $count++) {
 
-                $qty = $service['qty'] ?? 1;
-                $price = $dbService->price ?? null;
-                $tax = ($dbService->add_tax == 1 ? getTax() : 0) ?? null;
-                $serviceTaxAmount = $tax * $price / 100;
-                $serviceWithTax = $price + $serviceTaxAmount;
-                $servicePrice = $serviceWithTax * $qty;
-                $totalServiceAmount += $servicePrice;
-                $data = [
-                    'service_id' => $service,
-                    'qty' => $qty,
-                    'unit_price' => $price,
-                    'tax_perc' => $tax
-                ];
+            $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
+            $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
+            $serviceWithTax = $servicePrice + $serviceTaxAmount;
+            $totalServiceAmount += $servicePrice;
 
-                TaskService::updateOrCreate(
-                    [
-                        'task_id' => $taskId,
-                        'service_id' => $service,
-                    ],
-                    $data
-                );
-            }
+            TaskService::updateOrCreate(
+                [
+                    'task_id' => $taskId,
+                    'service_id' => $request->input("service_$count"),
+                ], [
+                    'customer_choice' => $isCustomerChoice,
+                    'qty' => $request->input("service_qty_$count"),
+                    'unit_price' => $request->input("service_price_$count"),
+                    'tax_perc' => $request->input("service_tax_$count"),
+                ]
+            );
         }
+
+
+        // Services
+        // $totalServiceAmount = 0;
+        // if ($request->input('services')) {
+        //     foreach ($request->input('services') as $service) {
+        //         $dbService = Service::where('id', $service)->select('id', 'price', 'tax')->first();
+
+        //         $qty = $service['qty'] ?? 1;
+        //         $price = $dbService->price ?? null;
+        //         $tax = ($dbService->add_tax == 1 ? getTax() : 0) ?? null;
+        //         $serviceTaxAmount = $tax * $price / 100;
+        //         $serviceWithTax = $price + $serviceTaxAmount;
+        //         $servicePrice = $serviceWithTax * $qty;
+        //         $totalServiceAmount += $servicePrice;
+        //         $data = [
+        //             'service_id' => $service,
+        //             'qty' => $qty,
+        //             'unit_price' => $price,
+        //             'tax_perc' => $tax
+        //         ];
+
+        //         TaskService::updateOrCreate(
+        //             [
+        //                 'task_id' => $taskId,
+        //                 'service_id' => $service,
+        //             ],
+        //             $data
+        //         );
+        //     }
+        // }
 
         $totalAmount = 0;
         $totalAmount = $totalServiceAmount + $totalProductAmount;
+        $pending = $totalAmount - $task->paid;
 
-        $task->update(['total' => $totalAmount]);
+        $task->update(['total' => $totalAmount, 'pending' => $pending]);
 
         $task->leaveParts()->sync($request->input('parts', []));
         // $task->services()->sync($request->input('services', []));
@@ -750,19 +778,38 @@ class TaskController extends Controller
     public function statusUpdate(Request $request, Task $task)
     {
         $this->validate($request, [
-            'status' => 'required',
-            'payment_status' => 'required',
+            'payment_method' => 'required',
+            'amount' => 'required|numeric|gt:0|max:' . $task->pending,
         ]);
-
-        // dd( $request->input('status') .'-'. $request->input('payment_status'));
 
         $taskId = $task->id;
-        $task = Task::where('id', $taskId)->update([
-            'status' => $request->input('status'),
-            'payment_status' => $request->input('payment_status')
+        $data = [
+            'task_id' => $taskId,
+            'via' => $request->input('payment_method'),
+            'amount' => $request->input('amount'),
+            'note' => $request->input('note') ?? null
+        ];
+        TaskPayment::create($data);
+
+        $amount = $request->input('amount');
+
+        if ($amount > 0) {
+            $pending = $task->pending - $amount;
+            $paid = $task->paid + $amount;
+            $payment_status = (((int)$paid == (int)$task->total) && ((int)$pending == 0)) ? 1 : 2;
+        } else {
+            $pending = $task->pending;
+            $paid = $task->paid;
+            $payment_status = $task->status;
+        }
+
+        Task::where('id', $taskId)->update([
+            'payment_status' => $payment_status,
+            'pending' => $pending,
+            'paid' => $paid
         ]);
 
-        return redirect()->route('case.edit1', $taskId)->with('success','Record update successfully');
+        return redirect()->route('case.index', $taskId)->with('success','Payment added successfully');
     }
 
     public function destroy(Task $task)

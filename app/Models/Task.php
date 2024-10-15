@@ -35,6 +35,11 @@ class Task extends Model
         return $this->hasMany(TaskService::class);
     }
 
+    public function taskPayments()
+    {
+        return $this->hasMany(TaskPayment::class);
+    }
+
     public function services()
     {
         return $this->belongsToMany(Service::class, 'task_services');

@@ -344,6 +344,7 @@
 
                                                 @php
                                                     $totalServicesPrice = 0;
+                                                    $totalProductsPrice = 0;
                                                 @endphp
                                                 <div class="mb-4 row" id="inspectionList" style="display: none;">
                                                     <div class="col-md-6">
@@ -427,7 +428,71 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <input type="hidden" name="services_row_count" id="services_row_count" value="0">
+                                                    @if(count($data->task->taskServices) > 0)
+                                                        @foreach ($data->task->taskServices as $indexS => $thisServ)
+                                                            @php ++$indexS @endphp
+                                                            <div>
+                                                                <div data-repeater-item class="row serviceRowTemplate">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-3">
+                                                                            <label for="place_holder">Service</label>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <label for="place_holder">Price</label>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <label for="place_holder">Qty</label>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <label for="place_holder">Tax (%)</label>
+                                                                        </div>
+                                                                        <div class="col-lg-2">
+                                                                            <label for="place_holder">Total</label>
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        @php
+                                                                            $thisServiceUnitTax = ($thisServ->unit_price * $thisServ->tax_perc) / 100;
+                                                                            $thisServiceTotal = ($thisServ->unit_price  + $thisServiceUnitTax) * $thisServ->qty;
+                                                                            $totalServicesPrice += $thisServiceTotal;
+                                                                        @endphp
+                                                                        <div class="mb-2 col-lg-3">
+                                                                            <select name="service_{{$indexS}}" class="select2 form-control service service_{{$indexS}}">
+                                                                                <option data-name="" data-price="0" value="">Choose Service</option>
+                                                                                @foreach ($data->services as $service)
+                                                                                    <option data-name="{{ $service->name }}" data-price="{{ $service->price }}" value="{{ $service->id }}" @if($service->id == $thisServ->service_id) selected @endif>{{ $service->name }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="mb-2 col-lg-2">
+                                                                            <input type="hidden" name="service_name_{{$indexS}}" class="form-control service_name service_name_{{$indexS}}" placeholder="name">
+                                                                            <input type="text" name="service_price_{{$indexS}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control service_price service_price_{{$indexS}}" placeholder="Enter Price" value="{{ $thisServ->unit_price }}">
+                                                                        </div>
+                                                                        <div class="mb-2 col-lg-2">
+                                                                            <input type="text" name="service_qty_{{$indexS}}" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control service_qty service_qty_{{$indexS}}" placeholder="Enter Quantity" value="{{ $thisServ->qty }}">
+                                                                        </div>
+                                                                        <div class="mb-2 col-lg-2">
+                                                                            <input type="text" name="service_tax_{{$indexS}}" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control service_tax service_tax_{{$indexS}}" placeholder="Enter Tax" value="{{ $thisServ->tax_perc }}">
+                                                                        </div>
+                                                                        <div class="mb-2 col-lg-2">
+                                                                            <input type="text" name="service_total_{{$indexS}}" class="form-control service_total service_total_{{$indexS}}" readonly placeholder="Total" value="{{ $thisServiceTotal }}">
+                                                                        </div>
+                                                                        <div class="col-lg-1">
+                                                                            <button type="button" class="btn btn-danger service-remove-btn" data-index="{{$indexS}}">
+                                                                                <i class="bx bx-minus-circle me-1"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        @php $indexS = 0;  @endphp
+                                                    @endif
+
+                                                    <input type="hidden" name="services_row_count" id="services_row_count" value="{{ $indexS }}">
                                                     <div class="col-md-12 add_service_template_area"></div>
 
                                                     <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
@@ -509,6 +574,13 @@
                                                                         </div>
                                                                         <div class="newRow_{{$index}}">
                                                                             @foreach ($parentProduct->taskItemProducts as $indexP => $chilProduct)
+
+                                                                                @php
+                                                                                    $thisProductUnitTax = ($chilProduct->unit_price * $chilProduct->tax_perc) / 100;
+                                                                                    $thisProductTotal = ($chilProduct->unit_price  + $thisProductUnitTax) * $chilProduct->qty;
+                                                                                    $totalProductsPrice += $thisProductTotal;
+                                                                                @endphp
+
                                                                                 <div data-repeater-item class="row templateRow rowAppend_{{$index}}">
                                                                                     <div class="mb-3 col-lg-3">
                                                                                         <select name="product_{{$index}}[]" class="select2 form-control product product_{{$index}}">
@@ -528,7 +600,7 @@
                                                                                         <input type="text" name="tax_{{$index}}[]" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control tax tax_{{$index}}" placeholder="Enter Tax Percentage" value="{{ $chilProduct->tax_perc }}">
                                                                                     </div>
                                                                                     <div class="mb-3 col-lg-2">
-                                                                                        <input type="text" name="total_{{$index}}[]" class="form-control total total_{{$index}}" readonly placeholder="Total" value="{{ $chilProduct->unit_price * $chilProduct->qty }}">
+                                                                                        <input type="text" name="total_{{$index}}[]" class="form-control total total_{{$index}}" readonly placeholder="Total" value="{{ $thisProductTotal }}">
                                                                                     </div>
                                                                                     <div class="col-lg-1">
                                                                                         <button type="button" class="btn btn-danger remove-btn">
@@ -559,7 +631,7 @@
                                             </div>
                                             <div>
                                                 <h4 class="card-title">Service Location</h4>
-                                                <p class="card-title-desc">Fill all information below {{$data->task->services_location}}</p>
+                                                <p class="card-title-desc">Fill all information below </p>
                                                 <br>
                                                 <div>
                                                     @foreach ($data->serviceLocations as $location)
@@ -718,16 +790,11 @@
                         <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 136px; padding-left: 60px; padding-right: 20px">
                             <div class="card">
                                 <div class="card-body">
-                                    {{-- <form method="POST" action="{{ route('case.status-update', $data->task->id) }}" class="form" enctype="multipart/form-data">
+                                    <form method="POST" action="{{ route('case.status-update', $data->task->id) }}" class="form" enctype="multipart/form-data">
                                         @csrf
-                                        @method('PUT') --}}
+                                        @method('PUT')
                                         <h4 class="card-title">Overview</h4>
-                                        {{-- <p class="card-title-desc">Fill all information below</p> --}}
                                         <div>
-                                            {{-- <h4 class="card-title">Leaving Parts</h4>
-                                            <p class="card-title-desc">The parts you want to leave</p> --}}
-                                            {{-- <form> --}}
-
                                             <div style="margin-top: 0px;">
                                                 <label>Case Number : <span class="font-size-18">{{ $data->task->code }}</span></label>
                                             </div>
@@ -744,7 +811,7 @@
                                                 {{-- <label>Services : <span class="font-size-18">{{$data->task->taskService->sum('unit_price') ?? 0}}</span></label> --}}
                                             </div>
 
-                                            <div class="mt-1">
+                                            {{-- <div class="mt-1">
                                                 <label class="col-form-label">Case Status</label>
                                                 <select class="form-control select2 @error('status') is-invalid @enderror" title="Status" name="status">
                                                     <option value="">Select Case Status </option>
@@ -772,7 +839,7 @@
                                                     @enderror
                                                 </select>
                                             </div>
-                                            {{-- <div class="mt-1">
+                                            <div class="mt-1">
                                                 <label class="col-form-label">Payment Method</label>
                                                 <select class="form-control select2" title="Payment Method" name="payment_method">
                                                     <option value="">Select Payment Method </option>
@@ -785,11 +852,72 @@
                                             <div class="d-grid gap-2 mt-3">
                                                 <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
                                             </div>
-                                        <div>
-                                    {{-- </form> --}}
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+
+                        @if(count($data->task->taskPayments) > 0)
+                            <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 410px; padding-left: 60px; padding-right: 20px; height: 100;">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="me-2">
+                                                <h5 class="card-title mb-4">Payment Logs</h5>
+                                            </div>
+                                        </div>
+                                        <div data-simplebar="init" class="mt-2 simplebar-scrollable-y" style="max-height: 280px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+                                            <ul class="verti-timeline list-unstyled">
+                                                @foreach ($data->task->taskPayments as $payment)
+                                                    <li class="event-list py-0 mb-2">
+                                                        <div class="event-timeline-dot">
+                                                            <i class="bx bx-right-arrow-circle"></i>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <div class="flex-shrink-0 me-3">
+                                                                {!! getPayment('via', $payment->via, 'badge') !!}
+                                                                <span class="text-primary">{{$payment->created_at->format('d M, Y')}}</span>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <div>
+                                                                    <h5 class="font-size-15"><a href="javascript: void(0);" class="text-dark">{{ numberFormat($payment->amount, 'euro') }}</a></h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    {{-- <li class="event-list active">
+                                                        <div class="event-timeline-dot">
+                                                            <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                                            <i class="bx bxs-right-arrow-circle font-size-18 bx-fade-right"></i>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <div class="flex-shrink-0 me-3">
+                                                                <h5 class="font-size-14">{{$payment->created_at->format('d M, Y')}} <i class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <div>
+                                                                    {!! getPayment('via', $payment->via, 'badge') !!}
+                                                                    {{ $payment->amount }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li> --}}
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="simplebar-placeholder" style="width: 351px; height: 125px;"></div>
+                                <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                    <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                                </div>
+                                <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                                    <div class="simplebar-scrollbar" style="height: 217px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -1100,8 +1228,13 @@
 
         // $('.select2').select2();
         var rowCount = 0;
-
         var serviceRowCount = 0;
+
+        // if there is record in DB in then consider that count (only parent products)
+        var dbRowCountService = <?php echo count($data->task->taskServices) ?>;
+        if (dbRowCountService > 0) {
+            serviceRowCount = dbRowCountService;
+        }
 
         $(document).on('click', '.add_services_button', function(){
             serviceRowCount++;

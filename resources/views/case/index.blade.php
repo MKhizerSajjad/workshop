@@ -48,7 +48,9 @@
                                                 <th>Product</th>
                                                 {{-- <th>Manufacturer</th> --}}
                                                 <th>Technician</th>
-                                                <th>Amount</th>
+                                                <th>Total</th>
+                                                <th>Paid</th>
+                                                <th>Pending</th>
                                                 <th>Status</th>
                                                 <th>Payment</th>
                                                 <th class="text-center">Options</th>
@@ -57,20 +59,72 @@
                                         <tbody>
                                             @foreach ($data as $key => $task)
                                                 <tr>
-                                                    <td  class="text-center">{{ ++$key }}</td>
+                                                    <td class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $task->code }}</td>
-                                                    <td>{{ $task->model .' '. $task->year }}</td>
-                                                    {{-- <td>{{ $task->manufacturer }}</td> --}}
+                                                    <td>{{ $task->model . ' ' . $task->year }}</td>
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
                                                     <td>{{ numberFormat($task->total, 'euro') }}</td>
+                                                    <td>{{ numberFormat($task->paid, 'euro') }}</td>
+                                                    <td>{{ numberFormat($task->pending, 'euro') }}</td>
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>
                                                     <td>{!! getPayment('status', $task->payment_status, 'badge') !!}</td>
                                                     <td class="text-center">
                                                         <a href="{{ route('case.invoice', $task->id) }}"><i class="bx bx-receipt"></i></a>
-                                                        {{-- <a href="{{ route('case.edit', $task->id) }}"><i class="bx bx-pencil"></i></a> --}}
+                                                        @if ($task->payment_status != 1)
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $task->id }}"><i class="bx bx-euro"></i></a>
+                                                        @endif
                                                         <a href="{{ route('case.edit1', $task->id) }}"><i class="bx bx-pencil"></i></a>
                                                     </td>
                                                 </tr>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="paymentModal-{{ $task->id }}" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="paymentModalLabel">Add New Payment for <b>{{$task->code}}</b></h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <form method="POST" action="{{ route('case.status-update', $task->id) }}" enctype="multipart/form-data">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="modal-body">
+                                                                    <div>
+                                                                        <label class="col-form-label amount">Payment Amount <span class="text-danger">*</span></label>
+                                                                        <input type="number" class="form-control @error('amount') is-invalid @enderror" name="amount" placeholder="Payment Amount" step="0.01" min="0.01" max="{{$task->pending}}" required>
+                                                                        @error('amount')
+                                                                            <span class="invalid-feedback" role="alert">
+                                                                                <strong>{{ $message }}</strong>
+                                                                            </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                    <div>
+                                                                        <label class="col-form-label payment_method mt-1">Payment Method <span class="text-danger">*</span></label>
+                                                                        <select class="form-control select2 @error('payment_method') is-invalid @enderror" name="payment_method" required>
+                                                                            <option value="">Select Payment Method</option>
+                                                                            @foreach (getPayment('via') as $payKey => $status)
+                                                                                <option value="{{ ++$payKey }}">{{ $status }}</option>
+                                                                            @endforeach
+                                                                            @error('payment_method')
+                                                                                <span class="invalid-feedback" role="alert">
+                                                                                    <strong>{{ $message }}</strong>
+                                                                                </span>
+                                                                            @enderror
+                                                                        </select>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="note" class="col-form-label">Note</label>
+                                                                        <textarea class="form-control" name="note" placeholder="Note"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Add Payment</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @endforeach
                                         </tbody>
                                     </table>
