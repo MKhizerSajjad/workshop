@@ -9,4 +9,9 @@ class TaskComment extends Model
 {
     use HasFactory;
     protected $guarded;
+
+    public function user()
+    {
+        return $this->hasOne(Product::class);
+    }
 }

@@ -40,6 +40,12 @@ class Task extends Model
         return $this->hasMany(TaskPayment::class);
     }
 
+
+    public function taskComments()
+    {
+        return $this->hasMany(TaskComment::class);
+    }
+
     public function services()
     {
         return $this->belongsToMany(Service::class, 'task_services');

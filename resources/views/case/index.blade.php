@@ -74,6 +74,7 @@
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $task->id }}"><i class="bx bx-euro"></i></a>
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $task->id }}"><i class="bx bx-message"></i></a>
                                                         @endif
+                                                        <a href="{{ route('case.show', $task->id) }}"><i class="bx bx-bullseye"></i></a>
                                                         <a href="{{ route('case.edit1', $task->id) }}"><i class="bx bx-pencil"></i></a>
                                                     </td>
                                                 </tr>

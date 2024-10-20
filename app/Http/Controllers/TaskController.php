@@ -435,7 +435,7 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-        $data['task'] = $task;
+        $data = $task;
         return view('case.show', compact('data'));
     }
 
