@@ -72,12 +72,13 @@
                                                         <a href="{{ route('case.invoice', $task->id) }}"><i class="bx bx-receipt"></i></a>
                                                         @if ($task->payment_status != 1)
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $task->id }}"><i class="bx bx-euro"></i></a>
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $task->id }}"><i class="bx bx-message"></i></a>
                                                         @endif
                                                         <a href="{{ route('case.edit1', $task->id) }}"><i class="bx bx-pencil"></i></a>
                                                     </td>
                                                 </tr>
 
-                                                <!-- Modal -->
+                                                <!-- Payment Modal -->
                                                 <div class="modal fade" id="paymentModal-{{ $task->id }}" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -115,6 +116,31 @@
                                                                     <div>
                                                                         <label for="note" class="col-form-label">Note</label>
                                                                         <textarea class="form-control" name="note" placeholder="Note"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Add Payment</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Comments Modal -->
+                                                <div class="modal fade" id="commentsModal-{{ $task->id }}" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="commentsModalLabel">Add New Comments for <b>{{$task->code}}</b></h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <form method="POST" action="{{ route('case.comment', $task->id) }}" enctype="multipart/form-data">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div>
+                                                                        <label for="comment" class="col-form-label">Comment</label>
+                                                                        <textarea class="form-control" name="comment" placeholder="Comment"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">

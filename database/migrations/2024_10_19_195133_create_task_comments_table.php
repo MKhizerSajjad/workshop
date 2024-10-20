@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_payments', function (Blueprint $table) {
+        Schema::create('task_comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained()->onDelete('No Action');
-            $table->tinyInteger('via')->default(1);
-            $table->decimal('amount', 10, 2);
-            $table->text('note')->nullable();
+            $table->tinyInteger('type')->default(1);
+            $table->text('comment')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('No Action');
             $table->timestamps();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_payments');
+        Schema::dropIfExists('task_comments');
     }
 };

@@ -24,6 +24,7 @@ use App\Models\TaskProduct;
 use App\Models\TaskPayment;
 use App\Models\SerivceLocation;
 use App\Models\Setting;
+use App\Models\TaskComment;
 use App\Models\TaskLeavePart;
 use Symfony\Component\VarDumper\VarDumper;
 
@@ -787,7 +788,8 @@ class TaskController extends Controller
             'task_id' => $taskId,
             'via' => $request->input('payment_method'),
             'amount' => $request->input('amount'),
-            'note' => $request->input('note') ?? null
+            'note' => $request->input('note') ?? null,
+            'user_id' => Auth::user()->id
         ];
         TaskPayment::create($data);
 
@@ -810,6 +812,24 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('case.index', $taskId)->with('success','Payment added successfully');
+    }
+
+    public function comment(Request $request, Task $task)
+    {
+        $this->validate($request, [
+            'comment' => 'required',
+        ]);
+
+        $taskId = $task->id;
+        $data = [
+            'task_id' => $taskId,
+            'type' => $request->input('type') ?? 1,
+            'comment' => $request->input('comment'),
+            'user_id' => Auth::user()->id
+        ];
+        TaskComment::create($data);
+
+        return redirect()->route('case.index', $taskId)->with('success','Comment added successfully');
     }
 
     public function destroy(Task $task)

@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('case.destroy');
         Route::get('{task}/delete-media', [TaskController::class, 'destroyMedia'])->name('case.destroyMedia');
         Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('case.invoice');
+        Route::post('{task}/comment', [TaskController::class, 'comment'])->name('case.comment');
     });
 
     // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');
