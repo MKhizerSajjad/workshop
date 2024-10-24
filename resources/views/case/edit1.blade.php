@@ -788,6 +788,15 @@
                             {{-- </form> --}}
                         </div>
                         <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 136px; padding-left: 60px; padding-right: 20px">
+                            <div class="text-center">
+                                <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-receipt"></i></a>
+                                <a href="{{ route('case.show', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-bullseye"></i></a>
+                                @if ($data->task->payment_status != 1)
+                                    <a href="#" class="btn btn-info font-size-18" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $data->task->id }}"><i class="bx bx-euro"></i></a>
+                                    <a href="#" class="btn btn-info font-size-18" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $data->task->id }}"><i class="bx bx-message"></i></a>
+                                @endif
+                            </div>
+
                             <div class="card">
                                 <div class="card-body">
                                     <form method="POST" action="{{ route('case.status-update', $data->task->id) }}" class="form" enctype="multipart/form-data">
@@ -1072,6 +1081,80 @@
                 <button type="button" class="btn btn-danger remove-btn" data-index="INDEX">
                     <i class="bx bx-minus-circle me-1"></i>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal-{{ $data->task->id }}" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Add New Payment for <b>{{$data->task->code}}</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{ route('case.status-update', $data->task->id) }}" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div>
+                            <label class="col-form-label amount">Payment Amount <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control @error('amount') is-invalid @enderror" name="amount" placeholder="Payment Amount" step="0.01" min="0.01" max="{{$data->task->pending}}" required>
+                            @error('amount')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="col-form-label payment_method mt-1">Payment Method <span class="text-danger">*</span></label>
+                            <select class="form-control select2 @error('payment_method') is-invalid @enderror" name="payment_method" required>
+                                <option value="">Select Payment Method</option>
+                                @foreach (getPayment('via') as $payKey => $status)
+                                    <option value="{{ ++$payKey }}">{{ $status }}</option>
+                                @endforeach
+                                @error('payment_method')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </select>
+                        </div>
+                        <div>
+                            <label for="note" class="col-form-label">Note</label>
+                            <textarea class="form-control" name="note" placeholder="Note"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div class="modal fade" id="commentsModal-{{ $data->task->id }}" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentsModalLabel">Add New Comments for <b>{{$data->task->code}}</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div>
+                            <label for="comment" class="col-form-label">Comment</label>
+                            <textarea class="form-control" name="comment" placeholder="Comment"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

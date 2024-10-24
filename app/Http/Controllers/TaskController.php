@@ -811,7 +811,7 @@ class TaskController extends Controller
             'paid' => $paid
         ]);
 
-        return redirect()->route('case.index', $taskId)->with('success','Payment added successfully');
+        return redirect()->route('case.edit1', $taskId)->with('success','Payment added successfully');
     }
 
     public function comment(Request $request, Task $task)
@@ -829,7 +829,7 @@ class TaskController extends Controller
         ];
         TaskComment::create($data);
 
-        return redirect()->route('case.index', $taskId)->with('success','Comment added successfully');
+        return redirect()->route('case.edit1', $taskId)->with('success','Comment added successfully');
     }
 
     public function destroy(Task $task)
