@@ -158,7 +158,7 @@
                                                     <div>
                                                         @foreach ($data->parts as $part)
                                                             @php
-                                                                $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id);
+                                                                $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id)
                                                             @endphp
                                                             <div class="form-check form-check-inline font-size-16 mt-1">
                                                                 <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ $isChecked ? 'checked' : '' }}>
