@@ -48,20 +48,20 @@
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>Status</th>
-                                                {{-- <th class="text-center">Options</th> --}}
+                                                <th class="text-center">Options</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($data as $key => $product)
+                                            @foreach ($data as $key => $customer)
                                                 <tr>
                                                     <td  class="text-center">{{ ++$key }}</td>
-                                                    <td>{{ $product->first_name .' '. $product->last_name }}</td>
-                                                    <td>{{ $product->email }}</td>
-                                                    <td>{{ $product->phone }}</td>
-                                                    <td>{!! $product->status == 1 ? '<span class="badge bg-primary">Active</span>' : '<span class="badge bg-warning">Inactive</span' !!}</td>
-                                                    {{-- <td class="text-center">
-                                                        <a href="{{ route('customer.show', $product->id) }}"><i class="fa fa-eye"></i></a>
-                                                    </td> --}}
+                                                    <td>{{ $customer->first_name .' '. $customer->last_name }}</td>
+                                                    <td>{{ $customer->email }}</td>
+                                                    <td>{{ $customer->phone }}</td>
+                                                    <td>{!! $customer->status == 1 ? '<span class="badge bg-primary">Active</span>' : '<span class="badge bg-warning">Inactive</span' !!}</td>
+                                                    <td class="text-center">
+                                                        <a href="{{ route('customer.edit', $customer->id) }}"><i class="bx bx-pencil"></i></a>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

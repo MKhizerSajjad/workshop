@@ -18,41 +18,42 @@ class CustomerController extends Controller
 
     public function create()
     {
-        return view('customer.create');
+        return redirect()->route('customer.index')->with('success','Not Accessible');
+        // return view('customer.create');
     }
 
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:150'],
-            'email' => ['required', 'string', 'email', 'max:245', 'unique:users'],
-            'phone' => ['required', 'string', 'max:15', 'unique:users', 'regex:/^([0-9\s\-\+\(\)]*)$/'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
+    //         'first_name' => ['required', 'string', 'max:255'],
+    //         'last_name' => ['required', 'string', 'max:150'],
+    //         'email' => ['required', 'string', 'email', 'max:245', 'unique:users'],
+    //         'phone' => ['required', 'string', 'max:15', 'unique:users', 'regex:/^([0-9\s\-\+\(\)]*)$/'],
+    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
+    //     ]);
 
-        $data = [
-            'status' => $request->status ?? 1,
-            'user_type' => 4,
-            'picture' => '',
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address ?? null,
-            'password' => Hash::make($request->password),
-        ];
+    //     $data = [
+    //         'status' => $request->status ?? 1,
+    //         'user_type' => 4,
+    //         'picture' => '',
+    //         'first_name' => $request->first_name,
+    //         'last_name' => $request->last_name,
+    //         'email' => $request->email,
+    //         'phone' => $request->phone,
+    //         'address' => $request->address ?? null,
+    //         'password' => Hash::make($request->password),
+    //     ];
 
-        User::create($data);
+    //     User::create($data);
 
-        return redirect()->route('customer.index')->with('success','Record created successfully');
-    }
+    //     return redirect()->route('customer.index')->with('success','Record created successfully');
+    // }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Customer $customer)
     {
         if (!empty($user)) {
 
@@ -71,7 +72,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $user = Customer::findOrFail($id);
         return view('customer.edit', compact('user'));
     }
 
@@ -81,17 +82,22 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:150'],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:70', 'unique:customers,email,' . $id],
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9]\d{1,14}$/', 'max:15', 'unique:customers,phone,' . $id],
+            'company' => ['required', 'string', 'max:50'],
+            'city' => ['required', 'string', 'max:50'],
+            'address' => ['required', 'string', 'max:255'],
         ]);
 
         $data = [
             'status' => $request->status ?? 1,
-            'picture' => '',
             'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'company' => $request->company,
+            'city' => $request->city,
             'address' => $request->address ?? null,
         ];
 
@@ -99,7 +105,7 @@ class CustomerController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        User::find($id)->update($data);
+        Customer::find($id)->update($data);
         return redirect()->route('customer.index')->with('success','Updated successfully');
     }
 
