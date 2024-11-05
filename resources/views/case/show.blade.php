@@ -151,9 +151,9 @@
                                         </div>
                                         <div class="flex-grow-1">
                                             <h5 class="font-size-15"><a href="javascript: void(0);" class="text-dark">{{  numberFormat($payment->amount, 'euro') }}</a></h5>
-                                            {{-- <p class="text-muted mb-1">
-                                                Separate existence is a myth.
-                                            </p> --}}
+                                            <p class="text-muted mb-1">
+                                                {{ $payment->note }}
+                                            </p>
                                         </div>
                                         <div class="ms-3">
                                             <span class="text-primary">{{$payment->created_at->format('d M, Y')}}</span>

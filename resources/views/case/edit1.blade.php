@@ -894,6 +894,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="d-flex">
+                                                            <p>{{ $payment->note }}</p>
+                                                        </div>
                                                     </li>
                                                     {{-- <li class="event-list active">
                                                         <div class="event-timeline-dot">
