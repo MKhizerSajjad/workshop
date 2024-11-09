@@ -70,15 +70,125 @@
                                     <div class="card-body">
                                         <div class="tab-content" id="v-pills-tabContent">
                                             <div>
-                                                <h4 class="card-title">Item information</h4>
-                                                <p class="card-title-desc">Fill all information below</p>
-                                                {{-- <form> --}}
-                                                    {{-- @foreach ($data->items as $item)
-                                                        <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="item" id="item-{{ $item->id }}" name="{{ $item->id }}">
-                                                            <label class="form-check-label font-size-13" for="item-{{ $item->id }}"> {{ $item->name }}</label>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h4 class="card-title mb-0">Item information</h4>
+                                                        <p class="card-title-desc mb-0">Fill all information below</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                        <!-- Item information Modal Trigger Button (optional) -->
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailsModal">
+                                                            <i class="fa fa-pen"></i> Item Information
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Item information Modal -->
+                                                <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title" id="itemDetailsModalLabel">Edit Item Details</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                    @endforeach --}}
+                                                        <div class="modal-body">
+                                                            {{-- <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data"> --}}
+                                                                <!-- Item Selection -->
+                                                                <div class="form-group row mb-2">
+                                                                    <label class="col-md-2 col-form-label">Select Item</label>
+                                                                    <div class="col-md-12">
+                                                                    <select class="form-control select2" title="Item" name="item">
+                                                                        <option value="">Select Item</option>
+                                                                        @foreach ($data->items as $item)
+                                                                        <option value="{{ $item->id }}" @if($item->id == $data->task->item_id) selected @endif>{{ $item->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('item')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                    @enderror
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Manufacturer, Model, Year, Color Fields -->
+                                                                <div class="form-group row mb-2">
+                                                                    <div class="col-md-6">
+                                                                    <label for="manufacturer" class="form-label">Manufacturer</label>
+                                                                    <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ $data->task->manufacturer }}" placeholder="Enter Manufacturer">
+                                                                    @error('manufacturer')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                    @enderror
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                    <label for="model" class="form-label">Model</label>
+                                                                    <input type="text" name="model" class="form-control" id="model" value="{{ $data->task->model }}" placeholder="Enter Model">
+                                                                    @error('model')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                    @enderror
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group row mb-2">
+                                                                    <div class="col-md-6">
+                                                                    <label for="year" class="form-label">Year</label>
+                                                                    <input type="text" name="year" class="form-control" id="year" value="{{ $data->task->year }}" placeholder="Enter Year">
+                                                                    @error('year')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                    @enderror
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                    <label for="color" class="form-label">Color</label>
+                                                                    <input type="text" name="color" class="form-control" id="color" value="{{ $data->task->color }}" placeholder="Enter Color">
+                                                                    @error('color')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                    @enderror
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Additional Information and Problem Description -->
+                                                                <div class="form-group row mb-3">
+                                                                    <label for="additional_info" class="form-label">Additional Information</label>
+                                                                    <div class="col-md-12">
+                                                                    <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $data->task->additional_info }}</textarea>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group row mb-3">
+                                                                    <label for="problem_description" class="form-label">Description of Problem / Failure</label>
+                                                                    <div class="col-md-12">
+                                                                    <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $data->task->problem_description }}</textarea>
+                                                                    @error('problem_description')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                        </span>
+                                                                    @enderror
+                                                                    </div>
+                                                                </div>
+                                                            {{-- </form> --}}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- <div class="pull-right">
+                                                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#itemInfo" aria-expanded="false" aria-controls="itemInfo">
+                                                        <i class="fa fa-chevron-down"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="collapse" id="itemInfo">
                                                     <div class="form-group row mb-2">
                                                         <label class="col-md-2 col-form-label">Select Item</label>
                                                         <div class="col-md-12">
@@ -152,24 +262,25 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <h4 class="card-title">Leaving Parts</h4>
-                                                    <p class="card-title-desc">The parts you want to leave</p>
+                                                </div> --}}
 
-                                                    <div>
-                                                        @foreach ($data->parts as $part)
-                                                            @php
-                                                                $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id)
-                                                            @endphp
-                                                            <div class="form-check form-check-inline font-size-16 mt-1">
-                                                                <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ $isChecked ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="part-{{ $part->id }}">
-                                                                    <h5>{{ $part->name }}</h5>
-                                                                </label>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
 
-                                                {{-- </form> --}}
+                                                <h4 class="card-title mt-4">Leaving Parts</h4>
+                                                <p class="card-title-desc">The parts you want to leave</p>
+
+                                                <div>
+                                                    @foreach ($data->parts as $part)
+                                                        @php
+                                                            $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id)
+                                                        @endphp
+                                                        <div class="form-check form-check-inline font-size-16 mt-1">
+                                                            <input class="form-check-input" type="checkbox" value="{{ $part->id }}" name="parts[]" id="part-{{ $part->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="part-{{ $part->id }}">
+                                                                <h5>{{ $part->name }}</h5>
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                             <div>
 
@@ -630,117 +741,119 @@
                                                 {{-- </form> --}}
                                             </div>
                                             <div>
-                                                <h4 class="card-title">Service Location</h4>
-                                                <p class="card-title-desc">Fill all information below </p>
-                                                <br>
-                                                <div>
-                                                    @foreach ($data->serviceLocations as $location)
-                                                    <div class="mb-2 form-check form-check-inline font-size-16">
-                                                        <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == $data->task->services_location ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="loc-{{ $location->id }}">
-                                                            <h5>{{ $location->title }}</h5>
-                                                        </label>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h4 class="card-title">Service Location</h4>
+                                                        <p class="card-title-desc">Fill all information below </p>
                                                     </div>
-                                                    @endforeach
-                                                </div>
-                                                @foreach ($data->serviceLocations as $location)
-                                                    <div class="tab-content p-3 text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
-                                                        <div class="tab-pane active show" id="location-{{$location->id}}" role="tabpanel">
-                                                            @if ($location->detail)
-                                                                <div class="alert alert-info d-none d-lg-block">
-                                                                    {{ $location->detail }}
+                                                    <div class="col-md-6 text-end">
+                                                        <!-- Modal Trigger Button (optional) -->
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#serviceLocationModal">
+                                                            <i class="fa fa-pen"></i> Service Location
+                                                        </button>
+                                                        <!-- Service Location Modal -->
+                                                        <div class="modal fade" id="serviceLocationModal" tabindex="-1" aria-labelledby="serviceLocationModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                <h5 class="modal-title" id="serviceLocationModalLabel">Select Service Location</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
-                                                            @endif
-                                                            <div class="row">
-                                                                @foreach (json_decode($location->fields) as $field)
-                                                                <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
-                                                                    <div class="mb-3">
-                                                                        <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
-                                                                        @if ($field->type === 'textarea')
-                                                                            <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ $data->task->customer[$field->name] }}</textarea>
-                                                                        @else
-                                                                            <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ $data->task->customer[$field->name] }}">
-                                                                        @endif
-                                                                    </div>
+                                                                <div class="modal-body">
+                                                                    {{-- <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data"> --}}
+                                                                        <!-- Service Location Selection -->
+                                                                        <div>
+                                                                            @foreach ($data->serviceLocations as $location)
+                                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                                <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == $data->task->services_location ? 'checked' : '' }}>
+                                                                                <label class="form-check-label" for="loc-{{ $location->id }}">
+                                                                                <h5>{{ $location->title }}</h5>
+                                                                                </label>
+                                                                            </div>
+                                                                            @endforeach
+                                                                        </div>
+
+                                                                        <!-- Dynamic Forms for Each Location -->
+                                                                        @foreach ($data->serviceLocations as $location)
+                                                                            <div class="tab-content p-3 text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
+                                                                            <div class="tab-pane active show" id="location-{{$location->id}}" role="tabpanel">
+                                                                                @if ($location->detail)
+                                                                                <div class="alert alert-info d-none d-lg-block">
+                                                                                    {{ $location->detail }}
+                                                                                </div>
+                                                                                @endif
+                                                                                <div class="row">
+                                                                                @foreach (json_decode($location->fields) as $field)
+                                                                                    <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
+                                                                                    <div class="mb-3">
+                                                                                        <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
+                                                                                        @if ($field->type === 'textarea')
+                                                                                        <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ $data->task->customer[$field->name] }}</textarea>
+                                                                                        @else
+                                                                                        <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ $data->task->customer[$field->name] }}">
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                                </div>
+                                                                            </div>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    {{-- </form> --}}
                                                                 </div>
-                                                                @endforeach
+                                                                <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @endforeach
-                                                    {{-- <br>
+                                                </div>
+                                                {{-- Collapse Button --}}
+                                                {{-- <div class="float-right">
+                                                    <button class="btn btn-primary mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#serviceLocation" aria-expanded="false" aria-controls="serviceLocation">
+                                                        <i class="fa fa-chevron-down"></i>
+                                                    </button>
+                                                </div> --}}
+                                                {{-- Collapse Area --}}
+                                                {{-- <div class="collapse" id="serviceLocation">
                                                     <div>
-
-                                                    @foreach (getService('location') as $key => $location)
+                                                        @foreach ($data->serviceLocations as $location)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="services_location" value="{{++$key}}" name="services_location" id="loc-{{$key}}" {{ $key == $data->task->services_location ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="loc-{{$key}}">
-                                                                <h5>{{ $location }}</h5>
+                                                            <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == $data->task->services_location ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="loc-{{ $location->id }}">
+                                                                <h5>{{ $location->title }}</h5>
                                                             </label>
                                                         </div>
-                                                    @endforeach
+                                                        @endforeach
                                                     </div>
-
-                                                    <div class="tab-content p-3 text-muted">
-                                                        <div class="tab-pane active show" id="home-1" role="tabpanel">
-                                                            <div class="row">
-                                                                <div class="col-lg-6">
-                                                                    <div class="mb-3">
-                                                                        <label for="first_name">First Name</label>
-                                                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" value="{{ $data->task->customer->first_name }}">
+                                                    @foreach ($data->serviceLocations as $location)
+                                                        <div class="tab-content p-3 text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
+                                                            <div class="tab-pane active show" id="location-{{$location->id}}" role="tabpanel">
+                                                                @if ($location->detail)
+                                                                    <div class="alert alert-info d-none d-lg-block">
+                                                                        {{ $location->detail }}
                                                                     </div>
-                                                                </div>
-
-                                                                <div class="col-lg-6">
-                                                                    <div class="mb-3">
-                                                                        <label for="last_name">Last Name</label>
-                                                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" value="{{ $data->task->customer->last_name }}">
+                                                                @endif
+                                                                <div class="row">
+                                                                    @foreach (json_decode($location->fields) as $field)
+                                                                    <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
+                                                                        <div class="mb-3">
+                                                                            <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
+                                                                            @if ($field->type === 'textarea')
+                                                                                <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ $data->task->customer[$field->name] }}</textarea>
+                                                                            @else
+                                                                                <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ $data->task->customer[$field->name] }}">
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-lg-6">
-                                                                    <div class="mb-3">
-                                                                        <label for="phone">Phone Number</label>
-                                                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" value="{{ $data->task->customer->phone }}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-lg-6">
-                                                                    <div class="mb-3">
-                                                                        <label for="email">Email</label>
-                                                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="{{ $data->task->customer->email }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-lg-6">
-                                                                    <div class="mb-3">
-                                                                        <label for="city">City</label>
-                                                                        <input type="text" class="form-control" id="city" name="city" placeholder="Enter city" value="{{ $data->task->customer->city }}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-lg-6">
-                                                                    <div class="mb-3">
-                                                                        <label for="company">Company</label>
-                                                                        <input type="text" class="form-control" id="company" name="company" placeholder="Enter company" value="{{ $data->task->customer->company }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-lg-12">
-                                                                    <div class="mb-3">
-                                                                        <label for="address">Address</label>
-                                                                        <textarea class="form-control" id="address" name="address" placeholder="Enter address">{{ $data->task->customer->address }}</textarea>
-                                                                    </div>
+                                                                    @endforeach
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div> --}}
-
-                                                {{-- </form> --}}
-                                            </div>
+                                                    @endforeach
+                                                </div> --}}
                                             <div>
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
