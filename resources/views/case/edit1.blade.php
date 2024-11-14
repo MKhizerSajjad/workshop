@@ -69,27 +69,154 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="tab-content" id="v-pills-tabContent">
-                                            <div>
+                                            <div class="col-md-12">
+
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h4 class="card-title mb-0">Item information</h4>
-                                                        <p class="card-title-desc mb-0">Fill all information below</p>
+                                                    <div class="col-md-6 border-end border-dark">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h4 class="card-title mb-0">Item information</h4>
+                                                                {{-- <p class="card-title-desc mb-0">Fill all information below</p> --}}
+                                                            </div>
+                                                            <div class="col-md-6 text-end">
+                                                                {{-- <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#itemInfo" aria-expanded="false" aria-controls="itemInfo">
+                                                                    <i class="fa fa-chevron-down"></i>
+                                                                </button> --}}
+                                                                <!-- Item information Modal Trigger Button (optional) -->
+                                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailsModal">
+                                                                    <i class="fa fa-pen"></i>
+                                                                </button>
+                                                            </div>
+
+                                                            <div class="container" id="itemInfo"> <!-- collapse -->
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <p><strong>Item: </strong><span class="text-muted">{{ $data->task->item->name ?? 'N/A' }}</span></p>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p><strong>Manufacturer: </strong><span class="text-muted">{{ $data->task->manufacturer ?? 'N/A' }}</span></p>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p><strong>Model: </strong><span class="text-muted">{{ $data->task->model ?? 'N/A' }}</span></p>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p><strong>Year: </strong><span class="text-muted">{{ $data->task->year ?? 'N/A' }}</span></p>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <p><strong>Color: </strong><span class="text-muted">{{ $data->task->color ?? 'N/A' }}</span></p>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <p><strong>Additional Information: <br> </strong><span class="text-muted">{{ $data->task->additional_info ?? 'N/A' }}</span></p>
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <p><strong>Description of Problem / Failure: <br> </strong><span class="text-muted">{{ $data->task->problem_description ?? 'N/A' }}</span></p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6 text-end">
-                                                        <!-- Item information Modal Trigger Button (optional) -->
-                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemDetailsModal">
-                                                            <i class="fa fa-pen"></i> Item Information
-                                                        </button>
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h4 class="card-title">Customer Information</h4>
+                                                                {{-- <p class="card-title-desc">Fill all information below </p> --}}
+                                                            </div>
+                                                            <div class="col-md-6 text-end">
+                                                                {{-- <button class="btn btn-primary mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#serviceLocation" aria-expanded="false" aria-controls="serviceLocation">
+                                                                    <i class="fa fa-chevron-down"></i>
+                                                                </button> --}}
+                                                                <!-- Modal Trigger Button (optional) -->
+                                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#serviceLocationModal">
+                                                                    <i class="fa fa-pen"></i>
+                                                                </button>
+                                                            </div>
+
+                                                            <div class="container" id="serviceLocation"> <!-- collapse -->
+                                                                @foreach ($data->serviceLocations as $location)
+                                                                    @if ($location->id == $data->task->services_location)
+                                                                        <div class="row">
+                                                                            @foreach (json_decode($location->fields) as $field)
+                                                                                <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }} ">
+                                                                                    <p>
+                                                                                        <strong>{{ $field->title }}:</strong>
+                                                                                        <span class="text-muted">
+                                                                                            {{ $data->task->customer[$field->name] ?? 'N/A' }}
+                                                                                        </span>
+                                                                                    </p>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    @endif
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 
+                                                <!-- Service Location Modal -->
+                                                <div class="modal fade" id="serviceLocationModal" tabindex="-1" aria-labelledby="serviceLocationModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="serviceLocationModalLabel">Select Service Location</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                {{-- <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data"> --}}
+                                                                    <!-- Service Location Selection -->
+                                                                    <div>
+                                                                        @foreach ($data->serviceLocations as $location)
+                                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                            <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == $data->task->services_location ? 'checked' : '' }}>
+                                                                            <label class="form-check-label" for="loc-{{ $location->id }}">
+                                                                            <h5>{{ $location->title }}</h5>
+                                                                            </label>
+                                                                        </div>
+                                                                        @endforeach
+                                                                    </div>
+
+                                                                    <!-- Dynamic Forms for Each Location -->
+                                                                    @foreach ($data->serviceLocations as $location)
+                                                                        <div class="tab-content p-3 text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
+                                                                            <div class="tab-pane active show" id="location-{{$location->id}}" role="tabpanel">
+                                                                                @if ($location->detail)
+                                                                                <div class="alert alert-info d-none d-lg-block">
+                                                                                    {{ $location->detail }}
+                                                                                </div>
+                                                                                @endif
+                                                                                <div class="row">
+                                                                                    @foreach (json_decode($location->fields) as $field)
+                                                                                        <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
+                                                                                            <div class="mb-3">
+                                                                                                <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
+                                                                                                @if ($field->type === 'textarea')
+                                                                                                    <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ $data->task->customer[$field->name] }}</textarea>
+                                                                                                @else
+                                                                                                    <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ $data->task->customer[$field->name] }}">
+                                                                                                @endif
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    @endforeach
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                {{-- </form> --}}
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <!-- Item information Modal -->
                                                 <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                        <h5 class="modal-title" id="itemDetailsModalLabel">Edit Item Details</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <h5 class="modal-title" id="itemDetailsModalLabel">Edit Item Details</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             {{-- <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data"> --}}
@@ -176,95 +303,27 @@
                                                             {{-- </form> --}}
                                                         </div>
                                                         <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save changes</button>
                                                         </div>
                                                     </div>
                                                     </div>
                                                 </div>
-
-                                                {{-- <div class="pull-right">
-                                                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#itemInfo" aria-expanded="false" aria-controls="itemInfo">
-                                                        <i class="fa fa-chevron-down"></i>
-                                                    </button>
+                                            </div>
+                                            <div>
+                                                <h4 class="card-title mt-4">Service Location </h4>
+                                                <div>
+                                                    @foreach ($data->serviceLocations as $location)
+                                                        <div class="mb-2 form-check form-check-inline font-size-16">
+                                                            <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == $data->task->services_location ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="loc-{{ $location->id }}">
+                                                            <h5>{{ $location->title }}</h5>
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
-                                                <div class="collapse" id="itemInfo">
-                                                    <div class="form-group row mb-2">
-                                                        <label class="col-md-2 col-form-label">Select Item</label>
-                                                        <div class="col-md-12">
-                                                            <select class="form-control select2" title="Item" name="item">
-                                                                <option value="">Select Item </option>
-                                                                @foreach ($data->items as $item)
-                                                                    <option value="{{ $item->id }}" @if($item->id == $data->task->item_id) selected @endif>{{ $item->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('item')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-2">
-                                                        <div class="col-md-6">
-                                                            <label for="manufacturer" class="form-label">Manufacturer</label>
-                                                            <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ $data->task->manufacturer }}" placeholder="Enter Manufacturer">
-                                                            @error('manufacturer')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="model" class="form-label">Model</label>
-                                                            <input type="text" name="model" class="form-control" id="model" value="{{ $data->task->model }}" placeholder="Enter Model">
-                                                            @error('model')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-2">
-                                                        <div class="col-md-6">
-                                                            <label for="year" class="form-label">Year</label>
-                                                            <input type="text" name="year" class="form-control" id="year" value="{{ $data->task->year }}" placeholder="Enter Year">
-                                                            @error('year')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="color" class="form-label">Color</label>
-                                                            <input type="text" name="color" class="form-control" id="color" value="{{ $data->task->color }}" placeholder="Enter Color">
-                                                            @error('color')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-3">
-                                                        <label for="additional_info" class="form-label">Additional Information</label>
-                                                        <div class="col-md-12">
-                                                            <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $data->task->additional_info }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row mb-3">
-                                                        <label for="problem_description" class="form-label">Description of Problem / Failure</label>
-                                                        <div class="col-md-12">
-                                                            <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $data->task->problem_description }}</textarea>
-                                                            @error('problem_description')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
-
-
+                                            </div>
+                                            <div>
                                                 <h4 class="card-title mt-4">Leaving Parts</h4>
                                                 <p class="card-title-desc">The parts you want to leave</p>
 
@@ -415,7 +474,7 @@
                                                 <span class="btn btn-info" id="currentPriority">{{ $selectedPriority->name }} - <b class="font-size-16">{{ number_format($selectedPriority->price, 0) }}€</b></span>
                                                 <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editPriority"><i class="fa fa-edit"></i></span>
 
-                                                <div id="priorityList" style="display: none;">
+                                                <div id="priorityList" style="display: none">
                                                     @foreach ($data->priorities as $priority)
                                                         <div class="form-check form-check-inline font-size-16">
                                                             <input class="form-check-input" type="radio" name="priority" value="{{$priority->id}}" id="priority-{{$priority->id}}" {{ $priority->id == $data->task->priority_id ? 'checked' : '' }}>
@@ -741,120 +800,7 @@
                                                 {{-- </form> --}}
                                             </div>
                                             <div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h4 class="card-title">Service Location</h4>
-                                                        <p class="card-title-desc">Fill all information below </p>
-                                                    </div>
-                                                    <div class="col-md-6 text-end">
-                                                        <!-- Modal Trigger Button (optional) -->
-                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#serviceLocationModal">
-                                                            <i class="fa fa-pen"></i> Service Location
-                                                        </button>
-                                                        <!-- Service Location Modal -->
-                                                        <div class="modal fade" id="serviceLocationModal" tabindex="-1" aria-labelledby="serviceLocationModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                <h5 class="modal-title" id="serviceLocationModalLabel">Select Service Location</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    {{-- <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data"> --}}
-                                                                        <!-- Service Location Selection -->
-                                                                        <div>
-                                                                            @foreach ($data->serviceLocations as $location)
-                                                                            <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                                <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == $data->task->services_location ? 'checked' : '' }}>
-                                                                                <label class="form-check-label" for="loc-{{ $location->id }}">
-                                                                                <h5>{{ $location->title }}</h5>
-                                                                                </label>
-                                                                            </div>
-                                                                            @endforeach
-                                                                        </div>
-
-                                                                        <!-- Dynamic Forms for Each Location -->
-                                                                        @foreach ($data->serviceLocations as $location)
-                                                                            <div class="tab-content p-3 text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
-                                                                            <div class="tab-pane active show" id="location-{{$location->id}}" role="tabpanel">
-                                                                                @if ($location->detail)
-                                                                                <div class="alert alert-info d-none d-lg-block">
-                                                                                    {{ $location->detail }}
-                                                                                </div>
-                                                                                @endif
-                                                                                <div class="row">
-                                                                                @foreach (json_decode($location->fields) as $field)
-                                                                                    <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
-                                                                                    <div class="mb-3">
-                                                                                        <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
-                                                                                        @if ($field->type === 'textarea')
-                                                                                        <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ $data->task->customer[$field->name] }}</textarea>
-                                                                                        @else
-                                                                                        <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ $data->task->customer[$field->name] }}">
-                                                                                        @endif
-                                                                                    </div>
-                                                                                    </div>
-                                                                                @endforeach
-                                                                                </div>
-                                                                            </div>
-                                                                            </div>
-                                                                        @endforeach
-                                                                    {{-- </form> --}}
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {{-- Collapse Button --}}
-                                                {{-- <div class="float-right">
-                                                    <button class="btn btn-primary mb-1" type="button" data-bs-toggle="collapse" data-bs-target="#serviceLocation" aria-expanded="false" aria-controls="serviceLocation">
-                                                        <i class="fa fa-chevron-down"></i>
-                                                    </button>
-                                                </div> --}}
-                                                {{-- Collapse Area --}}
-                                                {{-- <div class="collapse" id="serviceLocation">
-                                                    <div>
-                                                        @foreach ($data->serviceLocations as $location)
-                                                        <div class="mb-2 form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input service-location" type="radio" name="services_location" value="{{ $location->id }}" id="loc-{{ $location->id }}" {{ $location->id == $data->task->services_location ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="loc-{{ $location->id }}">
-                                                                <h5>{{ $location->title }}</h5>
-                                                            </label>
-                                                        </div>
-                                                        @endforeach
-                                                    </div>
-                                                    @foreach ($data->serviceLocations as $location)
-                                                        <div class="tab-content p-3 text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
-                                                            <div class="tab-pane active show" id="location-{{$location->id}}" role="tabpanel">
-                                                                @if ($location->detail)
-                                                                    <div class="alert alert-info d-none d-lg-block">
-                                                                        {{ $location->detail }}
-                                                                    </div>
-                                                                @endif
-                                                                <div class="row">
-                                                                    @foreach (json_decode($location->fields) as $field)
-                                                                    <div class="col-lg-{{ $field->type === 'textarea' ? '12' : '6' }}">
-                                                                        <div class="mb-3">
-                                                                            <label for="{{ $location->id .'-'. $field->name }}">{{ $field->title }}</label>
-                                                                            @if ($field->type === 'textarea')
-                                                                                <textarea class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}">{{ $data->task->customer[$field->name] }}</textarea>
-                                                                            @else
-                                                                                <input type="{{ $field->type }}" class="form-control" id="{{ $location->id .'-'. $field->name }}" name="{{ $location->id .'-'. $field->name }}" placeholder="{{ $field->place_holder ?? 'Enter ' .$field->title }}" value="{{ $data->task->customer[$field->name] }}">
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-                                                                    @endforeach
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div> --}}
-                                            <div>
+                                            {{-- <div>
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
                                                         <div class="row">
@@ -877,7 +823,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
                                             {{-- <div class="d-grid gap-2">
                                                 <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
@@ -885,6 +831,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                </div>
+                            </div>
                                 {{-- <div class="row mt-4">
                                     <div class="col-sm-6">
                                         <a href="ecommerce-cart.html" class="btn text-muted d-none d-sm-inline-block btn-link">
@@ -900,7 +848,7 @@
 
                             {{-- </form> --}}
                         </div>
-                        <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 136px; padding-left: 60px; padding-right: 20px">
+                        <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 85px; padding-left: 60px; padding-right: 20px">
                             <div class="text-center">
                                 <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-receipt"></i></a>
                                 <a href="{{ route('case.show', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-bullseye"></i></a>
@@ -928,6 +876,14 @@
                                             </div>
                                             <div style="margin-top: 0px;">
                                                 <label>Remaining : <span class="font-size-18">{{ $data->task->remaining ?? $data->task->total }}</span></label>
+                                            </div>
+                                            <div style="margin-top: 0px;">
+                                                <label>Service Location :</label>
+                                                @foreach ($data->serviceLocations as $location)
+                                                    @if ($location->id == $data->task->services_location)
+                                                        <span class="font-size-14">{{ $location->title }}</span>
+                                                    @endif
+                                                @endforeach
                                             </div>
                                             <div style="margin-top: 0px;">
                                                 {{-- <label>Services : <span class="font-size-18">{{$data->task->taskService->sum('unit_price') ?? 0}}</span></label> --}}
@@ -971,7 +927,7 @@
                                                 </select>
                                             </div> --}}
 
-                                            <div class="d-grid gap-2 mt-3">
+                                            <div class="d-grid gap-2">
                                                 <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
                                             </div>
                                         </div>
@@ -981,7 +937,7 @@
                         </div>
 
                         @if(count($data->task->taskPayments) > 0)
-                            <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 410px; padding-left: 60px; padding-right: 20px; height: 100;">
+                            <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 400px; padding-left: 60px; padding-right: 20px; height: 100;">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-start">
@@ -1585,7 +1541,7 @@
 </script>
 
 <style>
-    .switch {position: relative;display: inline-block;width: 60px;height: 34px;}
+    .switch {position: relative;display: inline-block;width: 60px;height: 50px;}
     .switch input {opacity: 0;width: 0;height: 0;}
     .slider {position: absolute;cursor: pointer;top: 0;left: 0;right: 0;bottom: 0;background-color: #ccc;-webkit-transition: .4s;transition: .4s;}
     .slider:before {position: absolute;content: "";height: 26px;width: 26px;left: 4px;bottom: 4px;background-color: white;-webkit-transition: .4s;transition: .4s;}
