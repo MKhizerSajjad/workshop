@@ -310,7 +310,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div>
+                                            {{-- <div>
                                                 <h4 class="card-title mt-4">Service Location </h4>
                                                 <div>
                                                     @foreach ($data->serviceLocations as $location)
@@ -322,7 +322,7 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div>
                                                 <h4 class="card-title mt-4">Leaving Parts</h4>
                                                 <p class="card-title-desc">The parts you want to leave</p>
@@ -831,7 +831,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                </div>
                             </div>
                                 {{-- <div class="row mt-4">
                                     <div class="col-sm-6">
@@ -848,7 +847,8 @@
 
                             {{-- </form> --}}
                         </div>
-                        <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 85px; padding-left: 60px; padding-right: 20px">
+                        <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 102px; z-index: 999;">
+                        {{-- <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 102px;"> --}}
                             <div class="text-center">
                                 <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-receipt"></i></a>
                                 <a href="{{ route('case.show', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-bullseye"></i></a>
@@ -937,7 +937,8 @@
                         </div>
 
                         @if(count($data->task->taskPayments) > 0)
-                            <div class="col-xl-3 col-sm-3 position-fixed" style="right: 0px; top: 400px; padding-left: 60px; padding-right: 20px; height: 100;">
+                            <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 420px; z-index: 999;">
+                            {{-- <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 400px; height: 100;"> --}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-start">
