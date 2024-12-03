@@ -799,7 +799,6 @@
 
                                                 {{-- </form> --}}
                                             </div>
-                                            <div>
                                             {{-- <div>
                                                 <div class="tab-content p-3 text-muted">
                                                     <div class="tab-pane active show" id="home-1" role="tabpanel">
@@ -847,7 +846,7 @@
                             {{-- </form> --}}
                         </div>
                         <div class="col-xl-3 col-sm-3 position-fixed" style="width:21%; right: 0px; top: 102px; z-index: 999;">
-                        {{-- <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 102px;"> --}}
+                            {{-- <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 102px;"> --}}
                             <div class="text-center">
                                 <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-receipt"></i></a>
                                 <a href="{{ route('case.show', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-bullseye"></i></a>
