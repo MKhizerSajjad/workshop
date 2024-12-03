@@ -831,7 +831,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                                 {{-- <div class="row mt-4">
                                     <div class="col-sm-6">
                                         <a href="ecommerce-cart.html" class="btn text-muted d-none d-sm-inline-block btn-link">
@@ -847,7 +846,7 @@
 
                             {{-- </form> --}}
                         </div>
-                        <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 102px; z-index: 999;">
+                        <div class="col-xl-3 col-sm-3 position-fixed" style="width:21%; right: 0px; top: 102px; z-index: 999;">
                         {{-- <div class="col-xl-3 col-sm-3 position-fixed" style="width:23%; right: 0px; top: 102px;"> --}}
                             <div class="text-center">
                                 <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank"><i class="bx bx-receipt"></i></a>
@@ -933,6 +932,58 @@
                                         </div>
                                     </form>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-3 position-fixed" style="width:21%; right: 0px; top: 420px; z-index: 999;">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start">
+                                        <div class="me-2">
+                                            <h5 class="card-title mb-4">Comments</h5>
+                                        </div>
+                                        @if ($data->task->payment_status != 1)
+                                            <a href="#" class="btn btn-info font-size-12 float-right" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $data->task->id }}"><i class="bx bx-message"></i> Add Comment</a>
+                                        @endif
+                                    </div>
+                                    <div data-simplebar="init" class="mt-2 simplebar-scrollable-y" style="max-height: 280px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+                                        @if(count($data->task->taskComments) > 0)
+                                            @foreach ($data->task->taskComments as $key => $comments)
+                                                <div class="d-flex mb-0">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <p class="text-muted mb-1 font-size-16">
+                                                                {{ $comments->comment }}
+                                                            </p>
+                                                            <p class="pt-0">Added By:
+                                                                {{ $comments->user_id }}
+                                                                <br>
+                                                                {{ $comments->created_at }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            {!! getGenStatus('visibility', $comments->type, 'badge') !!}
+                                                            <div class="row text-center d-flex justify-content-center">
+                                                                <a href="" class="btn btn-warning btn-sm px-0 py-0"><i class="bx bx-edit"></i></a>
+                                                                <a href="" class="btn btn-danger btn-sm px-0 py-0"><i class="bx bx-trash"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="my-1 mb-1 font-size-12 font-weight-bold border-top">
+                                            @endforeach
+                                        @else
+                                            <p class="text-muted mb-0">No comment yet.</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="simplebar-placeholder" style="width: 351px; height: 125px;"></div>
+                            <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                            </div>
+                            <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                                <div class="simplebar-scrollbar" style="height: 217px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
                             </div>
                         </div>
 

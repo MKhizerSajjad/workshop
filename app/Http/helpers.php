@@ -30,7 +30,12 @@ function getGenStatus($prefix, $status = null, $type = null)
         'bool'=> [
             '1' => ['Yes', '<span class="badge bg-primary">Yes</span>'],
             '2' => ['No', '<span class="badge bg-warning">No</span>']
-        ]
+        ],
+        'visibility'=> [
+            '1' => ['Public', '<span class="badge bg-success">Public</span>'],
+            '2' => ['Private', '<span class="badge bg-warning">Private</span>'],
+            '3' => ['Personal', '<span class="badge bg-danger">Personal</span>'],
+        ],
     ];
 
     return statusReturn($prefix, $statuses, $status, $type );
