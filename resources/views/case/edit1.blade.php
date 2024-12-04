@@ -529,7 +529,7 @@
                         <!-- Sidebar Section -->
                         <div class="col-xl-3 col-12" style="padding-top: 270px;">
                             {{--  position-fixed" style="width: 21%; right: 0px; top: 102px; z-index: 999; --}}
-                            <div class="fixed-div position-fixed-xl w-25-xl" style="width: 21.5%; right: 0px; top: 136px; z-index: 9999;">
+                            <div class="fixed-div position-fixed w-25-xl" style="width: 21.5%; right: 0px; top: 136px; z-index: 9999;">
                                 <div class="text-center">
                                     <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18" target="_blank">
                                         <i class="bx bx-receipt"></i>
