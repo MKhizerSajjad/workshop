@@ -17,7 +17,7 @@ return new class extends Migration
             $table->boolean('payment_status')->default(3);
             $table->string('code');
             $table->dateTime('date_opened');
-            $table->dateTime('date_service');
+            $table->dateTime('date_service')->nullable();
             $table->dateTime('date_closed')->nullable();
             $table->bigInteger('technician_id')->unsigned()->nullable();
             $table->bigInteger('customer_id')->unsigned()->nullable();
