@@ -181,7 +181,7 @@ class TaskController extends Controller
                     'qty' => $qtyArray[$key],
                     'price' => $priceArray[$key],
                     'total' =>  $totalItemPrice,
-                    'tax' =>  $taxArray[$key]
+                    'tax' =>  $taxArray[$key] ?? 0
                 ];
             }
             $product[$mergeProduct]['name'] = $mergeProduct;
@@ -291,7 +291,7 @@ class TaskController extends Controller
                 'customer_choice' => $isCustomerChoice,
                 'qty' => $request->input("service_qty_$count"),
                 'unit_price' => $request->input("service_price_$count"),
-                'tax_perc' => $request->input("service_tax_$count"),
+                'tax_perc' => $request->input("service_tax_$count") ?? 0,
             ]);
         }
 
@@ -459,7 +459,7 @@ class TaskController extends Controller
     public function edit1(Task $task)
     {
         $data = json_decode('{}');
-        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskItemProducts')->first();
+        $data->task = Task::where('id', $task->id)->with('customer', 'media', 'taskServices', 'taskLeaveParts', 'taskProducts.taskItemProducts', 'taskPayments')->first();
         $data->confirmations = isset($task->details) ? json_decode($task->details, true) : null;
         $data->items = Item::where('status', 1)->orderBy('name')->get();
         $data->parts = Part::where('status', 1)->orderBy('name')->get();
@@ -473,21 +473,18 @@ class TaskController extends Controller
         // dd($data->task);
         // $data->taskProduct = TaskProduct::with('taskChildProducts')->where('task_id', $task->id)->where('task_products_id', null)->get();
 
-        return view('case.edit1',compact('data'));
+        return view('case.new-edit1',compact('data'));
     }
 
     public function update(Request $request, Task $task)
     {
-        $serviceLocationID = $request->input('services_location');
-        $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
-        $fieldsArray = json_decode($serviceLocationFields);
 
         $additionalRules = [
-            'item' => 'required',
-            'manufacturer' => 'required',
-            'model' => 'required',
-            'year' => 'required',
-            'color' => 'required',
+            // 'item' => 'required',
+            // 'manufacturer' => 'required',
+            // 'model' => 'required',
+            // 'year' => 'required',
+            // 'color' => 'required',
             'additional_info' => 'nullable',
             'problem_description' => 'nullable',
             // 'description' => 'required',
@@ -499,30 +496,39 @@ class TaskController extends Controller
             // 'payment_status' => 'required',
         ];
 
-        // Merge dynamic field validation with additional rules
-        $rules = [];
-        foreach ($fieldsArray as $field) {
-            $fieldName = $serviceLocationID . '-' . $field->name;
-            $isMandatory = $field->is_mandatory == 1 ? 'required' : 'nullable';
-            $rules[$fieldName] = $isMandatory;
+        $rules = $additionalRules;
+        $serviceLocationID = $request->input('services_location');
+        if($serviceLocationID) {
+            $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
+            $fieldsArray = json_decode($serviceLocationFields);
+
+            // Merge dynamic field validation with additional rules
+            $rules = [];
+            foreach ($fieldsArray as $field) {
+                $fieldName = $serviceLocationID . '-' . $field->name;
+                $isMandatory = $field->is_mandatory == 1 ? 'required' : 'nullable';
+                $rules[$fieldName] = $isMandatory;
+            }
+            $rules = array_merge($additionalRules, $rules);
         }
-        $rules = array_merge($additionalRules, $rules);
 
         // Validate the request with merged rules
         $this->validate($request, $rules);
 
-        $phone = $request->input($serviceLocationID.'-phone');
-        $customer = [];
-        foreach ($fieldsArray as $field) {
-            if($field->name == 'phone') {
-                // continue;
+        if($serviceLocationID && isset($serviceLocationID)) {
+            $phone = $request->input($serviceLocationID.'-phone');
+            $customer = [];
+            foreach ($fieldsArray as $field) {
+                if($field->name == 'phone') {
+                    // continue;
+                }
+                $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
             }
-            $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
+            $customerAdd = Customer::updateOrCreate(
+                ['phone' => $phone],
+                $customer
+            );
         }
-        $customerAdd = Customer::updateOrCreate(
-            ['phone' => $phone],
-            $customer
-        );
 
         // Terms & Condition / Confirmations
         $terms = [];
@@ -542,19 +548,23 @@ class TaskController extends Controller
             // 'status' => $request->input('status'),
             // 'payment_status' => $request->input('payment_status'),
 
-            'customer_id' => $customerAdd->id ?? null,
+            'date_opened' => $request->input('date_opened'),
+            'date_closed' => $request->input('date_closed'),
+            'date_service' => $request->input('date_service'),
+            'customer_id' => $customerAdd->id ?? $task->customer_id,
             'details' => $confirmation,
-            'item_id' => $request->input('item'),
+            'item_id' => $request->input('item') ?? $task->item_id,
             'technician_id' => $request->input('technician_id'),
-            'manufacturer' => $request->input('manufacturer'),
-            'model' => $request->input('model'),
-            'year' => $request->input('year'),
-            'color' => $request->input('color'),
-            'additional_info' => $request->input('additional_info'),
-            'problem_description' => $request->input('problem_description'),
-            'priority_id' => $request->input('priority'),
-            'inspection_diagnose' => $request->input('inspection'),
-            'services_location' => $request->input('services_location'),
+            'manufacturer' => $request->input('manufacturer') ?? $task->manufacturer,
+            'model' => $request->input('model') ?? $task->model,
+            'year' => $request->input('year') ?? $task->year,
+            'color' => $request->input('color') ?? $task->color,
+            'additional_info' => $request->input('additional_info') ?? $task->additional_info,
+            'problem_description' => $request->input('problem_description') ?? $task->problem_description,
+            'priority_id' => $request->input('priority') ?? $task->priority,
+            'inspection_diagnose' => $request->input('inspection') ?? $task->inspection,
+            'services_location' => $request->input('services_location') ?? $task->services_location,
+            'service_desired_total' => $request->input('service_desired_total') ?? $task->service_desired_total,
         ];
 
         $taskId = $task->id;
@@ -814,6 +824,85 @@ class TaskController extends Controller
         return redirect()->route('case.edit1', $taskId)->with('success','Payment added successfully');
     }
 
+    public function itemInfoUpdate(Request $request, Task $task)
+    {
+
+        $rules = [
+            'item' => 'required',
+            'manufacturer' => 'required',
+            'model' => 'required',
+            'year' => 'required',
+            'color' => 'required',
+            'additional_info' => 'nullable',
+            'problem_description' => 'nullable',
+        ];
+
+        // Validate the request with merged rules
+        $this->validate($request, $rules);
+
+        $data = [
+            'item_id' => $request->input('item') ?? $task->item_id,
+            'manufacturer' => $request->input('manufacturer') ?? $task->manufacturer,
+            'model' => $request->input('model') ?? $task->model,
+            'year' => $request->input('year') ?? $task->year,
+            'color' => $request->input('color') ?? $task->color,
+            'additional_info' => $request->input('additional_info') ?? $task->additional_info,
+            'problem_description' => $request->input('problem_description') ?? $task->problem_description,
+        ];
+
+        $taskId = $task->id;
+        $task = Task::updateOrCreate(['id' => $taskId], $data);
+
+        return redirect()->route('case.edit1', $task->id)->with('success','Record update successfully');
+    }
+
+    public function customerInfoUpdate(Request $request, Task $task)
+    {
+        $additionalRules = [];
+        $rules = $additionalRules;
+        $serviceLocationID = $request->input('services_location');
+        if($serviceLocationID) {
+            $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
+            $fieldsArray = json_decode($serviceLocationFields);
+
+            // Merge dynamic field validation with additional rules
+            $rules = [];
+            foreach ($fieldsArray as $field) {
+                $fieldName = $serviceLocationID . '-' . $field->name;
+                $isMandatory = $field->is_mandatory == 1 ? 'required' : 'nullable';
+                $rules[$fieldName] = $isMandatory;
+            }
+            $rules = array_merge($additionalRules, $rules);
+        }
+
+        // Validate the request with merged rules
+        $this->validate($request, $rules);
+
+        if($serviceLocationID && isset($serviceLocationID)) {
+            $phone = $request->input($serviceLocationID.'-phone');
+            $customer = [];
+            foreach ($fieldsArray as $field) {
+                if($field->name == 'phone') {
+                    // continue;
+                }
+                $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
+            }
+            $customerAdd = Customer::updateOrCreate(
+                ['phone' => $phone],
+                $customer
+            );
+        }
+
+        $data = [
+            'customer_id' => $customerAdd->id ?? $task->customer_id,
+        ];
+
+        $taskId = $task->id;
+        $task = Task::updateOrCreate(['id' => $taskId], $data);
+
+        return redirect()->route('case.edit1', $task->id)->with('success','Record update successfully');
+    }
+
     public function comment(Request $request, Task $task)
     {
         $this->validate($request, [
@@ -823,13 +912,47 @@ class TaskController extends Controller
         $taskId = $task->id;
         $data = [
             'task_id' => $taskId,
-            'type' => $request->input('type') ?? 1,
+            'type' => $request->input('visibility') ?? 1,
             'comment' => $request->input('comment'),
             'user_id' => Auth::user()->id
         ];
         TaskComment::create($data);
 
         return redirect()->route('case.edit1', $taskId)->with('success','Comment added successfully');
+    }
+
+    public function commentUpdate(Request $request, $taskId, $commentId)
+    {
+        $this->validate($request, [
+            'comment' => 'required|string|max:500'
+        ]);
+
+        $data = [
+            'type' => $request->input('visibility') ?? 1,
+            'comment' => $request->input('comment'),
+            'user_id' => Auth::user()->id
+        ];
+
+        $comment = TaskComment::find($commentId);
+        if ($comment) {
+            $comment->update($data);
+        } else {
+            return redirect()->route('case.edit1', $taskId)->with('error', 'Comment not found');
+        }
+
+        return redirect()->route('case.edit1', $taskId)->with('success', 'Comment updated successfully');
+    }
+
+    public function commentDelete(Request $request, $taskId, $commentId)
+    {
+        $comment = TaskComment::find($commentId);
+        if ($comment) {
+            $comment->delete();
+        } else {
+            return redirect()->route('case.edit1', $taskId)->with('error', 'Comment not found');
+        }
+
+        return redirect()->route('case.edit1', $taskId)->with('success', 'Comment deleted successfully.');
     }
 
     public function destroy(Task $task)

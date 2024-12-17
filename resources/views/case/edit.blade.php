@@ -38,7 +38,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-xl-9 col-sm-9">
+                    <div class="col-xl-8 col-sm-8">
                         <form method="POST" action="{{ route('case.update', $data->task->id) }}" class="form" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -703,6 +703,55 @@
                             </div> <!-- end row --> --}}
 
                         </form>
+                    </div>
+                    <div class="col-xl-2 col-sm-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="POST" action="{{ route('case.update', $data->task->id) }}" class="form" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <h4 class="card-title">Overview</h4>
+                                    {{-- <p class="card-title-desc">Fill all information below</p> --}}
+                                    <div>
+                                        {{-- <h4 class="card-title">Leaving Parts</h4>
+                                        <p class="card-title-desc">The parts you want to leave</p> --}}
+                                        {{-- <form> --}}
+
+                                        <div class="mt-1">
+                                            <label class="col-form-label">Case Status</label>
+                                            <select class="form-control select2" title="Item" name="item">
+                                                <option value="">Select Case Status </option>
+                                                @foreach (getCaseStatus('general') as $key => $status)
+                                                    <option value="{{ $key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mt-1">
+                                            <label class="col-form-label">Payment Status</label>
+                                            <select class="form-control select2" title="Item" name="item">
+                                                <option value="">Select Payment Status </option>
+                                                @foreach (getPayment('status') as $key => $status)
+                                                    <option value="{{ $key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mt-1">
+                                            <label class="col-form-label">Payment Method</label>
+                                            <select class="form-control select2" title="Item" name="item">
+                                                <option value="">Select Payment Method </option>
+                                                @foreach (getPayment('via') as $key => $status)
+                                                    <option value="{{ $key }}" @if($key == $data->task->payment_status) selected @endif>{{ $status }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="d-grid gap-2 mt-3">
+                                            <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
+                                        </div>
+                                    <div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

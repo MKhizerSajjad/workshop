@@ -72,7 +72,13 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('case.destroy');
         Route::get('{task}/delete-media', [TaskController::class, 'destroyMedia'])->name('case.destroyMedia');
         Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('case.invoice');
+
+        Route::post('{task}/item-info', [TaskController::class, 'itemInfoUpdate'])->name('case.item-info');
+        Route::post('{task}/customer-info', [TaskController::class, 'customerInfoUpdate'])->name('case.customer-info');
+
         Route::post('{task}/comment', [TaskController::class, 'comment'])->name('case.comment');
+        Route::post('{task}/comment/{comment_id}', [TaskController::class, 'commentUpdate'])->name('case.commentUpdate');
+        Route::delete('{task}/comment/{comment_id}', [TaskController::class, 'commentDelete'])->name('case.commentDelete');
     });
 
     // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');

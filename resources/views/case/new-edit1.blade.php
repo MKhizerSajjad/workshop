@@ -7,46 +7,83 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Update Booking Form</h4>
+                        <h4 class="mb-sm-0 font-size-18">New Update Booking Form</h4>
                     </div>
                 </div>
             </div>
             <!-- End page title -->
 
             <div class="checkout-tabs">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success alert-border-left alert-dismissible fade show auto-close-3" role="alert">
-                        <i class="ri-check-double-line me-3 align-middle fs-16"></i>
-                        <strong>Success!</strong> {{ $message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <form method="POST" action="{{ route('case.update', $data->task->id) }}" class="form" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-
                     <div class="row">
                         <!-- Main Form Section -->
                         <div class="col-xl-9 col-12">
+
+                            {{-- Success and Error --}}
+                            @if ($message = Session::get('success'))
+                                <div class="alert alert-success alert-border-left alert-dismissible fade show auto-close-3" role="alert">
+                                    <i class="ri-check-double-line me-3 align-middle fs-16"></i>
+                                    <strong>Success!</strong> {{ $message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <div class="card">
                                 <div class="card-body">
                                     <div class="tab-content" id="v-pills-tabContent">
                                         <div class="col-md-12">
+
+                                            {{-- top --}}
+                                            <div class="row nowrap align-items-end mb-4">
+                                                <div class="col-lg-3 col-md-6">
+                                                    <label for="caseNumber" class="form-label">Case Number</label>
+                                                    <input type="text" class="form-control" id="caseNumber" placeholder="{{$data->task->code}}" disabled>
+                                                </div>
+                                                <div class="col-lg-2 col-md-6">
+                                                    <label for="bookingFilled" class="form-label">Booking Filled</label>
+                                                    <input type="date" class="form-control" id="bookingFilled" name="date_opened" value="@php echo $data->task->date_opened ? date('Y-m-d', strtotime($data->task->date_opened)) : ''; @endphp">
+                                                </div>
+                                                <div class="col-lg-2 col-md-6">
+                                                    <label for="itemDelivered" class="form-label">Item Delivered to Service</label>
+                                                    <input type="date" class="form-control" id="itemDelivered"  name="date_service" value="@php echo $data->task->date_service ? date('Y-m-d', strtotime($data->task->date_service)) : ''; @endphp">
+                                                </div>
+                                                <div class="col-lg-2 col-md-6">
+                                                    <label for="itemPickedUp" class="form-label">Item Picked Up / Sent Out</label>
+                                                    <input type="date" class="form-control" id="itemPickedUp" name="date_closed" value="@php echo $data->task->date_closed ? date('Y-m-d', strtotime($data->task->date_closed)) : ''; @endphp">
+                                                </div>
+                                                <div class="col-lg-3 col-md-6 d-flex justify-content-end">
+                                                    <div class="w-100 w-lg-auto">
+                                                        <label for="technician" class="form-label">Technician</label>
+                                                        <select class="form-control select2" title="Technician" name="technician_id">
+                                                            <option value="">Select Technician </option>
+                                                            @foreach ($data->technicians as $technician)
+                                                                <option value="{{ $technician->id }}"
+                                                                    @if ($technician->id == $data->task->technician_id) selected @endif>
+                                                                    {{ $technician->first_name . ' ' . $technician->last_name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             {{-- Info Section --}}
-                                            <div class="row">
+                                            <div class="row  d-flex gap-1 justify-content-between">
                                                 <!-- Item Information Section -->
-                                                <div class="col-md-6 column-rgt-border">
+                                                {{-- column-rgt-border --}}
+                                                <div class="custom-form custom-border11">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <h4 class="card-title mb-0">Item Information</h4>
@@ -100,7 +137,7 @@
                                                 <!-- End Item Information Section -->
 
                                                 <!-- Customer Information Section -->
-                                                <div class="col-md-6">
+                                                <div class="custom-form custom-border11">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <h4 class="card-title">Customer Information</h4>
@@ -135,32 +172,121 @@
                                                 <!-- End Customer Information Section -->
                                             </div>
 
-                                            {{-- Leaving Parts --}}
-                                            <div class="row">
+                                            <div class="row mt-2 custom-border11">
                                                 <div>
-                                                    <h4 class="card-title mt-4">Leaving Parts</h4>
-                                                    <p class="card-title-desc">The parts you want to leave</p>
-                                                    <div>
-                                                        @foreach ($data->parts as $part)
-                                                            @php
-                                                                $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id);
-                                                            @endphp
-                                                            <div class="form-check form-check-inline font-size-16 mt-1">
-                                                                <input class="form-check-input" type="checkbox" value="{{ $part->id }}"
-                                                                    name="parts[]" id="part-{{ $part->id }}"
-                                                                    {{ $isChecked ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="part-{{ $part->id }}">
-                                                                    <h5>{{ $part->name }}</h5>
-                                                                </label>
+                                                    <div class="row nowrap align-items-end">
+                                                        {{-- Leaving Parts --}}
+                                                        <div class="col-md-4 col-sm-12">
+                                                            <h4 class="card-title">Leaving Parts</h4>
+                                                            <p class="card-title-desc">The parts you want to leave</p>
+                                                            <div id="currentSelectedParts">
+                                                                @foreach ($data->parts as $part)
+                                                                    @if ($data->task->taskLeaveParts->contains('part_id', $part->id))
+                                                                        <span class="badge bg-info">{{ $part->name }}</span>
+                                                                    @endif
+                                                                @endforeach
                                                             </div>
-                                                        @endforeach
+                                                            <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editPartsList">
+                                                                <i class="fa fa-edit"></i>
+                                                            </span>
+                                                            <div id="partsList" style="display: none">
+                                                                @foreach ($data->parts as $part)
+                                                                    @php
+                                                                        $isChecked = $data->task->taskLeaveParts->contains('part_id', $part->id);
+                                                                    @endphp
+                                                                    <div class="form-check form-check-inline font-size-16 mt-1">
+                                                                        <input class="form-check-input" type="checkbox" value="{{ $part->id }}"
+                                                                            name="parts[]" id="part-{{ $part->id }}"
+                                                                            {{ $isChecked ? 'checked' : '' }}>
+                                                                        <label class="form-check-label" for="part-{{ $part->id }}">
+                                                                            <h5>{{ $part->name }}</h5>
+                                                                        </label>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                        {{-- Case Priority --}}
+                                                        <div class="col-md-4 col-sm-12">
+                                                            <h4 class="card-title">Priority of Case</h4>
+                                                            <p class="card-title-desc">How fast you wants get back?</p>
+                                                            @php
+                                                                $taskPriority = $data->task->priority_id;
+                                                                $selectedPriority = $data->priorities->where('id', $taskPriority)->first();
+                                                            @endphp
+                                                            <span class="btn btn-info" id="currentPriority">{{ $selectedPriority->name }} - <b
+                                                                    class="font-size-16">{{ number_format($selectedPriority->price, 0) }}€</b></span>
+                                                            <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editPriority"><i
+                                                                    class="fa fa-edit"></i></span>
+
+                                                            <div id="priorityList" style="display: none">
+                                                                @foreach ($data->priorities as $priority)
+                                                                    <div class="form-check form-check-inline font-size-16">
+                                                                        <input class="form-check-input" type="radio" name="priority"
+                                                                            value="{{ $priority->id }}" id="priority-{{ $priority->id }}"
+                                                                            {{ $priority->id == $data->task->priority_id ? 'checked' : '' }}>
+                                                                        <label class="form-check-label font-size-13"
+                                                                            for="priority-{{ $priority->id }}">
+                                                                            {{ $priority->name }} - {{ number_format($priority->price, 0) }}€
+                                                                        </label>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                        {{-- Inspection & Diganose --}}
+                                                        <div class="col-md-4 col-sm-12">
+                                                            <h4 class="card-title">Inspection and Diagnostics</h4>
+                                                            <p class="card-title-desc">Do you want to avail professional diagniostic serves?</p>
+
+                                                            <span class="btn btn-info" id="currentInspection">
+                                                                @if ($data->task->inspection_diagnose == 1)
+                                                                    Inspection & Diagnostics - <b class="font-size-16">35€</b>
+                                                                @else
+                                                                    Without Diagnostics - <b class="font-size-16">0€</b>
+                                                                @endif
+                                                            </span>
+                                                            <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editInspection">
+                                                                <i class="fa fa-edit"></i>
+                                                            </span>
+
+                                                            @php
+                                                                $totalServicesPrice = 0;
+                                                                $totalProductsPrice = 0;
+                                                            @endphp
+                                                            <div class="mb-4 row" id="inspectionList" style="display: none;">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-check form-check-inline font-size-16">
+                                                                        <input class="form-check-input" type="radio" value="1"
+                                                                            name="inspection" id="inspection"
+                                                                            {{ $data->task->inspection_diagnose == 1 ? 'checked' : '' }}>
+                                                                        <label class="form-check-label font-size-13" for="inspection">
+                                                                            <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
+                                                                            Inspection and Diagnostics - <b class="font-size-16">35€</b>
+                                                                            <br><span class="text text-danger">35€ would extra add on</span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-check form-check-inline font-size-16">
+                                                                        <input class="form-check-input" type="radio" value="2"
+                                                                            name="inspection" id="withoutinspection2"
+                                                                            {{ $data->task->inspection_diagnose != 1 ? 'checked' : '' }}>
+                                                                        <label class="form-check-label font-size-13" for="withoutinspection2">
+                                                                            <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
+                                                                            Without Diagnostics - <b class="font-size-16">0€</b>
+                                                                            <br><span class="text text-danger">Repair, according to the problem named
+                                                                                and described by the customer</span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {{-- Media --}}
                                             <div class="row">
-                                                <h4 class="card-title mt-5">Medias</h4>
+                                                <h4 class="card-title mt-3">Medias</h4>
                                                 <label for="uploadImage" class="custom-file-upload">
                                                     <span><i class="ti-cloud-up"></i> Pictures, files and videos of product</span>
                                                     <input type="file" name="files[]" id="uploadImage" class="form-control-file"
@@ -168,7 +294,6 @@
                                                     {{-- <input type="file" id="uploadImage" name="file[]" class="form-control-file" multiple="multiple"> --}}
                                                 </label>
                                                 <div id="imagesBody">
-
                                                     @foreach ($data->task->media as $media)
                                                         @php
                                                             $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
@@ -224,109 +349,15 @@
                                                 </div>
                                             </div>
 
-                                            {{-- Technician --}}
-                                            <div class="row">
-                                                <h4 class="card-title">Technician</h4>
-                                                <p class="card-title-desc">Alot Technician To Case</p>
-                                                <div class="form-group row mb-5">
-                                                    <div class="col-md-12">
-                                                        <select class="form-control select2" title="Technician" name="technician_id">
-                                                            <option value="">Select Technician </option>
-                                                            @foreach ($data->technicians as $technician)
-                                                                <option value="{{ $technician->id }}"
-                                                                    @if ($technician->id == $data->task->technician_id) selected @endif>
-                                                                    {{ $technician->first_name . ' ' . $technician->last_name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {{-- Case Priority --}}
-                                            <div class="row">
-                                                <h4 class="card-title">Priority of Case</h4>
-                                                <p class="card-title-desc">How fast you wants get back?</p>
-                                                @php
-                                                    $taskPriority = $data->task->priority_id;
-                                                    $selectedPriority = $data->priorities->where('id', $taskPriority)->first();
-                                                @endphp
-                                                <span class="btn btn-info" id="currentPriority">{{ $selectedPriority->name }} - <b
-                                                        class="font-size-16">{{ number_format($selectedPriority->price, 0) }}€</b></span>
-                                                <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editPriority"><i
-                                                        class="fa fa-edit"></i></span>
-
-                                                <div id="priorityList" style="display: none">
-                                                    @foreach ($data->priorities as $priority)
-                                                        <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" name="priority"
-                                                                value="{{ $priority->id }}" id="priority-{{ $priority->id }}"
-                                                                {{ $priority->id == $data->task->priority_id ? 'checked' : '' }}>
-                                                            <label class="form-check-label font-size-13"
-                                                                for="priority-{{ $priority->id }}">
-                                                                {{ $priority->name }} - {{ number_format($priority->price, 0) }}€
-                                                            </label>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-
-                                            {{-- Inspection & Diganose --}}
-                                            <div class="row">
-
-                                                <h4 class="card-title mt-5">Inspection and diagnostics</h4>
-                                                <p class="card-title-desc">Do you want to avail professional diagniostic serves?</p>
-
-                                                <span class="btn btn-info" id="currentInspection">
-                                                    @if ($data->task->inspection_diagnose == 1)
-                                                        Inspection and diagnostics - <b class="font-size-16">35€</b>
-                                                    @else
-                                                        Without diagnostics - <b class="font-size-16">0€</b>
-                                                    @endif
-                                                </span>
-                                                <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editInspection"><i
-                                                        class="fa fa-edit"></i></span>
 
 
-                                                @php
-                                                    $totalServicesPrice = 0;
-                                                    $totalProductsPrice = 0;
-                                                @endphp
-                                                <div class="mb-4 row" id="inspectionList" style="display: none;">
-                                                    <div class="col-md-6">
-                                                        <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" value="1"
-                                                                name="inspection" id="inspection"
-                                                                {{ $data->task->inspection_diagnose == 1 ? 'checked' : '' }}>
-                                                            <label class="form-check-label font-size-13" for="inspection">
-                                                                <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
-                                                                Inspection and diagnostics - <b class="font-size-16">35€</b>
-                                                                <br><span class="text text-danger">35€ would extra add on</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-check form-check-inline font-size-16">
-                                                            <input class="form-check-input" type="radio" value="2"
-                                                                name="inspection" id="withoutinspection2"
-                                                                {{ $data->task->inspection_diagnose != 1 ? 'checked' : '' }}>
-                                                            <label class="form-check-label font-size-13" for="withoutinspection2">
-                                                                <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
-                                                                Without diagnostics - <b class="font-size-16">0€</b>
-                                                                <br><span class="text text-danger">Repair, according to the problem named
-                                                                    and described by the customer</span>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
 
                                             {{-- Service --}}
-                                            <div class="row">
-
-                                                <h4 class="card-title mt-5">Services</h4>
+                                            <div class="row custom-border11">
+                                                <h4 class="card-title">Services</h4>
                                                 <p class="card-title-desc">Please select your required services carefully</p>
-                                                <div class="mb-5">
+                                                <div>
                                                     {{-- @foreach ($data->services->where('status', 1) as $service)
                                                         @php
                                                             $isChecked = $data->task->taskServices->contains('service_id', $service->id);
@@ -488,20 +519,20 @@
                                                             class="form-control" placeholder="Total Services Amount"
                                                             value="{{ $totalServicesPrice }}" readonly>
                                                     </div>
-                                                    <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
+                                                    {{-- <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
                                                         <label>Give your's if price is over (€)</label>
                                                         <input type="text" name="service_desired_total"
                                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control"
                                                             placeholder="Your Desired Amount"
                                                             value="{{ $data->task->service_desired_total }}">
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
 
 
                                             {{-- Products --}}
-                                            <div class="row">
-                                                <h4 class="card-title mt-5">Products</h4>
+                                            <div class="row mt-3 custom-border11">
+                                                <h4 class="card-title">Products</h4>
                                                 <p class="card-title-desc">Products consumed in this case</p>
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -516,7 +547,7 @@
                                                     </div>
                                                     <div class="col-md-6"></div>
 
-                                                    <div class="col-12 mb-5">
+                                                    <div class="col-12">
                                                         @foreach ($data->task->taskProducts as $index => $parentProduct)
                                                             @php $index++ @endphp
                                                             <div data-repeater-list="group-a">
@@ -629,10 +660,6 @@
                                                     <div class="col-md-12 add_template_area"></div>
                                                 </div>
                                             </div>
-
-
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -644,7 +671,7 @@
                         <div class="col-xl-3 col-12 right_side">
                             {{--  position-fixed" style="width: 21%; right: 0px; top: 102px; z-index: 999; --}}
                             <div class="fixed-div">
-                                <div class="text-center">
+                                {{-- <div class="text-center">
                                     <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18"
                                         target="_blank">
                                         <i class="bx bx-receipt"></i>
@@ -663,55 +690,80 @@
                                             <i class="bx bx-message"></i>
                                         </a>
                                     @endif
-                                </div>
+                                </div> --}}
                                 <div class="card">
                                     <div class="card-body">
-                                        <form method="POST" action="{{ route('case.status-update', $data->task->id) }}" class="form"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-                                            <h4 class="card-title">Overview</h4>
-                                            <div>
-                                                <label>Case Number: <span class="font-size-18">{{ $data->task->code }}</span></label>
-                                                <label>Total: <span class="font-size-18">{{ $data->task->total }}</span></label>
-                                                <label>Paid: <span class="font-size-18">{{ $data->task->paid ?? 0 }}</span></label>
-                                                <label>Remaining: <span
-                                                        class="font-size-18">{{ $data->task->remaining ?? $data->task->total }}</span></label>
-                                                <label>Service Location:
-                                                    @foreach ($data->serviceLocations as $location)
-                                                        @if ($location->id == $data->task->services_location)
-                                                            <span class="font-size-14">{{ $location->title }}</span>
-                                                        @endif
-                                                    @endforeach
-                                                </label>
+                                        <div class="row">
+                                            <div class="col-10">
+                                                {{-- <form method="POST" action="{{ route('case.status-update', $data->task->id) }}" class="form" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT') --}}
+                                                    <h4 class="card-title">Overview</h4>
+                                                    <div class="text-center">
+                                                        <label>Case Number: <span class="font-size-16 pull-right">{{ $data->task->code }}</span></label>
+                                                        <label>Total: <span class="font-size-16 pull-right">{{ $data->task->total }}</span></label>
+                                                        <label>Paid: <span class="font-size-16 pull-right">{{ $data->task->paid ?? 0 }}</span></label>
+                                                        <label>Remaining: <span class="font-size-16 pull-right">{{ $data->task->remaining ?? $data->task->total }}</span></label>
+                                                        <label class="font-size-11 text-muted">Service Location:
+                                                            @foreach ($data->serviceLocations as $location)
+                                                                @if ($location->id == $data->task->services_location)
+                                                                    <span class="pull-right">{{ $location->title }}</span>
+                                                                @endif
+                                                            @endforeach
+                                                        </label>
+                                                    </div>
+                                                    <div class="d-grid gap-2">
+                                                        <button type="submit"
+                                                            class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
+                                                    </div>
+                                                {{-- </form> --}}
                                             </div>
-                                            <div class="d-grid gap-2">
-                                                <button type="submit"
-                                                    class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
+                                            <div class="col-2 d-flex flex-column align-items-center justify-content-center">
+                                                <ul class="list-unstyled d-flex flex-column gap-2 w-100">
+                                                    <li class="w-100"><a href="{{ route('case.invoice', $data->task->id) }}"
+                                                            class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2">
+                                                            <i class="bx fs-16 bx-receipt"></i></a>
+                                                    </li>
+                                                    <li class="w-100"><a href="{{ route('case.show', $data->task->id) }}"
+                                                            class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2">
+                                                            <i class="bx fs-16 bx-bullseye"></i></a>
+                                                    </li>
+
+                                                    @if ($data->task->payment_status != 1)
+                                                        <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $data->task->id }}"
+                                                                class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2"><i
+                                                                    class="bx fs-16 bx-euro"></i></a>
+                                                        </li>
+                                                        <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $data->task->id }}"
+                                                                class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2">
+                                                                <i class="bx fs-16 bx-message"></i></a>
+                                                        </li>
+                                                    @endif
+                                                </ul>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Overview Card -->
-                            <div class="card">
-                                <div class="card-body">
-                                    @if (count($data->task->taskPayments) > 0)
+
+                            @if (count($data->task->taskPayments) > 0)
+                                <div class="card mt-2 mb-2">
+                                    <div class="card-body">
                                         <div class="">
                                             <div class="d-flex align-items-start">
                                                 <div class="me-2">
                                                     <h5 class="card-title mb-4">Payment Logs</h5>
                                                 </div>
                                             </div>
-                                            <div data-simplebar="init" class="mt-2 simplebar-scrollable-y" style="max-height: 120px;">
-                                                <div class="simplebar-wrapper" style="margin: 0px;">
-                                                    {{-- <div class="simplebar-height-auto-observer-wrapper">
-                                                <div class="simplebar-height-auto-observer"></div>
-                                            </div> --}}
-                                                    {{-- <div class="simplebar-mask">
-                                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                                    <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;">
-                                                        <div class="simplebar-content" style="padding: 0px;"> --}}
+                                            <div data-simplebar="init" class="mt-2 simplebar-scrollable-y">
+                                                <div class="simplebar-wrapper">
+                                                            {{-- <div class="simplebar-height-auto-observer-wrapper">
+                                                        <div class="simplebar-height-auto-observer"></div>
+                                                    </div> --}}
+                                                            {{-- <div class="simplebar-mask">
+                                                        <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                            <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;">
+                                                                <div class="simplebar-content" style="padding: 0px;"> --}}
                                                     <ul class="verti-timeline list-unstyled">
                                                         @foreach ($data->task->taskPayments as $payment)
                                                             <li class="event-list py-0 mb-2">
@@ -721,8 +773,7 @@
                                                                 <div class="d-flex">
                                                                     <div class="flex-shrink-0 me-3">
                                                                         {!! getPayment('via', $payment->via, 'badge') !!}
-                                                                        <span
-                                                                            class="text-primary">{{ $payment->created_at->format('d M, Y') }}</span>
+                                                                        <span class="text-primary">{{ $payment->created_at->format('d M, Y') }}</span>
                                                                     </div>
                                                                     <div class="flex-grow-1">
                                                                         <div>
@@ -738,25 +789,35 @@
                                                             </li>
                                                         @endforeach
                                                     </ul>
-                                                    {{-- </div>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
+                                                            {{-- </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
-                                            {{-- <div class="simplebar-placeholder" style="width: 351px; height: 125px;"></div>
-                                        <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                                            <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                                                {{-- <div class="simplebar-placeholder" style="width: 351px; height: 125px;"></div>
+                                            <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                                <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                                            </div>
+                                            <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                                                <div class="simplebar-scrollbar" style="height: 217px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
+                                            </div> --}}
                                         </div>
-                                        <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
-                                            <div class="simplebar-scrollbar" style="height: 217px; transform: translate3d(0px, 0px, 0px); display: block;"></div>
-                                        </div>
-                                    </div> --}}
-                                    @endif
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="card border-0 mb-2">
+                                <div class="card-body">
+                                    <strong class="fs-16 d-block text-center w-100 mb-1">Custom Budget (€)</strong>
+                                    <input type="text" name="service_desired_total"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control"
+                                            placeholder="Your Desired Amount"
+                                            value="{{ $data->task->service_desired_total }}">
                                 </div>
                             </div>
 
-                            <div class="card">
+                            <div class="card mb-2">
                                 <div class="card-body">
                                     <div class="mt-3">
                                         <div class="d-flex align-items-start mb-4">
@@ -766,12 +827,12 @@
                                             @if ($data->task->payment_status != 1)
                                                 <a href="#" class="btn btn-info font-size-12 flex-shrink-0 " data-bs-toggle="modal"
                                                     data-bs-target="#commentsModal-{{ $data->task->id }}"><i class="bx bx-message"></i>
-                                                    Add
-                                                    Comment</a>
+                                                    Add Comment</a>
                                             @endif
                                         </div>
-                                        <div data-simplebar="init" class="mt-2 simplebar-scrollable-y" style="max-height: 280px;">
-                                            <div class="simplebar-wrapper" style="margin: 0px;">
+                                        <div data-simplebar="init" class="simplebar-scrollable-y" style="max-height: 280px;">
+                                            <div>
+                                                {{--  class="simplebar-wrapper" style="margin: 0px;" --}}
                                                 {{-- <div class="simplebar-height-auto-observer-wrapper">
                                             <div class="simplebar-height-auto-observer"></div>
                                         </div>
@@ -780,36 +841,145 @@
                                                 <div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;">
                                                     <div class="simplebar-content" style="padding: 0px;"> --}}
                                                 @if (count($data->task->taskComments) > 0)
-                                                    @foreach ($data->task->taskComments as $key => $comments)
-                                                        <div class="d-flex mb-0">
-                                                            <div class="row w-100">
-                                                                <div class="col-md-10">
-                                                                    <p class="text-muted mb-1 font-size-16">
-                                                                        {{ $comments->comment }}
+                                                    @foreach ($data->task->taskComments as $key => $comment)
+                                                        {{-- <div class="row mb-2 py-2 border-bottom">
+                                                            <div class="col-md-8 col-9">
+                                                                <span class="fs-14 d-block mb-4">{{ $comment->comment }}</span>
+                                                                <span class="fs-14 d-block mb-1">Added By: {{ $comment->user_id }}</span>
+                                                                <span class="fs-14 d-block mb-1">{{ $comment->created_at }}</span>
+                                                            </div>
+                                                            <div class="col-md-4 col-3">
+                                                                {!! getGenStatus('visibility', $comment->type, 'badge') !!}
+                                                                <button class="btn d-inline-block w-100 btn-danger mb-2">Public</button>
+                                                                <div class="d-flex align-items-center justify-content-center gap-1">
+                                                                    <button class="btn btn-sm  rounded btn-primary "><i class="bx bx-edit"></i></button>
+                                                                    <button class="btn btn-sm  rounded btn-danger d-inline-block"><i
+                                                                            class="bx bx-trash"></i></button>
+                                                                    <button class="btn btn-sm  rounded btn-warning d-inline-block"><i
+                                                                            class="bx bx-trash"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div> --}}
+
+
+
+                                                        {{-- <div class="d-flex mb-0"> --}}
+                                                            <div class="row"> {{-- mb-2 py-2 border-bottom --}}
+                                                                <div class="col-md-8 col-sm-9">
+
+                                                                    <span class="fs-14 d-block mb-4">{{ $comment->comment }}</span>
+                                                                    <span class="fs-14 d-block mb-1">Added By: {{ $comment->user_id }}</span>
+                                                                    <span class="fs-14 d-block mb-1">{{ $comment->created_at }}</span>
+                                                                    {{-- <p class="text-muted mb-1 font-size-16">
+                                                                        {{ $comment->comment }}
                                                                     </p>
                                                                     <p class="pt-0">Added By:
-                                                                        {{ $comments->user_id }}
+                                                                        {{ $comment->user_id }}
                                                                         <br>
-                                                                        {{ $comments->created_at }}
-                                                                    </p>
+                                                                        {{ $comment->created_at }}
+                                                                    </p> --}}
                                                                 </div>
-                                                                <div class="col-md-2 text-center p-0 editable-btn">
-                                                                    {!! getGenStatus('visibility', $comments->type, 'badge') !!}
-                                                                    <div class="row text-center d-flex justify-content-center">
-                                                                        <a href=""
-                                                                            class="btn btn-warning btn btn-warning  px-0 py-0 btn-xs"><i
-                                                                                class="bx bx-edit"></i></a>
-                                                                        <a href=""
-                                                                            class="btn btn-danger btn btn-warning  px-0 py-0 btn-xs"><i
-                                                                                class="bx bx-trash"></i></a>
+                                                                <div class="col-md-4 col-sm-3">
+                                                                    {{--  text-center p-0 editable-btn --}}
+                                                                    {!! getGenStatus('visibility', $comment->type, 'badge') !!}
+                                                                    <div class="row text-center d-flex justify-content-center mt-2">
+                                                                        {{-- <div class="col-md-6">
+                                                                            <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editComment.{{ $comment->id }}">
+                                                                                <i class="fa fa-edit"></i>
+                                                                            </span>
+                                                                            <a href="" class="btn btn-warning btn-xs justify-content-center"><i class="bx bx-edit"></i></a>
+                                                                        </div> --}}
+                                                                        <div class="col-md-6">
+                                                                            <span class="btn btn-warning font-weight-bold p-1" data-bs-toggle="modal" data-bs-target="#editCommentModal-{{ $comment->id }}">
+                                                                                <i class="fa fa-edit"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            {{-- <span class="btn btn-danger font-weight-bold p-1" id="deleteComment.{{ $comment->id }}">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </span> --}}
+                                                                            <span class="btn btn-danger font-weight-bold p-1" data-bs-toggle="modal" data-bs-target="#deleteCommentModal-{{ $comment->id }}">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </span>
+                                                                            {{-- <a href="" class="btn btn-danger btn-xs justify-content-center"><i class="bx bx-trash"></i></a> --}}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        {{-- </div>
+                                                        <hr class="my-1 mb-1 font-size-12 font-weight-bold border-top"> --}}
+
+
+                                                        <!-- Edit Comment Modal -->
+                                                        <div class="modal fade" id="editCommentModal-{{ $comment->id }}" tabindex="-1" aria-labelledby="editCommentModalLabel-{{ $comment->id }}" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="editCommentModalLabel-{{ $comment->id }}">Edit Comment for <b>{{ $data->task->code }}</b></h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <form method="POST" action="{{ route('case.commentUpdate', ['task' => $data->task->id, 'comment_id' => $comment->id]) }}" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        @method('POST')
+                                                                        <div class="modal-body">
+                                                                            <div>
+                                                                                <label for="visibility" class="col-form-label">Status</label>
+                                                                                <select id="visibility" name="visibility" class="select2 form-control @error('visibility') is-invalid @enderror" required>
+                                                                                    <option value="">Select Status</option>
+                                                                                    @foreach (getGenStatus('visibility') as $key => $price)
+                                                                                        <option value="{{ ++$key }}" {{ old('visibility', $comment->type) == $key ? 'selected' : '' }}>{{ $price }}</option>
+                                                                                    @endforeach
+                                                                                    @error('visibility')
+                                                                                        <span class="invalid-feedback" role="alert">
+                                                                                            <strong>{{ $message }}</strong>
+                                                                                        </span>
+                                                                                    @enderror
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div>
+                                                                                <label for="comment" class="col-form-label">Comment</label>
+                                                                                <textarea class="form-control" name="comment" placeholder="Edit your comment">{{ $comment->comment }}</textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                            <button type="submit" class="btn btn-warning">Update Comment</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <hr class="my-1 mb-1 font-size-12 font-weight-bold border-top">
+
+                                                        <!-- Delete Comment Modal -->
+                                                        <div class="modal fade" id="deleteCommentModal-{{ $comment->id }}" tabindex="-1" aria-labelledby="deleteCommentModalLabel-{{ $comment->id }}" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="deleteCommentModalLabel-{{ $comment->id }}">Delete Comment for <b>{{ $data->task->code }}</b></h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <form method="POST" action="{{ route('case.commentDelete', ['task' => $data->task->id, 'comment_id' => $comment->id]) }}">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <div class="modal-body">
+                                                                            <p>Are you sure you want to <b>Delete</b> this comment?</p>
+                                                                            {{-- <textarea class="form-control" readonly>{{ $comment->comment }}</textarea> --}}
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                            <button type="submit" class="btn btn-danger">Delete Comment</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <hr class="draw-line">
                                                     @endforeach
                                                 @else
-                                                    <p class="text-muted mb-0">No comment yet.</p>
+                                                    <p class="text-muted mb-0 text-center">No comment yet.</p>
                                                 @endif
                                                 {{-- </div>
                                                 </div>
@@ -821,17 +991,11 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-
-
-
-
 
 
     <div class="services_row_template d-none">
@@ -989,13 +1153,14 @@
     <!-- Service Location Modal -->
     <div class="modal fade" id="serviceLocationModal" tabindex="-1" aria-labelledby="serviceLocationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="serviceLocationModalLabel">Select Service Location</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    {{-- <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data"> --}}
+            <form method="POST" action="{{ route('case.customer-info', $data->task->id) }}" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="serviceLocationModalLabel">Select Service Location</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
                         <!-- Service Location Selection -->
                         <div>
                             @foreach ($data->serviceLocations as $location)
@@ -1034,113 +1199,114 @@
                                 </div>
                             </div>
                         @endforeach
-                    {{-- </form> --}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <!-- Item information Modal -->
     <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="itemDetailsModalLabel">Edit Item Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {{-- <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data"> --}}
-                    <!-- Item Selection -->
-                    <div class="form-group row mb-2">
-                        <label class="col-md-2 col-form-label">Select Item</label>
-                        <div class="col-md-12">
-                        <select class="form-control select2" title="Item" name="item">
-                            <option value="">Select Item</option>
-                            @foreach ($data->items as $item)
-                            <option value="{{ $item->id }}" @if($item->id == $data->task->item_id) selected @endif>{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('item')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                        </div>
+            <form method="POST" action="{{ route('case.item-info', $data->task->id) }}" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="itemDetailsModalLabel">Edit Item Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                        <!-- Item Selection -->
+                        <div class="form-group row mb-2">
+                            <label class="col-md-2 col-form-label">Select Item</label>
+                            <div class="col-md-12">
+                            <select class="form-control select2" title="Item" name="item">
+                                <option value="">Select Item</option>
+                                @foreach ($data->items as $item)
+                                <option value="{{ $item->id }}" @if($item->id == $data->task->item_id) selected @endif>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('item')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            </div>
+                        </div>
 
-                    <!-- Manufacturer, Model, Year, Color Fields -->
-                    <div class="form-group row mb-2">
-                        <div class="col-md-6">
-                        <label for="manufacturer" class="form-label">Manufacturer</label>
-                        <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ $data->task->manufacturer }}" placeholder="Enter Manufacturer">
-                        @error('manufacturer')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <!-- Manufacturer, Model, Year, Color Fields -->
+                        <div class="form-group row mb-2">
+                            <div class="col-md-6">
+                            <label for="manufacturer" class="form-label">Manufacturer</label>
+                            <input type="text" name="manufacturer" class="form-control" id="manufacturer" value="{{ $data->task->manufacturer }}" placeholder="Enter Manufacturer">
+                            @error('manufacturer')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            </div>
+                            <div class="col-md-6">
+                            <label for="model" class="form-label">Model</label>
+                            <input type="text" name="model" class="form-control" id="model" value="{{ $data->task->model }}" placeholder="Enter Model">
+                            @error('model')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                        <label for="model" class="form-label">Model</label>
-                        <input type="text" name="model" class="form-control" id="model" value="{{ $data->task->model }}" placeholder="Enter Model">
-                        @error('model')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                        </div>
-                    </div>
 
-                    <div class="form-group row mb-2">
-                        <div class="col-md-6">
-                        <label for="year" class="form-label">Year</label>
-                        <input type="text" name="year" class="form-control" id="year" value="{{ $data->task->year }}" placeholder="Enter Year">
-                        @error('year')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <div class="form-group row mb-2">
+                            <div class="col-md-6">
+                            <label for="year" class="form-label">Year</label>
+                            <input type="text" name="year" class="form-control" id="year" value="{{ $data->task->year }}" placeholder="Enter Year">
+                            @error('year')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            </div>
+                            <div class="col-md-6">
+                            <label for="color" class="form-label">Color</label>
+                            <input type="text" name="color" class="form-control" id="color" value="{{ $data->task->color }}" placeholder="Enter Color">
+                            @error('color')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                        <label for="color" class="form-label">Color</label>
-                        <input type="text" name="color" class="form-control" id="color" value="{{ $data->task->color }}" placeholder="Enter Color">
-                        @error('color')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                        </div>
-                    </div>
 
-                    <!-- Additional Information and Problem Description -->
-                    <div class="form-group row mb-3">
-                        <label for="additional_info" class="form-label">Additional Information</label>
-                        <div class="col-md-12">
-                        <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $data->task->additional_info }}</textarea>
+                        <!-- Additional Information and Problem Description -->
+                        <div class="form-group row mb-3">
+                            <label for="additional_info" class="form-label">Additional Information</label>
+                            <div class="col-md-12">
+                            <textarea class="form-control" name="additional_info" id="additional_info" placeholder="Enter Additional Information">{{ $data->task->additional_info }}</textarea>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row mb-3">
-                        <label for="problem_description" class="form-label">Description of Problem / Failure</label>
-                        <div class="col-md-12">
-                        <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $data->task->problem_description }}</textarea>
-                        @error('problem_description')
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <div class="form-group row mb-3">
+                            <label for="problem_description" class="form-label">Description of Problem / Failure</label>
+                            <div class="col-md-12">
+                            <textarea class="form-control" name="problem_description" id="problem_description" placeholder="Enter Detailed Description of Problem / Failure">{{ $data->task->problem_description }}</textarea>
+                            @error('problem_description')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                            </div>
                         </div>
                     </div>
-                {{-- </form> --}}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -1204,9 +1370,25 @@
                 <form method="POST" action="{{ route('case.comment', $data->task->id) }}" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
+                        <input type="hidden" name="task_id" value="{{ $data->task->id }}">
+
+                        <div class="mt-0">
+                            <label for="visibility" class="col-form-label">Visibility</label>
+                            <select id="visibility" name="visibility" class="select2 form-control @error('visibility') is-invalid @enderror" required>
+                                <option value="">Select Status </option>
+                                @foreach (getGenStatus('visibility') as $key => $price)
+                                    <option value="{{ ++$key }}" {{ old('visibility') == $key ? 'selected' : '' }}>{{ $price }}</option>
+                                @endforeach
+                                @error('visibility')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </select>
+                        </div>
                         <div>
                             <label for="comment" class="col-form-label">Comment</label>
-                            <textarea class="form-control" name="comment" placeholder="Comment"></textarea>
+                            <textarea class="form-control" name="comment" placeholder="Comment" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1279,6 +1461,20 @@
 
     $(document).ready(function() {
 
+        // Parts Edit Button
+        $('#editPartsList').click(function() {
+            var $currentSelectedParts = $('#currentSelectedParts');
+            var $partsList = $('#partsList');
+
+            // Toggle visibility
+            if ($currentSelectedParts.is(':visible')) {
+                $currentSelectedParts.hide();
+                $partsList.show();
+            } else {
+                $currentSelectedParts.show();
+                $partsList.hide();
+            }
+        });
 
         // Priority Button
         $('#editPriority').click(function() {
@@ -1600,13 +1796,33 @@
     }
 
 
+    .custom-form {
+        width: calc(50% - 10px) !important;
+    }
 
-    //
+    @media (max-widht: 767px) {
+        .custom-form {
+            width: 100% !important;
+        }
+    }
 
-    .right_side {
+    .custom-border11 {
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .draw-line {
+        border: 0;
+        border-top: 3px solid #e0e0e0;
+        width: 100%;
+    }
+
+
+.right_side {
   padding-top: 0px;
 }
-@media (min-width: 1200px) {
+@media (min-width: 1000px) {
   .right_side {
     padding-top: 270px;
   }
@@ -1616,13 +1832,13 @@
   position: relative;
   width: 100%;
 }
-@media (min-width: 1200px) {
+@media (min-width: 1000px) {
   .fixed-div {
-    width: 21.5%;
+    width: 20.25%;
     position: fixed;
     top: 136px;
     z-index: 9999;
-    right: 0px;
+    right: 23px;
   }
 }
 
