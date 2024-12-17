@@ -12,6 +12,6 @@ class TaskComment extends Model
 
     public function user()
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(User::class);
     }
 }

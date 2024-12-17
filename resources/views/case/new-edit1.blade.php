@@ -868,7 +868,7 @@
                                                                 <div class="col-md-8 col-sm-9">
 
                                                                     <span class="fs-14 d-block mb-4">{{ $comment->comment }}</span>
-                                                                    <span class="fs-14 d-block mb-1">Added By: {{ $comment->user_id }}</span>
+                                                                    <span class="fs-14 d-block mb-1">Added By: {{ $comment->user->first_name }}</span>
                                                                     <span class="fs-14 d-block mb-1">{{ $comment->created_at }}</span>
                                                                     {{-- <p class="text-muted mb-1 font-size-16">
                                                                         {{ $comment->comment }}
