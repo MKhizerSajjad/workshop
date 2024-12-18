@@ -670,7 +670,7 @@
                         <!-- Sidebar Section -->
                         <div class="col-xl-3 col-12 right_side">
                             {{--  position-fixed" style="width: 21%; right: 0px; top: 102px; z-index: 999; --}}
-                            <div class="fixed-div">
+                            <div> {{--  class="fixed-div" --}}
                                 {{-- <div class="text-center">
                                     <a href="{{ route('case.invoice', $data->task->id) }}" class="btn btn-info font-size-18"
                                         target="_blank">
@@ -1824,7 +1824,7 @@
 }
 @media (min-width: 1000px) {
   .right_side {
-    padding-top: 270px;
+    // padding-top: 270px;
   }
 }
 
