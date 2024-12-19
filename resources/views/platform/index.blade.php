@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Customer</h4>
+                        <h4 class="mb-sm-0 font-size-18">Plaforms</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class=""><a href="javascript: void(0);">Customer</a></li>
+                                <li class=""><a href="javascript: void(0);">Plaforms</a></li>
                                 <li class="mx-1"><a href="javascript: void(0);"> > </a></li>
-                                <li class="breadcrumb-item active">Customer List</li>
+                                <li class="breadcrumb-item active">Plaforms List</li>
                             </ol>
                         </div>
                     </div>
@@ -33,35 +33,31 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Customer List</h4>
-                            {{-- <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
-                                <a href="{{ route('customer.create') }}" class="btn btn-primary waves-effect waves-light"> <i class="bx bx-plus me-1"></i> Add New</a>
-                            </div> --}}
+                            <h4 class="card-title">Plaforms List</h4>
+                            <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
+                                <a href="{{ route('platform.create') }}" class="btn btn-primary waves-effect waves-light"> <i class="bx bx-plus me-1"></i> Add New</a>
+                            </div>
                             {{-- <div class="card-title-desc card-subtitle" bis_skin_checked="1">Create responsive tables by wrapping any <code>.table</code> in <code>.table-responsive</code>to make them scroll horizontally on small devices (under 768px).</div> --}}
                             @if (count($data) > 0)
                                 <div class="table-responsive" bis_skin_checked="1">
                                     <table class="table mb-0 table">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">#</th>
+                                                <th class="text-center" width="50px">#</th>
                                                 <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Phone</th>
-                                                <th>Status</th>
-                                                <th class="text-center">Options</th>
+                                                <th>Short</th>
+                                                <th class="text-center" width="50px">Status</th>
+                                                <th class="text-center" width="50px">Options</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($data as $key => $customer)
+                                            @foreach ($data as $key => $platform)
                                                 <tr>
-                                                    <td  class="text-center">{{ ++$key }}</td>
-                                                    <td>{{ $customer->first_name .' '. $customer->last_name }}</td>
-                                                    <td>{{ $customer->email }}</td>
-                                                    <td>{{ $customer->phone }}</td>
-                                                    <td class="text-center">{!! getGenStatus('user', $customer->status, 'badge') !!}</td>
-                                                    <td class="text-center">
-                                                        <a href="{{ route('customer.edit', $customer->id) }}"><i class="bx bx-pencil"></i></a>
-                                                    </td>
+                                                    <td class="text-center">{{ ++$key }}</td>
+                                                    <td>{{ $platform->name }}</td>
+                                                    <td>{{ $platform->short }}</td>
+                                                    <td class="text-center">{!! getGenStatus('bool', $platform->status, 'badge') !!}</td>
+                                                    <td class="text-center"> <a href="{{ route('platform.edit', $platform->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

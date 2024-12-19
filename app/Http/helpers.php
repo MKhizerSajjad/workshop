@@ -1,5 +1,6 @@
 <?php
 use App\Models\Setting;
+use App\Models\Platform;
 
 function statusReturn($prefix, $statuses, $status = null, $type = null)
 {
@@ -35,6 +36,11 @@ function getGenStatus($prefix, $status = null, $type = null)
             '1' => ['Public', '<span class="badge bg-success">Public</span>'],
             '2' => ['Private', '<span class="badge bg-warning">Private</span>'],
             '3' => ['Personal', '<span class="badge bg-danger">Personal</span>'],
+        ],
+        'user'=> [
+            '1' => ['Active', '<span class="badge bg-success">Active</span>'],
+            '2' => ['Problem', '<span class="badge bg-warning">Problem</span>'],
+            '3' => ['Suspended', '<span class="badge bg-danger">Suspended</span>'],
         ],
     ];
 
@@ -192,4 +198,9 @@ function numberFormat($amount, $type=null) {
         default:
             return $formatted;
     }
+}
+
+
+function getPlatforms() {
+    return Platform::where('status', 1)->select('id', 'name')->orderBy('name')->get();
 }

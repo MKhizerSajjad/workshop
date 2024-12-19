@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('company')->nullable();
             $table->string('city')->nullable();
             $table->text('address')->nullable();
+            $table->text('status_detail')->nullable();
+            $table->foreignId('platform_id')->indexed()->nullable()->constrained()->onDelete('No Action');
             $table->timestamps();
         });
     }

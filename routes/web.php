@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VpnController;
+use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ItemController;
@@ -57,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vpn', VpnController::class)->names('vpn');
     Route::resource('suggestion', SuggestionController::class)->names('suggestion');
     Route::resource('notification', NotificationController::class)->names('notification');
+    Route::resource('platform', PlatformController::class)->names('platform');
     // Route::get('case', [TaskController::class, 'create'])->name('case.create');
     // ->except(['create'])
 

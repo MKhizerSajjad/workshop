@@ -81,32 +81,47 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:150'],
-            'email' => ['required', 'string', 'email', 'max:70', 'unique:customers,email,' . $id],
-            'phone' => ['required', 'string', 'regex:/^\+?[0-9]\d{1,14}$/', 'max:15', 'unique:customers,phone,' . $id],
-            'company' => ['required', 'string', 'max:50'],
-            'city' => ['required', 'string', 'max:50'],
-            'address' => ['required', 'string', 'max:255'],
-        ]);
+        $action = $request->input('action');
 
-        $data = [
-            'status' => $request->status ?? 1,
-            'first_name' => $request->first_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'company' => $request->company,
-            'city' => $request->city,
-            'address' => $request->address ?? null,
-        ];
+        if ($action == 'update-comment') {
+            $this->validate($request, [
+                'status' => ['required', 'integer'],
+                'status_detail' => ['required', 'string', 'max:255'],
+            ]);
+
+            $data = [
+                'status' => $request->status,
+                'status_detail' => $request->status_detail,
+            ];
+        } else {
+            $this->validate($request, [
+                'first_name' => ['required', 'string', 'max:255'],
+                'last_name' => ['required', 'string', 'max:150'],
+                'email' => ['required', 'string', 'email', 'max:70', 'unique:customers,email,' . $id],
+                'phone' => ['required', 'string', 'regex:/^\+?[0-9]\d{1,14}$/', 'max:15', 'unique:customers,phone,' . $id],
+                'company' => ['required', 'string', 'max:50'],
+                'city' => ['required', 'string', 'max:50'],
+                'address' => ['required', 'string', 'max:255'],
+            ]);
+
+            $data = [
+                'status' => $request->status ?? 1,
+                'first_name' => $request->first_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'company' => $request->company,
+                'city' => $request->city,
+                'platform_id' => $request->platform_id ?? null,
+                'address' => $request->address ?? null,
+            ];
+        }
 
         if ($request->has('password') && $request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
         Customer::find($id)->update($data);
-        return redirect()->route('customer.index')->with('success','Updated successfully');
+        return redirect()->route('customer.edit', $id)->with('success','Updated successfully');
     }
 
     /**

@@ -21,11 +21,33 @@
                 </div>
             </div>
             <!-- end page title -->
+
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-border-left alert-dismissible fade show auto-colse-3" role="alert">
+                    <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success! </strong>
+                    {{ $message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Edit Customer</h4>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                <h4 class="card-title">Edit Customer</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4 class="card-title float-right">
+                                        Status : {!! getGenStatus('user', $user->status, 'badge') !!}
+                                        <button class="badge bg-primary" data-bs-toggle="modal" data-bs-target="#editStatusModal-{{ $user->id }}">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </h4>
+
+                                </div>
+                            </div>
                             <form method="POST" action="{{ route('customer.update', $user->id) }}">
                                 @csrf
                                 @method('PUT')
@@ -114,18 +136,75 @@
                                         </div>
                                     </div>
 
+
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label for="platform_id">Where Customer Found Us </label>
+                                            <select id="platform_id" name="platform_id" class="select2 form-control @error('platform_id') is-invalid @enderror">
+                                                <option value="">Select Platform </option>
+                                                @foreach (getPlatforms() as $platform)
+                                                    <option value="{{ $platform->id }}" {{ old('platform_id', $user->platform_id ) == $platform->id ? 'selected' : '' }}>{{ $platform->name }}</option>
+                                                @endforeach
+                                                @error('platform_id')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="d-flex justify-content-end gap-2">
-                                        <button type="submit" class="btn btn-primary waves-effect waves-light w-10">Update</button>
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light w-10" name="action" value="update">Update</button>
                                         <a href="{{ route('customer.index') }}" class="waves-effect waves-light btn btn-secondary">Cancel</a>
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div> <!-- container-fluid -->
+    </div>
+
+    <!-- Edit Comment Modal -->
+    <div class="modal fade" id="editStatusModal-{{ $user->id }}" tabindex="-1" aria-labelledby="editStatusModalLabel-{{ $user->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editStatusModalLabel-{{ $user->id }}">Edit Comment for </b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ route('customer.update', $user->id) }}" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div>
+                        <label for="status" class="col-form-label">Status</label>
+                        <select id="user_status" name="status" class="select2 form-control @error('status') is-invalid @enderror" required>
+                            <option value="">Select Status</option>
+                            @foreach (getGenStatus('user') as $key => $stat)
+                                <option value="{{ ++$key }}" {{ old('status', $user->status) == $key ? 'selected' : '' }}>{{ $stat }}</option>
+                            @endforeach
+                            @error('status')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="status_detail" class="col-form-label">Reason for status update</label>
+                        <textarea class="form-control" name="status_detail" placeholder="Edit your comment" required>{{ $user->status_detail }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-warning" name="action" value="update-comment">Update Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
     </div>
 @endsection
