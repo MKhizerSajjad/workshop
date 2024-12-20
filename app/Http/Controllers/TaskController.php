@@ -32,10 +32,71 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Task::with('technician')->orderByDesc('code')->paginate(10);
+        $limit = $request->limit ?? 10;
+        $query = Task::with('technician')->orderByDesc('code');
 
-        return view('case.index',compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 10);
+        // Applying filters based on request inputs
+        if ($request->has('fname') && $request->fname) {
+            $query->whereHas('customer', function($q) use ($request) {
+                $q->where('first_name', 'like', '%' . $request->fname . '%');
+            });
+        }
+
+        if ($request->has('lname') && $request->lname) {
+            $query->whereHas('customer', function($q) use ($request) {
+                $q->where('last_name', 'like', '%' . $request->lname . '%');
+            });
+        }
+
+        if ($request->has('cno') && $request->cno) {
+            $query->where('code', 'like', '%' . $request->cno . '%');
+        }
+
+        if ($request->has('cst') && $request->cst) {
+            $query->where('case_status', $request->cst);
+        }
+
+        if ($request->has('pst') && $request->pst) {
+            $query->where('payment_status', $request->pst);
+        }
+
+        if ($request->has('tech') && $request->tech) {
+            $query->where('technician_id', $request->tech);
+        }
+
+        if ($request->has('date') && $request->date) {
+            $query->whereDate('date_opened', $request->date);
+        }
+
+        if ($request->has('phone') && $request->phone) {
+            $query->whereHas('customer', function($q) use ($request) {
+                $q->where('phone', 'like', '%' . $request->phone . '%');
+            });
+        }
+
+        if ($request->has('email') && $request->email) {
+            $query->whereHas('customer', function($q) use ($request) {
+                $q->where('email', 'like', '%' . $request->email . '%');
+            });
+        }
+
+        if ($request->has('ust') && $request->ust) {
+            $query->whereHas('customer', function($q) use ($request) {
+                $q->where('status', $request->ust);
+            });
+        }
+
+        if ($request->has('plat') && $request->plat) {
+            $query->whereHas('customer', function($q) use ($request) {
+                $q->where('platform_id', $request->plat);
+            });
+        }
+
+        // Get the results with pagination
+        $data = $query->paginate($limit);
+
+        // Return the view with the filtered data and pagination
+        return view('case.index', compact('data'))->with('i', ($request->input('page', 1) - 1) * $limit);
     }
 
     public function create0()

@@ -1,4 +1,5 @@
 <?php
+use App\Models\User;
 use App\Models\Setting;
 use App\Models\Platform;
 
@@ -203,4 +204,8 @@ function numberFormat($amount, $type=null) {
 
 function getPlatforms() {
     return Platform::where('status', 1)->select('id', 'name')->orderBy('name')->get();
+}
+
+function getUsers($userType) {
+    return User::where([['status', 1],['user_type', $userType]])->orderBy('first_name')->get();
 }
