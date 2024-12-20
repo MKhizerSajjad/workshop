@@ -196,7 +196,7 @@
 
                     <div>
                         <label for="status_detail" class="col-form-label">Reason for status update</label>
-                        <textarea class="form-control" name="status_detail" placeholder="Edit your comment" required>{{ $user->status_detail }}</textarea>
+                        <textarea class="form-control" name="status_detail" placeholder="Reason for status update" required>{{ $user->status_detail }}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

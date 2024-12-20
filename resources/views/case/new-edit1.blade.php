@@ -166,6 +166,8 @@
                                                                     </div>
                                                                 @endif
                                                             @endforeach
+                                                            {!! getGenStatus('user', $data->task->customer->status, 'badge') !!}
+                                                            <span>{{ $data->task->customer->status_detail }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -213,7 +215,7 @@
                                                                 $taskPriority = $data->task->priority_id;
                                                                 $selectedPriority = $data->priorities->where('id', $taskPriority)->first();
                                                             @endphp
-                                                            <span class="btn btn-info" id="currentPriority">{{ $selectedPriority->name }} - <b
+                                                            <span class="badge bg-info" id="currentPriority">{{ $selectedPriority->name }} - <b
                                                                     class="font-size-16">{{ number_format($selectedPriority->price, 0) }}€</b></span>
                                                             <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editPriority"><i
                                                                     class="fa fa-edit"></i></span>
@@ -237,7 +239,7 @@
                                                             <h4 class="card-title">Inspection and Diagnostics</h4>
                                                             <p class="card-title-desc">Do you want to avail professional diagniostic serves?</p>
 
-                                                            <span class="btn btn-info" id="currentInspection">
+                                                            <span class="badge bg-info" id="currentInspection">
                                                                 @if ($data->task->inspection_diagnose == 1)
                                                                     Inspection & Diagnostics - <b class="font-size-16">35€</b>
                                                                 @else
@@ -721,21 +723,21 @@
                                             <div class="col-2 d-flex flex-column align-items-center justify-content-center">
                                                 <ul class="list-unstyled d-flex flex-column gap-2 w-100">
                                                     <li class="w-100"><a href="{{ route('case.invoice', $data->task->id) }}"
-                                                            class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2">
+                                                            class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
                                                             <i class="bx fs-16 bx-receipt"></i></a>
                                                     </li>
                                                     <li class="w-100"><a href="{{ route('case.show', $data->task->id) }}"
-                                                            class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2">
+                                                            class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
                                                             <i class="bx fs-16 bx-bullseye"></i></a>
                                                     </li>
 
                                                     @if ($data->task->payment_status != 1)
                                                         <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $data->task->id }}"
-                                                                class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2"><i
+                                                                class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2"><i
                                                                     class="bx fs-16 bx-euro"></i></a>
                                                         </li>
                                                         <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $data->task->id }}"
-                                                                class="btn btn-sm btn-info w-100 d-flex align-items-center justify-content-center py-2">
+                                                                class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
                                                                 <i class="bx fs-16 bx-message"></i></a>
                                                         </li>
                                                     @endif
@@ -825,7 +827,7 @@
                                                 <h5 class="card-title mb-4">Comments</h5>
                                             </div>
                                             @if ($data->task->payment_status != 1)
-                                                <a href="#" class="btn btn-info font-size-12 flex-shrink-0 " data-bs-toggle="modal"
+                                                <a href="#" class="badge bg-info font-size-14 flex-shrink-0 " data-bs-toggle="modal"
                                                     data-bs-target="#commentsModal-{{ $data->task->id }}"><i class="bx bx-message"></i>
                                                     Add Comment</a>
                                             @endif
@@ -1175,12 +1177,12 @@
 
                         <!-- Dynamic Forms for Each Location -->
                         @foreach ($data->serviceLocations as $location)
-                            <div class="tab-content p-3 text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
+                            <div class="tab-content text-muted service-location-form" id="form-location-{{ $location->id }}" style="display: none;">
                                 <div class="tab-pane active show" id="location-{{$location->id}}" role="tabpanel">
                                     @if ($location->detail)
-                                    <div class="alert alert-info d-none d-lg-block">
-                                        {{ $location->detail }}
-                                    </div>
+                                        <div class="alert alert-info d-none d-lg-block">
+                                            {{ $location->detail }}
+                                        </div>
                                     @endif
                                     <div class="row">
                                         @foreach (json_decode($location->fields) as $field)
@@ -1199,6 +1201,28 @@
                                 </div>
                             </div>
                         @endforeach
+
+                        <div class="">
+                            <div>
+                                <label for="status" class="col-form-label">Status</label>
+                                <select id="user_status" name="status" class="select2 form-control @error('status') is-invalid @enderror" required>
+                                    <option value="">Select Status</option>
+                                    @foreach (getGenStatus('user') as $key => $stat)
+                                        <option value="{{ ++$key }}" {{ old('status', $data->task->customer->status) == $key ? 'selected' : '' }}>{{ $stat }}</option>
+                                    @endforeach
+                                    @error('status')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="status_detail" class="col-form-label">Reason for status update</label>
+                                <textarea class="form-control" name="status_detail" placeholder="Reason for status update" required>{{ $data->task->customer->status_detail }}</textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

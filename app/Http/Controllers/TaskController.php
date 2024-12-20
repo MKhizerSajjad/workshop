@@ -528,6 +528,9 @@ class TaskController extends Controller
                 ['phone' => $phone],
                 $customer
             );
+
+            $customer['status'] = $request->input('status') ?? null;
+            $customer['status_detail'] = $request->input('status_detail') ?? null;
         }
 
         // Terms & Condition / Confirmations
@@ -887,6 +890,8 @@ class TaskController extends Controller
                 }
                 $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
             }
+            $customer['status'] = $request->input('status') ?? null;
+            $customer['status_detail'] = $request->input('status_detail') ?? null;
             $customerAdd = Customer::updateOrCreate(
                 ['phone' => $phone],
                 $customer
