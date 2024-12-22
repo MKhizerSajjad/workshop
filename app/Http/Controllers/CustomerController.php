@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -73,7 +74,8 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $user = Customer::findOrFail($id);
-        return view('customer.edit', compact('user'));
+        $cases = Task::get();
+        return view('customer.edit', compact('user', 'cases'));
     }
 
     /**
