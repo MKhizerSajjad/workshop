@@ -69,7 +69,7 @@
                                                     <td>{{ $customer->email }}</td>
                                                     <td>{{ $customer->phone }}</td>
                                                     <td class="text-center">{{ COUNT($customer->tasks) }}</td>
-                                                    <td class="text-center">{{ $total }}</td>
+                                                    <td class="text-center">{{ $total }} eur</td>
                                                     <td class="text-center">{!! getGenStatus('user', $customer->status, 'badge') !!}</td>
                                                     <td class="text-center">
                                                         <a href="{{ route('customer.edit', $customer->id) }}"><i class="bx bx-pencil"></i></a>
