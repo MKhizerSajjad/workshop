@@ -47,7 +47,7 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
-                                                <th>Status</th>
+                                                <th class="text-center">Status</th>
                                                 <th class="text-center">Options</th>
                                             </tr>
                                         </thead>

@@ -167,7 +167,7 @@
                                                                 @endif
                                                             @endforeach
                                                             {!! getGenStatus('user', $data->task->customer->status, 'badge') !!}
-                                                            <span>{{ $data->task->customer->status_detail }}</span>
+                                                            {{-- <span>{{ $data->task->customer->status_detail }}</span> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -184,7 +184,7 @@
                                                             <div id="currentSelectedParts">
                                                                 @foreach ($data->parts as $part)
                                                                     @if ($data->task->taskLeaveParts->contains('part_id', $part->id))
-                                                                        <span class="badge bg-info">{{ $part->name }}</span>
+                                                                        <span class="btn btn-info">{{ $part->name }}</span>
                                                                     @endif
                                                                 @endforeach
                                                             </div>
@@ -215,7 +215,7 @@
                                                                 $taskPriority = $data->task->priority_id;
                                                                 $selectedPriority = $data->priorities->where('id', $taskPriority)->first();
                                                             @endphp
-                                                            <span class="badge bg-info" id="currentPriority">{{ $selectedPriority->name }} - <b
+                                                            <span class="btn btn-info" id="currentPriority">{{ $selectedPriority->name }} - <b
                                                                     class="font-size-16">{{ number_format($selectedPriority->price, 0) }}€</b></span>
                                                             <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editPriority"><i
                                                                     class="fa fa-edit"></i></span>
@@ -239,7 +239,7 @@
                                                             <h4 class="card-title">Inspection and Diagnostics</h4>
                                                             <p class="card-title-desc">Do you want to avail professional diagniostic serves?</p>
 
-                                                            <span class="badge bg-info" id="currentInspection">
+                                                            <span class="btn btn-info" id="currentInspection">
                                                                 @if ($data->task->inspection_diagnose == 1)
                                                                     Inspection & Diagnostics - <b class="font-size-16">35€</b>
                                                                 @else
@@ -867,7 +867,7 @@
 
                                                         {{-- <div class="d-flex mb-0"> --}}
                                                             <div class="row"> {{-- mb-2 py-2 border-bottom --}}
-                                                                <div class="col-md-8 col-sm-9">
+                                                                <div class="col-md-9 col-sm-9">
 
                                                                     <span class="fs-14 d-block mb-4">{{ $comment->comment }}</span>
                                                                     <span class="fs-14 d-block mb-1">Added By: {{ $comment->user->first_name }}</span>
@@ -881,7 +881,7 @@
                                                                         {{ $comment->created_at }}
                                                                     </p> --}}
                                                                 </div>
-                                                                <div class="col-md-4 col-sm-3">
+                                                                <div class="col-md-3 col-sm-3">
                                                                     {{--  text-center p-0 editable-btn --}}
                                                                     {!! getGenStatus('visibility', $comment->type, 'badge') !!}
                                                                     <div class="row text-center d-flex justify-content-center mt-2">
