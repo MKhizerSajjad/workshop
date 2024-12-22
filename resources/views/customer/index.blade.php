@@ -47,17 +47,29 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
+                                                <th class="text-center">Case Count</th>
+                                                <th class="text-center">Total Spent</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-center">Options</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($data as $key => $customer)
+                                                @php
+                                                    $total = 0;
+                                                @endphp
+                                                @foreach ($customer->tasks as $task)
+                                                    @php
+                                                        $total = $total + $task->total;
+                                                    @endphp
+                                                @endforeach
                                                 <tr>
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $customer->first_name .' '. $customer->last_name }}</td>
                                                     <td>{{ $customer->email }}</td>
                                                     <td>{{ $customer->phone }}</td>
+                                                    <td class="text-center">{{ COUNT($customer->tasks) }}</td>
+                                                    <td class="text-center">{{ $total }}</td>
                                                     <td class="text-center">{!! getGenStatus('user', $customer->status, 'badge') !!}</td>
                                                     <td class="text-center">
                                                         <a href="{{ route('customer.edit', $customer->id) }}"><i class="bx bx-pencil"></i></a>

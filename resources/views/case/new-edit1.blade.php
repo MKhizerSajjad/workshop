@@ -922,7 +922,7 @@
                                                                     </div>
                                                                     <form method="POST" action="{{ route('case.commentUpdate', ['task' => $data->task->id, 'comment_id' => $comment->id]) }}" enctype="multipart/form-data">
                                                                         @csrf
-                                                                        @method('POST')
+                                                                        @method('PUT')
                                                                         <div class="modal-body">
                                                                             <div>
                                                                                 <label for="visibility" class="col-form-label">Status</label>
