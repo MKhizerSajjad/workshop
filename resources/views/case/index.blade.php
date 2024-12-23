@@ -82,7 +82,7 @@
                                             <tr>
                                                 <th class="text-center">#</th>
                                                 <th>Number</th>
-                                                <th>Product</th>
+                                                <th>Item</th>
                                                 {{-- <th>Manufacturer</th> --}}
                                                 <th>Technician</th>
                                                 <th>Date</th>
