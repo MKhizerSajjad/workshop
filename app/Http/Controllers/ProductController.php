@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $limit = $request->limit ?? 10;
@@ -27,17 +25,11 @@ class ProductController extends Controller
             ->with('i', ($request->input('page', 1) - 1) * 20);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('product.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -59,9 +51,6 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success','Record created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Product $product)
     {
         if (!empty($product)) {
@@ -76,17 +65,11 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Product $product)
     {
         return view('product.edit', compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Product $product)
     {
         $this->validate($request, [
@@ -110,12 +93,32 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success','Updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Product $product)
     {
         Product::find($product->id)->delete();
         return redirect()->route('product.index')->with('success', 'Deleted successfully');
+    }
+
+    public function report(Request $request)
+    {
+        if($request->from && $request->to) {
+            $from = Carbon::parse($request->from)->startOfDay();
+            $to = Carbon::parse($request->to)->endOfDay();
+
+            $products = Product::join('task_item_products', 'products.id', '=', 'task_item_products.product_id')
+                ->select('products.name', 'products.sku')
+                ->selectRaw('COUNT(task_item_products.id) as total_usage_count')
+                ->selectRaw('SUM(task_item_products.qty) as total_qty_used')
+                ->selectRaw('SUM(task_item_products.total) as total_amount')
+                ->whereBetween('task_item_products.created_at', [$from, $to])
+                // ->orWhereNull('task_item_products.id')
+                ->groupBy('products.id', 'products.name', 'products.sku')
+                ->orderBy('products.name')
+                ->get();
+
+            return view('product.report',compact('products', 'from', 'to'));
+        }
+
+        return view('product.report');
     }
 }

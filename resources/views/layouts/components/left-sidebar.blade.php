@@ -87,6 +87,17 @@
                             @endif
                         </ul>
                     </li>
+
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-file"></i>
+                            <span key="t-report">Reporting</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ route('product.report') }}" key="t-products">Products</a></li>
+                            <li><a href="{{ route('service.report') }}" key="t-service">Products</a></li>
+                        </ul>
+                    </li>
                 @endif
 
                 @if (in_array(auth()->user()->user_type , [1, 2]))

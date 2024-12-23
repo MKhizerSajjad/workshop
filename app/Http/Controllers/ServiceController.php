@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $data = Service::with('service')->orderBy('name')->paginate(10);
@@ -26,9 +25,6 @@ class ServiceController extends Controller
             ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $tax = getTax();
@@ -36,9 +32,6 @@ class ServiceController extends Controller
         return view('service.create', compact('services', 'tax'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -69,9 +62,6 @@ class ServiceController extends Controller
         return redirect()->route('service.index')->with('success','Record created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Service $service)
     {
         if (!empty($service)) {
@@ -86,9 +76,6 @@ class ServiceController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Service $service)
     {
         $tax = getTax();
@@ -96,9 +83,6 @@ class ServiceController extends Controller
         return view('service.edit', compact('service', 'services', 'tax'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Service $service)
     {
         $this->validate($request, [
@@ -126,12 +110,31 @@ class ServiceController extends Controller
         return redirect()->route('service.index')->with('success','Updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Service $service)
     {
         Service::find($service->id)->delete();
         return redirect()->route('service.index')->with('success', 'Deleted successfully');
+    }
+
+    public function report(Request $request)
+    {
+        if($request->from && $request->to) {
+            $from = Carbon::parse($request->from)->startOfDay();
+            $to = Carbon::parse($request->to)->endOfDay();
+
+            $services = Service::leftJoin('task_services', 'services.id', '=', 'task_services.service_id')
+                    ->select('services.id as service_id', 'services.name')
+                    ->selectRaw('COUNT(task_services.id) as total_usage_count')
+                    ->selectRaw('SUM(task_services.qty) as total_qty_used')
+                    ->selectRaw('SUM(task_services.unit_price * task_services.qty) as total_amount')
+                    ->whereBetween('task_services.created_at', [$from, $to])
+                    // ->orWhereNull('task_services.id')  // This includes services without task_services records
+                    ->groupBy('services.id', 'services.name')  // Group by service id and name
+                    ->orderBy('services.name')
+                    ->get();
+            return view('service.report',compact('services', 'from', 'to'));
+        }
+
+        return view('service.report');
     }
 }

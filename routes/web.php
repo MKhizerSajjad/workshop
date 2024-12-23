@@ -51,6 +51,8 @@ Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('caseInvo
 // Route::get('service-location/{locationId}/fields', [SerivceLocationController::class, 'locationDetail']);
 
 Route::get('products', [ProductController::class, 'list'])->name('productsList');
+Route::get('product/report', [ProductController::class, 'report'])->name('product.report');
+Route::get('service/report', [ServiceController::class, 'report'])->name('service.report');
 Route::get('services', [ServiceController::class, 'list'])->name('servicesList');
 
 Route::middleware(['auth', AccessControls::class])->group(function () {
