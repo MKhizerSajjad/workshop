@@ -51,8 +51,6 @@ Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('caseInvo
 // Route::get('service-location/{locationId}/fields', [SerivceLocationController::class, 'locationDetail']);
 
 Route::get('products', [ProductController::class, 'list'])->name('productsList');
-Route::get('product/report', [ProductController::class, 'report'])->name('product.report');
-Route::get('service/report', [ServiceController::class, 'report'])->name('service.report');
 Route::get('services', [ServiceController::class, 'list'])->name('servicesList');
 
 Route::middleware(['auth', AccessControls::class])->group(function () {
@@ -91,7 +89,10 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
     // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');
     Route::resource('settings', SettingController::class)->names('setting')->middleware('access.level:1,2');
     Route::resource('item', ItemController::class)->names('item')->middleware('access.level:1,2,3');
+
+    Route::get('product/report', [ProductController::class, 'report'])->name('product.report');
     Route::resource('product', ProductController::class)->names('product')->middleware('access.level:1,2,3');
+    Route::get('service/report', [ServiceController::class, 'report'])->name('service.report');
     Route::resource('service', ServiceController::class)->names('service')->middleware('access.level:1,2,3');
     Route::resource('priority', PriorityController::class)->names('priority')->middleware('access.level:1');
     Route::resource('employee', EmployeeController::class)->names('employee')->middleware('access.level:1');

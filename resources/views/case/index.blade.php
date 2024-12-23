@@ -98,7 +98,8 @@
                                                 <tr>
                                                     <td class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $task->code }}</td>
-                                                    <td>{{ $task->model . ' ' . $task->year }}</td>
+                                                    <td>{{ $task->item->name . ' - ' . $task->item->manufacturer }}</td>
+                                                    {{-- <td>{{ $task->model . ' ' . $task->year }}</td> --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
                                                     <td>{{ numberFormat($task->total, 'euro') }}</td>
                                                     <td>{{ numberFormat($task->paid, 'euro') }}</td>
