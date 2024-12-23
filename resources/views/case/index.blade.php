@@ -85,9 +85,10 @@
                                                 <th>Product</th>
                                                 {{-- <th>Manufacturer</th> --}}
                                                 <th>Technician</th>
+                                                <th>Date</th>
                                                 <th>Total</th>
-                                                <th>Paid</th>
-                                                <th>Pending</th>
+                                                {{-- <th>Paid</th>
+                                                <th>Pending</th> --}}
                                                 <th>Status</th>
                                                 <th>Payment</th>
                                                 <th class="text-center">Options</th>
@@ -101,9 +102,10 @@
                                                     <td>{{ $task->item->name . ' - ' . $task->item->manufacturer }}</td>
                                                     {{-- <td>{{ $task->model . ' ' . $task->year }}</td> --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
+                                                    <td>{{ date('d M Y', strtotime($task->date_opened)) }}</td>
                                                     <td>{{ numberFormat($task->total, 'euro') }}</td>
-                                                    <td>{{ numberFormat($task->paid, 'euro') }}</td>
-                                                    <td>{{ numberFormat($task->pending, 'euro') }}</td>
+                                                    {{-- <td>{{ numberFormat($task->paid, 'euro') }}</td>
+                                                    <td>{{ numberFormat($task->pending, 'euro') }}</td> --}}
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>
                                                     <td>{!! getPayment('status', $task->payment_status, 'badge') !!}</td>
                                                     <td class="text-center">
