@@ -166,7 +166,7 @@
                                                                     </div>
                                                                 @endif
                                                             @endforeach
-                                                            {!! getGenStatus('user', $data->task->customer->status, 'badge') !!}
+                                                            <b>Customer status : </b> {!! getGenStatus('user', $data->task->customer->status, 'badge') !!}
                                                             {{-- <span>{{ $data->task->customer->status_detail }}</span> --}}
                                                         </div>
                                                     </div>
