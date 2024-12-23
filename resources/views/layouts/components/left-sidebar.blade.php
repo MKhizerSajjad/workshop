@@ -94,8 +94,8 @@
                             <span key="t-report">Reporting</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ route('service.report') }}" key="t-service">Services</a></li>
                             <li><a href="{{ route('product.report') }}" key="t-products">Products</a></li>
-                            <li><a href="{{ route('service.report') }}" key="t-service">Products</a></li>
                         </ul>
                     </li>
                 @endif
