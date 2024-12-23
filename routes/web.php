@@ -17,9 +17,11 @@ use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PickupPointController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\AccessControlController;
 use App\Http\Controllers\SerivceLocationController;
 use App\Models\Technician;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AccessControls;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +53,7 @@ Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('caseInvo
 Route::get('products', [ProductController::class, 'list'])->name('productsList');
 Route::get('services', [ServiceController::class, 'list'])->name('servicesList');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', AccessControls::class])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
@@ -59,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('suggestion', SuggestionController::class)->names('suggestion');
     Route::resource('notification', NotificationController::class)->names('notification');
     Route::resource('platform', PlatformController::class)->names('platform');
+    Route::resource('access', AccessControlController::class)->names('access')->middleware('access.level:1');
     // Route::get('case', [TaskController::class, 'create'])->name('case.create');
     // ->except(['create'])
 

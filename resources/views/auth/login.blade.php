@@ -18,6 +18,17 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger alert-border-left alert-dismissible fade show auto-colse-3" role="alert">
+                                    <i class="fa fa-ban me-1 align-middle fs-16"></i><strong>Alert! </strong>
+                                        @foreach ($errors->all() as $error)
+                                            <br>{{ $error }}
+                                        @endforeach
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+
                             <div class="bg-primary-subtle">
                                 <div class="row">
                                     <div class="col-7">
