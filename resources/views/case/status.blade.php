@@ -129,6 +129,7 @@
                                                 </ul>
                                             </div>
                                         @endif
+
                                         <div class="tab-pane fade show active" id="v-pills-item" role="tabpanel" aria-labelledby="v-pills-item-tab">
                                             <div>
                                                 <h4 class="card-title">Item information</h4>
@@ -140,6 +141,8 @@
                                                             <label class="form-check-label font-size-13" for="item-{{ $item->id }}"> {{ $item->name }}</label>
                                                         </div>
                                                     @endforeach --}}
+                                                    {!! getPayment('status', $data->task->payment_status, 'badge') !!}
+                                                    {!! getCaseStatus('general', $data->task->status, 'badge') !!}
                                                     <div class="form-group row mb-2">
                                                         <label class="col-md-2 col-form-label">Select Item</label>
                                                         <div class="col-md-12">
@@ -231,73 +234,82 @@
                                             <div>
                                                 <h4 class="card-title mt-5">Uploaded By Customer</h4>
                                                 <div id="imagesBody">
-                                                    @foreach ($data->task->media->where('customer_choice', 1) as $media)
-                                                        @php
-                                                            $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
-                                                            $previewContent = '';
-                                                            $imagePath = '';
 
-                                                            switch ($fileType) {
-                                                                case 'jpg':
-                                                                case 'jpeg':
-                                                                case 'png':
-                                                                case 'gif':
-                                                                    $previewContent = '<img class="thumb" src="' . asset('/task/media/'. $media->media) . '" title="' . $media->media . '">';
-                                                                    break;
-                                                                case 'mp4':
-                                                                case 'avi':
-                                                                case 'mov':
-                                                                case 'wmv':
-                                                                    $imagePath = asset('images/video.png');
-                                                                    $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
-                                                                    break;
-                                                                default:
-                                                                    $imagePath = asset('images/file.png');
-                                                                    $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
-                                                                    break;
-                                                            }
-                                                        @endphp
-                                                        <div class="preview-image">
-                                                            {!! $previewContent !!}
-                                                            <span class="delete-image" data-nxame="' + theFile.name + '"></span>
-                                                        </div>
-                                                    @endforeach
+                                                    @if (count($data->task->media->where('customer_choice', 1)) > 0)
+                                                        @foreach ($data->task->media->where('customer_choice', 1) as $media)
+                                                            @php
+                                                                $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
+                                                                $previewContent = '';
+                                                                $imagePath = '';
+
+                                                                switch ($fileType) {
+                                                                    case 'jpg':
+                                                                    case 'jpeg':
+                                                                    case 'png':
+                                                                    case 'gif':
+                                                                        $previewContent = '<img class="thumb" src="' . asset('/task/media/'. $media->media) . '" title="' . $media->media . '">';
+                                                                        break;
+                                                                    case 'mp4':
+                                                                    case 'avi':
+                                                                    case 'mov':
+                                                                    case 'wmv':
+                                                                        $imagePath = asset('images/video.png');
+                                                                        $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
+                                                                        break;
+                                                                    default:
+                                                                        $imagePath = asset('images/file.png');
+                                                                        $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
+                                                                        break;
+                                                                }
+                                                            @endphp
+                                                            <div class="preview-image">
+                                                                {!! $previewContent !!}
+                                                                <span class="delete-image" data-nxame="' + theFile.name + '"></span>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <h5 class="text text-danger text-center">No media uploaded by customer</h5>
+                                                    @endif
                                                 </div>
                                                 <hr>
                                                 <h4 class="card-title mt-5">Uploaded By Service Center</h4>
                                                 <div id="imagesBody">
 
-                                                    @foreach ($data->task->media->where('customer_choice', 2) as $media)
-                                                        @php
-                                                            $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
-                                                            $previewContent = '';
-                                                            $imagePath = '';
+                                                    @if (count($data->task->media->where('customer_choice', 2)) > 0)
+                                                        @foreach ($data->task->media->where('customer_choice', 2) as $media)
+                                                            @php
+                                                                $fileType = pathinfo($media->media, PATHINFO_EXTENSION); // Get the file extension
+                                                                $previewContent = '';
+                                                                $imagePath = '';
 
-                                                            switch ($fileType) {
-                                                                case 'jpg':
-                                                                case 'jpeg':
-                                                                case 'png':
-                                                                case 'gif':
-                                                                    $previewContent = '<img class="thumb" src="' . asset('/task/media/'. $media->media) . '" title="' . $media->media . '">';
-                                                                    break;
-                                                                case 'mp4':
-                                                                case 'avi':
-                                                                case 'mov':
-                                                                case 'wmv':
-                                                                    $imagePath = asset('images/video.png');
-                                                                    $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
-                                                                    break;
-                                                                default:
-                                                                    $imagePath = asset('images/file.png');
-                                                                    $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
-                                                                    break;
-                                                            }
-                                                        @endphp
-                                                        <div class="preview-image">
-                                                            {!! $previewContent !!}
-                                                            <span class="delete-image" data-nxame="' + theFile.name + '"></span>
-                                                        </div>
-                                                    @endforeach
+                                                                switch ($fileType) {
+                                                                    case 'jpg':
+                                                                    case 'jpeg':
+                                                                    case 'png':
+                                                                    case 'gif':
+                                                                        $previewContent = '<img class="thumb" src="' . asset('/task/media/'. $media->media) . '" title="' . $media->media . '">';
+                                                                        break;
+                                                                    case 'mp4':
+                                                                    case 'avi':
+                                                                    case 'mov':
+                                                                    case 'wmv':
+                                                                        $imagePath = asset('images/video.png');
+                                                                        $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
+                                                                        break;
+                                                                    default:
+                                                                        $imagePath = asset('images/file.png');
+                                                                        $previewContent = '<img class="thumb" src="' . $imagePath . '" title="' . $media->media . '">';
+                                                                        break;
+                                                                }
+                                                            @endphp
+                                                            <div class="preview-image">
+                                                                {!! $previewContent !!}
+                                                                <span class="delete-image" data-nxame="' + theFile.name + '"></span>
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <h5 class="text text-danger text-center">No media uploaded by service center</h5>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
