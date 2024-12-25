@@ -36,7 +36,7 @@
                             <div class="row mb-3">
                                 <div class="col-lg-4 col-sm-12">
                                     <div class="mt-2">
-                                        <h4 class="card-title">Products List</h4>
+                                        <h4 class="card-title">Cases List</h4>
                                     </div>
                                 </div>
                                 <div class="col-lg-8 col-sm-12">
@@ -102,7 +102,7 @@
                                                     <td>{{ $task->item->name . ' - ' . $task->item->manufacturer }}</td>
                                                     {{-- <td>{{ $task->model . ' ' . $task->year }}</td> --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
-                                                    <td>{{ date('d M Y', strtotime($task->date_opened)) }}</td>
+                                                    <td>{{ date('Y-m-d', strtotime($task->date_opened)) }}</td>
                                                     <td>{{ numberFormat($task->total, 'euro') }}</td>
                                                     {{-- <td>{{ numberFormat($task->paid, 'euro') }}</td>
                                                     <td>{{ numberFormat($task->pending, 'euro') }}</td> --}}
