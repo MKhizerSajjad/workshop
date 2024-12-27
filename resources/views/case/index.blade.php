@@ -83,7 +83,7 @@
                                                 <th class="text-center">#</th>
                                                 <th>Number</th>
                                                 <th>Item</th>
-                                                {{-- <th>Manufacturer</th> --}}
+                                                <th>Manufacturer - Model</th>
                                                 <th>Technician</th>
                                                 <th>Date</th>
                                                 <th>Total</th>
@@ -99,8 +99,8 @@
                                                 <tr>
                                                     <td class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $task->code }}</td>
-                                                    <td>{{ $task->item->name . ' - ' . $task->item->manufacturer }}</td>
-                                                    {{-- <td>{{ $task->model . ' ' . $task->year }}</td> --}}
+                                                    <td>{{ $task->item->name }}</td>
+                                                    <td>{{ $task->manufacturer . ' - ' . $task->model }}</td> {{--  . ' ' . $task->year --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
                                                     <td>{{ date('Y-m-d', strtotime($task->date_opened)) }}</td>
                                                     <td>{{ numberFormat($task->total, 'euro') }}</td>
