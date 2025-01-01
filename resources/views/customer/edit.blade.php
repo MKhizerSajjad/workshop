@@ -225,7 +225,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editStatusModalLabel-{{ $user->id }}">Edit Comment for </b></h5>
+                    <h5 class="modal-title" id="editStatusModalLabel-{{ $user->id }}">Edit Status </b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="{{ route('customer.update', $user->id) }}" enctype="multipart/form-data">
@@ -254,7 +254,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-warning" name="action" value="update-comment">Update Comment</button>
+                        <button type="submit" class="btn btn-warning" name="action" value="update-comment">Update</button>
                     </div>
                 </form>
             </div>
