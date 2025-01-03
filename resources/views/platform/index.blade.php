@@ -56,7 +56,7 @@
                                                     <td class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $platform->name }}</td>
                                                     <td>{{ $platform->short }}</td>
-                                                    <td class="text-center">{!! getGenStatus('bool', $platform->status, 'badge') !!}</td>
+                                                    <td class="text-center">{!! getGenStatus('general', $platform->status, 'badge') !!}</td>
                                                     <td class="text-center"> <a href="{{ route('platform.edit', $platform->id) }}"><i class="bx bx-pencil"></i></a></td>
                                                 </tr>
                                             @endforeach

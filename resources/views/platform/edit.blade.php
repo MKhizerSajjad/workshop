@@ -58,7 +58,7 @@
                                             <label for="status">Status <span class="text text-danger"> *</span></label>
                                             <select id="service_status" name="status" class="select2 form-control @error('status') is-invalid @enderror">
                                                 <option value="">Select Status </option>
-                                                @foreach (getGenStatus('service') as $key => $price)
+                                                @foreach (getGenStatus('general') as $key => $price)
                                                     <option value="{{ ++$key }}" @if($key == old('status', $platform->status)) selected @endif>{{ $price }}</option>
                                                 @endforeach
                                                 @error('status')

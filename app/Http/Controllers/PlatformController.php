@@ -26,6 +26,7 @@ class PlatformController extends Controller
         $this->validate($request, [
             'status' => 'required',
             'name' => 'required|max:200',
+            'short' => 'required|max:5'
         ]);
 
         $data = [
@@ -70,6 +71,7 @@ class PlatformController extends Controller
         $this->validate($request, [
             'status' => 'required',
             'name' => 'required|max:200',
+            'short' => 'required|max:5'
         ]);
 
         $data = [
