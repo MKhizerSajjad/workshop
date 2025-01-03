@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VpnController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\NotificationController;
@@ -57,6 +58,7 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('log', [LogController::class, 'index'])->name('log.index');
     Route::resource('vpn', VpnController::class)->names('vpn');
     Route::resource('suggestion', SuggestionController::class)->names('suggestion');
     Route::resource('notification', NotificationController::class)->names('notification');
