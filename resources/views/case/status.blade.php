@@ -141,8 +141,9 @@
                                                             <label class="form-check-label font-size-13" for="item-{{ $item->id }}"> {{ $item->name }}</label>
                                                         </div>
                                                     @endforeach --}}
-                                                    {!! getPayment('status', $data->task->payment_status, 'badge') !!}
-                                                    {!! getCaseStatus('general', $data->task->status, 'badge') !!}
+                                                    Payment Status : {!! getPayment('status', $data->task->payment_status, 'badge') !!}
+                                                    <br>
+                                                    Case Status : {!! getCaseStatus('general', $data->task->status, 'badge') !!}
                                                     <div class="form-group row mb-2">
                                                         <label class="col-md-2 col-form-label">Select Item</label>
                                                         <div class="col-md-12">
