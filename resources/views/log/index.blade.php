@@ -70,7 +70,7 @@
 
                                                 <tr>
                                                     <td class="text-center">{{ ++$key }}</td>
-                                                    <td>{{ $log->user->first_name }}</td>
+                                                    <td>{{ $log->user_id ? $log->user->first_name : '' }}</td>
                                                     <td>{{ ucfirst($log->model_name) }}</td>
                                                     <td>{{ $log->action }}</td>
                                                     <td>{{ $log->ip_address }}</td>
@@ -114,10 +114,12 @@
 
                                                                 <!-- Time Section -->
                                                                 <div class="row border p-2 mb-0">
-                                                                    <div class="col-6">
-                                                                        <strong>User:</strong>
-                                                                        {{ $log->user->first_name .' '. $log->user->last_name }}
-                                                                    </div>
+                                                                    @if ($log->user_id)
+                                                                        <div class="col-6">
+                                                                            <strong>User:</strong>
+                                                                            {{ $log->user->first_name .' '. $log->user->last_name }}
+                                                                        </div>
+                                                                    @endif
                                                                     <div class="col-6">
                                                                         <strong>Time:</strong> {{ $log->created_at }}
                                                                     </div>

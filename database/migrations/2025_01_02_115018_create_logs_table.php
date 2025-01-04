@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            // $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
             $table->string('model_name');
             $table->bigInteger('model_id');
             $table->string('action');
             $table->string('ip_address');
             $table->string('user_agent');
-            $table->json('changes')->nullable(); // For storing changes made, like in JSON format
+            $table->json('changes')->nullable();
             $table->timestamps();
         });
     }

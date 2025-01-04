@@ -106,6 +106,7 @@ function getCaseStatus($prefix, $status = null, $type = null)
 {
     $statuses = [
         'general'=> [
+            '0' => ['Customer Suspended', '<span class="badge bg-danger">Customer Suspended</span>'],
             '1' => ['To Recieve', '<span class="badge bg-primary">To Recieve</span>'],
             '2' => ['Recieved', '<span class="badge bg-warning">Recieved</span>'],
             '3' => ['Inspecting', '<span class="badge bg-danger">Inspecting</span>'],

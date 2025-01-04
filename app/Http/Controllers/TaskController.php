@@ -127,6 +127,13 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $serviceLocationID = $request->input('services_location');
+        $customerValidation = $this->validateCustomer($serviceLocationID, $request);
+        if ($customerValidation) {
+            return redirect()->back()->withInput()->withErrors([
+                'customer' => 'SUSPENDED – Please ask for help.'
+            ]);
+        }
+
         $serviceLocationFields = SerivceLocation::where('id', $serviceLocationID)->value('fields');
         $fieldsArray = json_decode($serviceLocationFields);
 
@@ -1170,5 +1177,29 @@ class TaskController extends Controller
         $todaysCount = Task::where('code', 'LIKE', $code.'%')->count();
         // Increment the max code number by 1, if null set it to 1
         return $code. str_pad(++$todaysCount, 5, '0', STR_PAD_LEFT);
+    }
+
+    private function validateCustomer($serviceLocationID, $request) {
+        // Get the input data from the request
+        $firstName = $request->input($serviceLocationID . '-' . 'first_name');
+        $lastName = $request->input($serviceLocationID . '-' . 'last_name');
+        $phone = $request->input($serviceLocationID . '-' . 'phone');
+        $email = $request->input($serviceLocationID . '-' . 'email');
+        $address = $request->input($serviceLocationID . '-' . 'address');
+        $company = $request->input($serviceLocationID . '-' . 'company');
+
+        // Search for a suspended customer by any of the given fields
+        $suspendedCustomer = Customer::where('status', 3)
+            ->where(function ($query) use ($firstName, $lastName, $phone, $email, $address, $company) {
+                $query->where('first_name', 'LIKE', $firstName)
+                    ->where('last_name', 'LIKE', $lastName)
+                    ->orWhere('phone', $phone)
+                    ->orWhere('email', $email);
+                    // ->orWhere('address', $address)
+                    // ->orWhere('company', $company);
+            })
+            ->first();
+
+        return $suspendedCustomer ?? '';
     }
 }
