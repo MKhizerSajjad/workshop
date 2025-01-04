@@ -94,7 +94,9 @@
                             <span key="t-report">Reporting</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{ route('log.index') }}" key="t-logs">Logs</a></li>
+                            @if (in_array(auth()->user()->user_type , [1]))
+                                <li><a href="{{ route('log.index') }}" key="t-logs">Logs</a></li>
+                            @endif
                             <li><a href="{{ route('service.report') }}" key="t-service">Services</a></li>
                             <li><a href="{{ route('product.report') }}" key="t-products">Products</a></li>
                         </ul>

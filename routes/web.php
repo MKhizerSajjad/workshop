@@ -58,7 +58,7 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::get('log', [LogController::class, 'index'])->name('log.index');
+    Route::get('log', [LogController::class, 'index'])->name('log.index')->middleware('access.level:1');
     Route::resource('vpn', VpnController::class)->names('vpn');
     Route::resource('suggestion', SuggestionController::class)->names('suggestion');
     Route::resource('notification', NotificationController::class)->names('notification');
