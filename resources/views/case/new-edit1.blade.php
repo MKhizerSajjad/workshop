@@ -47,24 +47,24 @@
                                         <div class="col-md-12">
 
                                             {{-- top --}}
-                                            <div class="row nowrap align-items-end mb-4">
-                                                <div class="col-lg-3 col-md-6">
+                                            <div class="row nowrap align-items-end mb-1">
+                                                <div class="col-lg-4 col-md-6">
                                                     <label for="caseNumber" class="form-label">Case Number</label>
                                                     <input type="text" class="form-control" id="caseNumber" placeholder="{{$data->task->code}}" disabled>
                                                 </div>
-                                                <div class="col-lg-2 col-md-6">
+                                                <div class="col-lg-4 col-md-6">
                                                     <label for="bookingFilled" class="form-label">Booking Filled</label>
                                                     <input type="date" class="form-control" id="bookingFilled" name="date_opened" value="@php echo $data->task->date_opened ? date('Y-m-d', strtotime($data->task->date_opened)) : ''; @endphp">
                                                 </div>
-                                                <div class="col-lg-2 col-md-6">
+                                                {{-- <div class="col-lg-2 col-md-6">
                                                     <label for="itemDelivered" class="form-label">Item Delivered to Service</label>
                                                     <input type="date" class="form-control" id="itemDelivered"  name="date_service" value="@php echo $data->task->date_service ? date('Y-m-d', strtotime($data->task->date_service)) : ''; @endphp">
                                                 </div>
                                                 <div class="col-lg-2 col-md-6">
                                                     <label for="itemPickedUp" class="form-label">Item Picked Up / Sent Out</label>
                                                     <input type="date" class="form-control" id="itemPickedUp" name="date_closed" value="@php echo $data->task->date_closed ? date('Y-m-d', strtotime($data->task->date_closed)) : ''; @endphp">
-                                                </div>
-                                                <div class="col-lg-3 col-md-6 d-flex justify-content-end">
+                                                </div> --}}
+                                                <div class="col-lg-4 col-md-12 d-flex justify-content-end">
                                                     <div class="w-100 w-lg-auto">
                                                         <label for="technician" class="form-label">Technician</label>
                                                         <select class="form-control select2" title="Technician" name="technician_id">
@@ -76,6 +76,24 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="row nowrap align-items-end mb-4">
+                                                <div class="col-lg-3 col-md-6">
+                                                    <label for="dateRecieved" class="form-label">Delivered To Office</label>
+                                                    <input type="date" class="form-control" id="dateRecieved"  name="date_recieved" value="@php echo $data->task->date_recieved ? date('Y-m-d', strtotime($data->task->date_recieved)) : ''; @endphp">
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <label for="dateDispatched" class="form-label">Dispatched / Recieved</label>
+                                                    <input type="date" class="form-control" id="dateDispatched" name="date_dispatched" value="@php echo $data->task->date_dispatched ? date('Y-m-d', strtotime($data->task->date_dispatched)) : ''; @endphp">
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <label for="itemDelivered" class="form-label">Item Delivered to Service</label>
+                                                    <input type="date" class="form-control" id="itemDelivered"  name="date_service" value="@php echo $data->task->date_service ? date('Y-m-d', strtotime($data->task->date_service)) : ''; @endphp">
+                                                </div>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <label for="itemPickedUp" class="form-label">Item Picked Up / Sent Out</label>
+                                                    <input type="date" class="form-control" id="itemPickedUp" name="date_closed" value="@php echo $data->task->date_closed ? date('Y-m-d', strtotime($data->task->date_closed)) : ''; @endphp">
                                                 </div>
                                             </div>
 
