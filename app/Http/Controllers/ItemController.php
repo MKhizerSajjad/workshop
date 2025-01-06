@@ -83,7 +83,6 @@ class ItemController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:200',
-            'detail' => 'required',
             'colors' => ['required', 'array'],
             'colors.*' => ['required', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}$/'],
             'manufacturer' => 'required|max:200',

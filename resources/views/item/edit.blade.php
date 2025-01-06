@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="mb-3">
-                                            <label for="detail">Detail <span class="text text-danger"> *</span></label>
+                                            <label for="detail">Detail </label>
                                             <textarea id="detail" name="detail" rows="4" class="form-control @error('detail') is-invalid @enderror" placeholder="Detail">{{ $item->detail }}</textarea>
                                             @error('detail')
                                                 <span class="invalid-feedback" role="alert">
