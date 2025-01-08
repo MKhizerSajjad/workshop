@@ -154,6 +154,12 @@
                                 <div class="d-flex align-items-center tax-row mb-2">
                                     <input type="text" name="name[]" class="form-control me-2" value="{{ $tax['name'] ?? '' }}" placeholder="Tax Name" required>
                                     <input type="number" name="percentage[]" class="form-control me-2" value="{{ $tax['percentage'] ?? '' }}" placeholder="Percentage" required>
+                                    <select id="statusTax" name="status[]" class="form-control me-2" required>
+                                        <option value="">Select Option </option>
+                                        @foreach (getGenStatus('bool') as $key => $status)
+                                            <option value="{{ ++$key }}" @if($key == $tax['status']) selected @endif>{{ $status }}</option>
+                                        @endforeach
+                                    </select>
                                     {{-- <button type="button" class="btn btn-danger btn-remove-tax">
                                         <i class="bx bx-plus-circle me-1"></i>
                                     </button> --}}
@@ -218,6 +224,12 @@
                 <div class="d-flex align-items-center tax-row mb-2">
                     <input type="text" name="name[]" class="form-control me-2" placeholder="Tax Name" required>
                     <input type="number" name="percentage[]" class="form-control me-2" placeholder="Percentage" required>
+                    <select id="status" name="status[]" class="form-control me-2" required>
+                        <option value="">Select Option </option>
+                        @foreach (getGenStatus('bool') as $key => $status)
+                            <option value="{{ ++$key }}">{{ $status }}</option>
+                        @endforeach
+                    </select>
                     <button type="button" class="btn btn-danger btn-remove-tax">
                         <i class="bx bx-plus-circle me-1"></i>
                     </button>
