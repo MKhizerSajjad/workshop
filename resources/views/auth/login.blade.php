@@ -47,7 +47,7 @@
                                     <a href="#" class="auth-logo-light">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="{{ asset('images/icon.png') }}" alt="" class="rounded-circle" height="34">
+                                                <img src="{{ asset('images/'.config('app.favicon')) }}" alt="" class="rounded-circle" height="34">
                                             </span>
                                         </div>
                                     </a>
@@ -55,7 +55,7 @@
                                     <a href="#" class="auth-logo-dark">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="{{ asset('images/icon.png') }}" alt="" class="rounded-circle" height="34">
+                                                <img src="{{ asset('images/'.config('app.favicon')) }}" alt="" class="rounded-circle" height="34">
                                             </span>
                                         </div>
                                     </a>
@@ -130,7 +130,7 @@
                         <div class="text-center">
                             <div>
                                 <p>Don't have an account ? <a href="{{ route('register') }}" class="fw-medium text-primary"> Signup Now </a> </p>
-                                <p>© <script>document.write(new Date().getFullYear())</script> {{ config('app.name') }}. Powered with <i class="mdi mdi-heart text-danger"></i> by The Tech Shelf</p>
+                                <p>© <script>document.write(new Date().getFullYear())</script> {{ config('app.name') }}. Powered with <i class="mdi mdi-heart text-danger"></i> by {{ config('app.developed_by') }}</p>
                             </div>
                         </div>
 

@@ -23,6 +23,7 @@ class AppSettingsServiceProvider extends ServiceProvider
         // Fetch the 'general' settings from the database
         $generalSettings = Setting::where('type', 'general')->first();
         $emailSettings = Setting::where('type', 'email_settings')->first();
+        $businessInformation = Setting::where('type', 'business_information')->first();
 
         // If general settings exist, update APP_NAME dynamically
         if ($generalSettings) {
@@ -39,6 +40,22 @@ class AppSettingsServiceProvider extends ServiceProvider
             if (isset($settingsData['developed_by'])) {
                 $developedBy = $settingsData['developed_by'];
                 config(['app.developed_by' => $developedBy]);  // Dynamically set the company name
+            }
+        }
+
+
+        if ($businessInformation) {
+            // Decode the 'data' column which is in JSON format
+            $businessInformationData = json_decode($businessInformation->data, true);
+
+            if (isset($businessInformationData['logo'])) {
+                $logo = $businessInformationData['logo'];
+                config(['app.logo' => $logo]);  // Override
+            }
+
+            if (isset($businessInformationData['favicon'])) {
+                $favicon = $businessInformationData['favicon'];
+                config(['app.favicon' => $favicon]);  // Override
             }
         }
 

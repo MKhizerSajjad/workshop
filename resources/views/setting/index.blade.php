@@ -20,12 +20,24 @@
         </div>
         <!-- End Page Title -->
 
+        @if ($errors->any())
+            <div class="alert alert-danger alert-border-left alert-dismissible fade show auto-colse-3" role="alert">
+                <i class="fa fa-ban me-1 align-middle fs-16"></i><strong>Alert! </strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-border-left alert-dismissible fade show auto-close-3" role="alert">
-            <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success! </strong>
-            {{ $message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+            <div class="alert alert-success alert-border-left alert-dismissible fade show auto-close-3" role="alert">
+                <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success! </strong>
+                {{ $message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         @endif
 
         @php
@@ -82,10 +94,16 @@
                             <div class="mb-3">
                                 <label for="logo">Logo</label>
                                 <input type="file" name="logo" class="form-control">
+                                @if (isset($businessData['logo']))
+                                    <img src="{{ asset('images/'.$businessData['logo']) }}" width="50">
+                                @endif
                             </div>
                             <div class="mb-3">
                                 <label for="favicon">Favicon</label>
                                 <input type="file" name="favicon" class="form-control">
+                                @if (isset($businessData['favicon']))
+                                    <img src="{{ asset('images/'.$businessData['favicon']) }}" width="50">
+                                @endif
                             </div>
                             <button type="submit" class="btn btn-primary waves-effect waves-light w-100">Update Business Information</button>
                         </form>

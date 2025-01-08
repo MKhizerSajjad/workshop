@@ -54,8 +54,8 @@ class SettingController extends Controller
                 'working_days' => 'required|array',
                 'working_hours.start' => 'required|date_format:H:i',
                 'working_hours.end' => 'required|date_format:H:i',
-                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'favicon' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+                'favicon' => 'nullable|mimes:jpeg,png,jpg,gif,ico,webp|max:1024',
             ]);
         }
 
@@ -87,36 +87,90 @@ class SettingController extends Controller
 
 
          // If the request type is business_information or email_settings or payments, we just save the form data as is.
-    if ($request->type == 'business_information') {
-        // For business information, we might also handle file uploads (logo and favicon)
-        if ($request->hasFile('logo')) {
-            $logo = $request->file('logo')->store('logos', 'public');
-            $inputs['logo'] = $logo;
-        }
+        // if ($request->type == 'business_information') {
 
-        if ($request->hasFile('favicon')) {
-            $favicon = $request->file('favicon')->store('favicons', 'public');
-            $inputs['favicon'] = $favicon;
-        }
+        //     $logo = '';
+        //     $favicon = '';
+        //     if (!$request->hasFile('logo') || !$request->hasFile('favicon')) {
+        //         $settings = Setting::where('type', 'business_information')->first();
+        //         $businessDetails = json_decode($settings->data);
+        //         $logo = $businessDetails->logo;
+        //         $favicon = $businessDetails->favicon;
+        //     }
 
-        $jsonData = json_encode($inputs);
-    } elseif ($request->type == 'email_settings' || $request->type == 'payments') {
-        $jsonData = json_encode($inputs);
+        //     // For business information, we might also handle file uploads (logo and favicon)
+        //     if ($request->hasFile('logo')) {
+        //         $file = $request->logo;
 
-    } else {
-        // For tax or term, process the arrays
-        $keys = array_keys($inputs);
-        $data = [];
-        $numItems = count($inputs[$keys[0]]);
-        for ($i = 0; $i < $numItems; $i++) {
-            $item = [];
-            foreach ($keys as $key) {
-                $item[$key] = $inputs[$key][$i];
+        //         $filenameWithExt = $file->getClientOriginalName();
+        //         $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        //         $extension = $file->getClientOriginalExtension();
+        //         $fileNameToStore = 'logo.' . $extension;
+        //         $file->move(public_path('images/'), $fileNameToStore);
+        //         $inputs['logo'] = $fileNameToStore;
+        //     } else {
+        //         $inputs['logo'] = $logo;
+        //     }
+
+        //     if ($request->hasFile('favicon')) {
+        //         $file = $request->favicon;
+        //         $filenameWithExt = $file->getClientOriginalName();
+        //         $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+        //         $extension = $file->getClientOriginalExtension();
+        //         $fileNameToStore = 'favicon.' . $extension;
+        //         $file->move(public_path('images/'), $fileNameToStore);
+        //         $inputs['favicon'] = $fileNameToStore;
+
+
+        //         // $favicon = $request->file('favicon')->store('favicons', 'public');
+        //         // $inputs['favicon'] = $favicon;
+        //     } else {
+        //         $inputs['favicon'] = $favicon;
+        //     }
+
+        //     $jsonData = json_encode($inputs);
+        // }
+
+        if ($request->type == 'business_information') {
+            // Fetch current business details if no new files are uploaded
+            $settings = Setting::where('type', 'business_information')->first();
+            $businessDetails = json_decode($settings->data);
+            $logo = $businessDetails->logo ?? '';
+            $favicon = $businessDetails->favicon ?? '';
+
+            // Handle file uploads for logo
+            if ($request->hasFile('logo')) {
+                $logo = $this->uploadFile($request->file('logo'), 'logo');
             }
-            $data[] = $item;
+
+            // Handle file uploads for favicon
+            if ($request->hasFile('favicon')) {
+                $favicon = $this->uploadFile($request->file('favicon'), 'favicon');
+            }
+
+            $inputs['logo'] = $logo;
+            $inputs['favicon'] = $favicon;
+
+            // Store the updated data
+            $jsonData = json_encode($inputs);
+
+        } elseif ($request->type == 'email_settings' || $request->type == 'payments') {
+            $jsonData = json_encode($inputs);
+
+        } else {
+            // For tax or term, process the arrays
+            $keys = array_keys($inputs);
+            $data = [];
+            $numItems = count($inputs[$keys[0]]);
+            for ($i = 0; $i < $numItems; $i++) {
+                $item = [];
+                foreach ($keys as $key) {
+                    $item[$key] = $inputs[$key][$i];
+                }
+                $data[] = $item;
+            }
+            $jsonData = json_encode($data);
         }
-        $jsonData = json_encode($data);
-    }
 
 
         // $keys = array_keys($inputs);
@@ -138,5 +192,13 @@ class SettingController extends Controller
         );
 
         return redirect()->route('setting.index')->with('success','Updated successfully');
+    }
+
+    private function uploadFile($file, $type)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $filenameToStore = $type . '.' . $extension;
+        $file->move(public_path('images/'), $filenameToStore);
+        return $filenameToStore;
     }
 }
