@@ -44,34 +44,40 @@ class AppSettingsServiceProvider extends ServiceProvider
 
 
         // If email settings exist, update email configurations dynamically
-        if ($emailSettings) {
+        // Ensure the settings are available before applying
+        if ($emailSettings && $emailSettings->data) {
             $emailData = json_decode($emailSettings->data, true);
 
-            // Override email configuration if settings exist
-            if (isset($emailData['mail_mailer'])) {
-                config(['mail.mailer' => $emailData['mail_mailer']]);
+            // Ensure that we have the necessary keys before attempting to configure
+            if ($emailData) {
+                if (isset($emailData['mail_mailer'])) {
+                    config(['mail.default' => $emailData['mail_mailer']]);
+                }
+                if (isset($emailData['mail_host'])) {
+                    config(['mail.mailers.smtp.host' => $emailData['mail_host']]);
+                }
+                if (isset($emailData['mail_port'])) {
+                    config(['mail.mailers.smtp.port' => $emailData['mail_port']]);
+                }
+                if (isset($emailData['mail_username'])) {
+                    config(['mail.mailers.smtp.username' => $emailData['mail_username']]);
+                }
+                if (isset($emailData['mail_password'])) {
+                    config(['mail.mailers.smtp.password' => $emailData['mail_password']]);
+                }
+                if (isset($emailData['mail_encryption'])) {
+                    config(['mail.mailers.smtp.encryption' => $emailData['mail_encryption']]);
+                }
+                if (isset($emailData['mail_from_address'])) {
+                    config(['mail.from.address' => $emailData['mail_from_address']]);
+                }
+                if (isset($emailData['mail_from_name'])) {
+                    config(['mail.from.name' => $emailData['mail_from_name']]);
+                }
             }
-            if (isset($emailData['mail_host'])) {
-                config(['mail.host' => $emailData['mail_host']]);
-            }
-            if (isset($emailData['mail_port'])) {
-                config(['mail.port' => $emailData['mail_port']]);
-            }
-            if (isset($emailData['mail_username'])) {
-                config(['mail.username' => $emailData['mail_username']]);
-            }
-            if (isset($emailData['mail_password'])) {
-                config(['mail.password' => $emailData['mail_password']]);
-            }
-            if (isset($emailData['mail_encryption'])) {
-                config(['mail.encryption' => $emailData['mail_encryption']]);
-            }
-            if (isset($emailData['mail_from_address'])) {
-                config(['mail.from.address' => $emailData['mail_from_address']]);
-            }
-            if (isset($emailData['mail_from_name'])) {
-                config(['mail.from.name' => $emailData['mail_from_name']]);
-            }
+        } else {
+            // Handle the case where email settings are not found in DB (optional fallback)
+            \Log::warning('Email settings not found or malformed in the database');
         }
     }
 }

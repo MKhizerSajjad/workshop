@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\EmailService;
+use Illuminate\Notifications\Notifiable;
 
 use Carbon\Carbon;
 use App\Models\Item;
@@ -27,10 +28,13 @@ use App\Models\SerivceLocation;
 use App\Models\Setting;
 use App\Models\TaskComment;
 use App\Models\TaskLeavePart;
+use App\Notifications\TaskCreateNotification;
 use Symfony\Component\VarDumper\VarDumper;
 
 class TaskController extends Controller
 {
+    use Notifiable;
+
     protected $emailService;
 
     public function __construct(EmailService $emailService)
@@ -438,8 +442,7 @@ class TaskController extends Controller
         $company = Setting::where('type', 'business_information')->first();
         $company = json_decode($company->data);
 
-        // Send "case received" email
-        $this->emailService->sendEmail('case_received', [
+        $data = [
             'customer_email' => $customerAdd->email,
             'customer_phone' => $customerAdd->phone,
             'customer_name' => $customerAdd->first_name,
@@ -450,7 +453,23 @@ class TaskController extends Controller
             'company_name' => $company->company_name,
             'company_email' => $company->company_email,
             'company_website' => $company->company_website,
-        ]);
+        ];
+
+        $customerAdd->notify(new TaskCreateNotification($data));
+
+        // Send "case received" email
+        // $this->emailService->sendEmail('case_received', [
+        //     'customer_email' => $customerAdd->email,
+        //     'customer_phone' => $customerAdd->phone,
+        //     'customer_name' => $customerAdd->first_name,
+        //     'case_number' => $task->code,
+        //     'date_opened' => $task->date_opened,
+        //     'problem_description' => $task->problem_description,
+        //     'tracking_link' => $trackingLink,
+        //     'company_name' => $company->company_name,
+        //     'company_email' => $company->company_email,
+        //     'company_website' => $company->company_website,
+        // ]);
 
         if(auth()->check() && Auth::user()->user_type != 4) {
             return redirect()->route('case.index')->with('success','Record created successfully');

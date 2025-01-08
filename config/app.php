@@ -20,16 +20,16 @@ return [
     'developed_by' => env('DEVELOPED_BY', 'The Tech Shelf'),
 
     // SMTP
-    'mailer' => env('MAIL_MAILER', 'smtp'),
-    'host' => env('MAIL_HOST', 'smtp.mailtrap.io'),
-    'port' => env('MAIL_PORT', 587),
-    'username' => env('MAIL_USERNAME', null),
-    'password' => env('MAIL_PASSWORD', null),
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-    'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'noreply@example.com'),
-        'name' => env('MAIL_FROM_NAME', env('APP_NAME')),
-    ],
+    // 'mailer' => env('MAIL_MAILER', 'smtp'),
+    // 'host' => env('MAIL_HOST', 'smtp.mailtrap.io'),
+    // 'port' => env('MAIL_PORT', 587),
+    // 'username' => env('MAIL_USERNAME', null),
+    // 'password' => env('MAIL_PASSWORD', null),
+    // 'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    // 'from' => [
+    //     'address' => env('MAIL_FROM_ADDRESS', 'noreply@example.com'),
+    //     'name' => env('MAIL_FROM_NAME', env('APP_NAME')),
+    // ],
 
     /*
     |--------------------------------------------------------------------------
