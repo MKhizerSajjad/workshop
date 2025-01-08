@@ -30,7 +30,7 @@ class SettingsSeeder extends Seeder
                 [
                     'type'      => 'email_settings',
                     // 'data'      => '[{"invoice_email": "invoice@mywebsite.com", "notification_email": "notifications@mywebsite.com", "homepage_email": "contact@mywebsite.com"}]',
-                    'data'      => '[{"mail_mailer": "smtp", "mail_host": "mail.mkhizersajjad.com", "mail_port": 587, "mail_username": "info@mkhizersajjad.com", "mail_password": "mail_mks@123", "mail_encryption": "tls", "mail_from_address": "info@mkhizersajjad.com", "mail_from_name": "FabiRide"}]',
+                    'data'      => '{"mail_mailer": "smtp", "mail_host": "mail.mkhizersajjad.com", "mail_port": 587, "mail_username": "info@mkhizersajjad.com", "mail_password": "mail_mks@123", "mail_encryption": "tls", "mail_from_address": "info@mkhizersajjad.com", "mail_from_name": "FabiRide"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
