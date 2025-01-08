@@ -149,6 +149,12 @@
                         <form method="POST" action="{{ route('setting.store') }}">
                             @csrf
                             <input type="hidden" name="type" value="tax">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                <div class="me-2" style="width: 33%;">Tax Name</div>
+                                <div class="me-2" style="width: 33%;">Percentage</div>
+                                <div class="me-2" style="width: 33%;">Status</div>
+                            </div>
                             <div id="tax-container">
                                 @foreach ($taxData as $tax)
                                 <div class="d-flex align-items-center tax-row mb-2">
@@ -184,6 +190,12 @@
                         <form method="POST" action="{{ route('setting.store') }}">
                             @csrf
                             <input type="hidden" name="type" value="term">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                <div class="me-2" style="width: 30%;">Title</div>
+                                <div class="me-2" style="width: 30%;">Link</div>
+                                <div class="me-2" style="width: 30%;">Required</div>
+                            </div>
                             <div id="terms-container">
                                 @foreach ($termsData as $term)
                                 <div class="d-flex align-items-center terms-row mb-2">
