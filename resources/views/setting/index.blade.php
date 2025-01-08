@@ -160,7 +160,7 @@
                                 </div>
                                 @endforeach
                             </div>
-                            {{-- <div class="col-lg-1 offset-lg-11">
+                            {{-- <div class="d-flex justify-content-end">
                                 <button type="button" id="btn-add-tax" class="btn btn-success">
                                     <i class="bx bx-plus-circle me-1"></i>
                                 </button>
@@ -183,14 +183,20 @@
                                 <div class="d-flex align-items-center terms-row mb-2">
                                     <input type="text" name="title[]" class="form-control me-2" value="{{ $term['title'] ?? '' }}" placeholder="Title" required>
                                     <input type="text" name="link[]" class="form-control me-2" value="{{ $term['link'] ?? '' }}" placeholder="Link" required>
+                                    <select id="is_required" name="is_required[]" class="form-control me-2" required>
+                                        <option value="">Select Option </option>
+                                        @foreach (getGenStatus('bool') as $key => $status)
+                                            <option value="{{ ++$key }}" @if($key == $term['is_required']) selected @endif>{{ $status }}</option>
+                                        @endforeach
+                                    </select>
                                     <button type="button" class="btn btn-danger btn-remove-terms">
-                                        <i class="bx bx-plus-circle me-1"></i>
+                                        <i class="bx bx-minus-circle me-1"></i>
                                     </button>
                                 </div>
                                 @endforeach
                             </div>
-                            <div class="col-lg-1 offset-lg-11">
-                                <button type="button" id="btn-add-terms" class="btn btn-success">
+                            <div class="d-flex justify-content-end">
+                                <button type="button" id="btn-add-terms" class="btn btn-success ">
                                     <i class="bx bx-plus-circle me-1"></i>
                                 </button>
                             </div>
@@ -230,8 +236,14 @@
                 <div class="d-flex align-items-center terms-row mb-2">
                     <input type="text" name="title[]" class="form-control me-2" placeholder="Title" required>
                     <input type="text" name="link[]" class="form-control me-2" placeholder="Link" required>
+                    <select id="is_required" name="is_required[]" class="form-control me-2" required>
+                        <option value="">Select Option </option>
+                        @foreach (getGenStatus('bool') as $key => $status)
+                            <option value="{{ ++$key }}" @if($key == $term['is_required']) selected @endif>{{ $status }}</option>
+                        @endforeach
+                    </select>
                     <button type="button" class="btn btn-danger btn-remove-terms">
-                        <i class="bx bx-plus-circle me-1"></i>
+                        <i class="bx bx-minus-circle me-1"></i>
                     </button>
                 </div>
             `);
