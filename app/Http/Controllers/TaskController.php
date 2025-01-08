@@ -165,20 +165,7 @@ class TaskController extends Controller
         foreach ($fieldsArray as $field) {
             $fieldName = $serviceLocationID . '-' . $field->name;
             $isMandatory = $field->is_mandatory == 1 ? 'required' : 'nullable';
-
-            // Apply validation for phone and email
-            if ($field->name === 'phone') {
-                // Unique validation for phone
-                $rules[$fieldName] = $isMandatory . '|unique:users,phone';
-            } elseif ($field->name === 'email') {
-                // Unique validation for email
-                $rules[$fieldName] = $isMandatory . '|unique:users,email';
-            } else {
-                // For all other fields, apply the mandatory/nullable validation
-                $rules[$fieldName] = $isMandatory;
-            }
-            // $isMandatory = $field->is_mandatory == 1 ? 'required' : 'nullable';
-            // $rules[$fieldName] = $isMandatory;
+            $rules[$fieldName] = $isMandatory;
         }
         $rules = array_merge($additionalRules, $rules);
 
@@ -192,7 +179,7 @@ class TaskController extends Controller
         }
 
         $customerAdd = Customer::updateOrCreate(
-            ['phone' => $phone], //
+            ['phone' => $phone],
             $customer
         );
 
