@@ -47,6 +47,8 @@ class SettingController extends Controller
         if ($request->type == 'business_information') {
             $this->validate($request, [
                 'company_name' => 'required|string|max:255',
+                'company_email' => 'required|string|max:50',
+                'company_website' => 'required|string|max:50',
                 'company_phone' => 'required|string|max:15',
                 'company_address' => 'required|string|max:255',
                 'working_days' => 'required|array',

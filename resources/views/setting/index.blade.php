@@ -68,8 +68,16 @@
                                         <input type="text" name="company_name" class="form-control" value="{{ $businessData['company_name'] }}" required>
                                     </div>
                                     <div class="col-12 mb-3">
+                                        <label for="company_email">Company Email</label>
+                                        <input type="text" name="company_email" class="form-control" value="{{ $businessData['company_email'] }}" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
                                         <label for="company_phone">Company Phone</label>
                                         <input type="text" name="company_phone" class="form-control" value="{{ $businessData['company_phone'] }}" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="company_website">Company Website</label>
+                                        <input type="text" name="company_website" class="form-control" value="{{ $businessData['company_website'] }}" required>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="company_address">Company Address</label>

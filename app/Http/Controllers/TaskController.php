@@ -7,6 +7,7 @@ use App\Models\TaskItemProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Services\EmailService;
 
 use Carbon\Carbon;
 use App\Models\Item;
@@ -30,6 +31,13 @@ use Symfony\Component\VarDumper\VarDumper;
 
 class TaskController extends Controller
 {
+    protected $emailService;
+
+    public function __construct(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+
     public function index(Request $request)
     {
         $limit = $request->limit ?? 10;
@@ -424,16 +432,31 @@ class TaskController extends Controller
             }
         }
 
+        $baseUrl = url('/');
+        $trackingLink = $baseUrl . '/booking/status_search?_token=z6oZeY6Nk52fFBc8sYKKxMkv1sGZowc12eLRsaWV&case_number='. $task->code .' phonne=' . $customerAdd->phone;
+
+        $company = Setting::where('type', 'business_information')->first();
+        $company = json_decode($company->data);
+
+        // Send "case received" email
+        $this->emailService->sendEmail('case_received', [
+            'customer_email' => $customerAdd->email,
+            'customer_phone' => $customerAdd->phone,
+            'customer_name' => $customerAdd->first_name,
+            'case_number' => $task->code,
+            'date_opened' => $task->date_opened,
+            'problem_description' => $task->problem_description,
+            'tracking_link' => $trackingLink,
+            'company_name' => $company->company_name,
+            'company_email' => $company->company_email,
+            'company_website' => $company->company_website,
+        ]);
+
         if(auth()->check() && Auth::user()->user_type != 4) {
             return redirect()->route('case.index')->with('success','Record created successfully');
         } else {
             return redirect()->route('bookingStatusSearch', ['case_number' => $invoce, 'phone' => $phone])->with('success','Your booking has been created successfully');
         }
-
-
-
-
-
 
         // ## General info
         // $job                      = new Job;
