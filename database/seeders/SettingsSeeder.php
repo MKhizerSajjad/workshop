@@ -17,13 +17,13 @@ class SettingsSeeder extends Seeder
             $data = [
                 [
                     'type'      => 'general',
-                    'data'      => '{"website_name": "FabiRide", "developed_by": "The Tech Shelf", "currency": "USD", "case_prefix": "CASE-"}',
+                    'data'      => '{"website_name": "FabiRide", "report_company": "FabiRide", "developed_by": "The Tech Shelf", "currency": "USD", "case_prefix": "CASE-"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
                 [
                     'type'      => 'business_information',
-                    'data'      => '{"company_name": "FabiRide", "company_email": "customer@fabiRide.com", "company_phone": "+1234567890", "company_website": "https://fabiride.lt", "company_address": "123 Street, City", "working_days": ["Mon", "Tue", "Wed", "Thu", "Fri"], "working_hours": {"start": "09:00", "end": "17:00"}, "logo": "logo.jpg", "favicon": "favicon.ico"}',
+                    'data'      => '{"company_name": "FabiRide", "company_email": "customer@fabiRide.com", "company_phone": "+1234567890", "company_website": "https://fabiride.lt", "company_address": "123 Street, City", "working_days": ["Mon", "Tue", "Wed", "Thu", "Fri"], "working_hours": {"start": "09:00", "end": "17:00"}, "main_color": "", "logo": "logo.jpg", "favicon": "favicon.ico"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
