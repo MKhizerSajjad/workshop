@@ -1,5 +1,5 @@
 
-<header id="page-topbar">
+<header id="page-topbar" style="background-color: {{config('app.main_color')}} !important;">
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->

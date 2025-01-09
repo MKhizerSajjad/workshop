@@ -50,7 +50,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <address>
-                                        <strong>Servisas - {{ config('app.company_name') }}:</strong><br><br>
+                                        <strong>Servisas - {{ config('app.report_company') }}:</strong><br><br>
                                         {{-- Technikas g. 7, Kaunas<br> --}}
                                         <b>Email: </b> {{ config('app.company_email') }}<br>
                                         <b>Phone: </b> {{ config('app.company_phone') }}<br>

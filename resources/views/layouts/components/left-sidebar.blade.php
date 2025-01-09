@@ -1,4 +1,4 @@
-<div class="vertical-menu">
+<div class="vertical-menu" style="background-color: {{config('app.main_color')}} !important;">
     @php
         $userType = auth()->user()->user_type ?? null;
     @endphp

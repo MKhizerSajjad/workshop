@@ -60,11 +60,15 @@
                             <input type="hidden" name="type" value="general">
                             <input type="hidden" name="developed_by" value="The Tech Shelf">
                             <div class="mb-3">
-                                <label for="website_name">Company Name</label>
+                                <label for="website_name">Website Name</label>
                                 <input type="text" name="website_name" class="form-control" value="{{ $generalData['website_name'] }}" required>
                             </div>
                             <div class="mb-3">
-                                <label for="currency">Currency {{$generalData['currency']}}</label>
+                                <label for="report_company">Report Company </label>
+                                <input type="text" name="report_company" class="form-control" value="{{ $generalData['report_company'] }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="currency">Currency </label>
                                 <select name="currency" class="form-control" required>
                                     <option value="">Select Currency</option>
                                     @foreach (['EUR', 'USD', 'GBP'] as $currency)
@@ -124,6 +128,10 @@
                                     <input type="time" name="working_hours[start]" class="form-control me-2" value="{{ $businessData['working_hours']['start'] }}" required>
                                     <input type="time" name="working_hours[end]" class="form-control" value="{{ $businessData['working_hours']['end'] }}" required>
                                 </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="main_color">Main Color</label>
+                                <input type="color" name="main_color" class="form-control" value="{{ $businessData['main_color'] ?? '' }}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="logo">Logo</label>

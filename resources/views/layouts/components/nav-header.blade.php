@@ -2,7 +2,7 @@
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
-            <div class="navbar-brand-box pt-3">
+            <div class="navbar-brand-box pt-3" style="background-color: {{config('app.main_color')}} !important;">
                 <a href="{{route('dashboard')}}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{ asset('images/logo.webp') }}" alt="" height="22">

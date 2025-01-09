@@ -47,6 +47,7 @@ class SettingController extends Controller
         if ($request->type == 'general') {
             $this->validate($request, [
                 'website_name' => 'nullable|string|max:25',
+                'report_company' => 'nullable|string|max:25',
                 'currency' => 'required|string|max:10',
                 'case_prefix' => 'required|string|max:5'
             ]);
@@ -63,6 +64,7 @@ class SettingController extends Controller
                 'working_days' => 'required|array',
                 'working_hours.start' => 'required|date_format:H:i',
                 'working_hours.end' => 'required|date_format:H:i',
+                'main_color' => 'nullable|regex:/^#([A-Fa-f0-9]{3}){1,2}$/',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'favicon' => 'nullable|mimes:jpeg,png,jpg,gif,ico,webp|max:1024',
             ]);
