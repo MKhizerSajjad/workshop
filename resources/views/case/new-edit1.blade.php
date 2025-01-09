@@ -1238,7 +1238,7 @@
 
                         <div class="">
                             <div>
-                                <label for="status" class="col-form-label">Status</label>
+                                <label for="status" class="col-form-label">Customer Status</label>
                                 <select id="user_status" name="status" class="select2 form-control @error('status') is-invalid @enderror" required>
                                     <option value="">Select Status</option>
                                     @foreach (getGenStatus('user') as $key => $stat)
