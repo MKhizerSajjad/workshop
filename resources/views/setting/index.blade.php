@@ -41,6 +41,7 @@
         @endif
 
         @php
+            $generalData = json_decode($data['general']['data'] ?? '{}', true);
             $businessData = json_decode($data['business_information']['data'] ?? '{}', true);
             $emailData = json_decode($data['email_settings']['data'] ?? '{}', true);
             $taxData = json_decode($data['tax']['data'] ?? '[]', true);
@@ -48,8 +49,41 @@
         @endphp
 
         <div class="row">
+
             <!-- Business Information -->
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">General Information</h4>
+                        <form method="POST" action="{{ route('setting.store') }}" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="type" value="general">
+                            <input type="hidden" name="developed_by" value="The Tech Shelf">
+                            <div class="mb-3">
+                                <label for="website_name">Company Name</label>
+                                <input type="text" name="website_name" class="form-control" value="{{ $generalData['website_name'] }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="currency">Currency {{$generalData['currency']}}</label>
+                                <select name="currency" class="form-control" required>
+                                    <option value="">Select Currency</option>
+                                    @foreach (['EUR', 'USD', 'GBP'] as $currency)
+                                        <option value="{{ $currency }}"  @if($currency == $generalData['currency']) selected @endif>{{ $currency }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="case_prefix">Case Prefix</label>
+                                <input type="text" name="case_prefix" class="form-control" value="{{ $generalData['case_prefix'] ?? '' }}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary waves-effect waves-light w-100">Update General Information</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Information -->
+            <div class="col-md-4 col-sm-12">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Business Information</h4>
@@ -112,7 +146,7 @@
             </div>
 
             <!-- Email Settings -->
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Email Settings</h4>

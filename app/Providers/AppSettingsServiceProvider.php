@@ -50,12 +50,34 @@ class AppSettingsServiceProvider extends ServiceProvider
 
             if (isset($businessInformationData['logo'])) {
                 $logo = $businessInformationData['logo'];
-                config(['app.logo' => $logo]);  // Override
+                config(['app.logo' => $logo]);
             }
 
             if (isset($businessInformationData['favicon'])) {
                 $favicon = $businessInformationData['favicon'];
-                config(['app.favicon' => $favicon]);  // Override
+                config(['app.favicon' => $favicon]);
+            }
+
+            if (isset($businessInformationData['company_email'])) {
+                $company_email = $businessInformationData['company_email'];
+                config(['app.company_email' => $company_email]);
+            }
+
+            if (isset($businessInformationData['company_phone'])) {
+                $company_phone = $businessInformationData['company_phone'];
+                config(['app.company_phone' => $company_phone]);
+            }
+
+            if (isset($businessInformationData['company_address'])) {
+                $company_address = $businessInformationData['company_address'];
+                config(['app.company_address' => $company_address]);
+            }
+
+            if (isset($businessInformationData['working_hours'])) {
+                $working_hours_start = $businessInformationData['working_hours']['start'];
+                $working_hours_end = $businessInformationData['working_hours']['end'];
+                config(['app.working_hours_start' => $working_hours_start]);
+                config(['app.working_hours_end' => $working_hours_end]);
             }
         }
 

@@ -53,26 +53,25 @@
             <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect">
                     <i class="bx bx-envelope"></i>
-                    info@fabiride.com
+                    {{ config('app.company_email') }}
                 </button>
             </div>
             <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect">
                     <i class="bx bx-map"></i>
-                    Technikos g. 7, Kaunas
+                    {{ config('app.company_address') }}
                 </button>
             </div>
             <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect">
                     <i class="bx bx-phone"></i>
-                    +370 604 15255
+                    {{ config('app.company_phone') }}
                 </button>
             </div>
             <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect">
                     <i class="bx bx-time"></i>
-                    I-V 11:00 - 19:00 <b>|</b>
-                    VI  11:00 - 15:00
+                    {{ config('app.working_hours_start') .' - '. config('app.working_hours_end') }}
                 </button>
             </div>
 

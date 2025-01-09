@@ -17,6 +17,7 @@ class SettingController extends Controller
         $data = [
             'tax' => $settings->firstWhere('type', 'tax'),
             'term' => $settings->firstWhere('type', 'term'),
+            'general' => $settings->firstWhere('type', 'general'),
             'business_information' => $settings->firstWhere('type', 'business_information'),
             'email_settings' => $settings->firstWhere('type', 'email_settings'),
             'payments' => $settings->firstWhere('type', 'payments'),
@@ -40,6 +41,14 @@ class SettingController extends Controller
                 'title.*' => 'required',
                 'link.*' => 'required',
                 'is_required.*' => 'required',
+            ]);
+        }
+
+        if ($request->type == 'general') {
+            $this->validate($request, [
+                'website_name' => 'nullable|string|max:25',
+                'currency' => 'required|string|max:10',
+                'case_prefix' => 'required|string|max:5'
             ]);
         }
 
@@ -154,7 +163,7 @@ class SettingController extends Controller
             // Store the updated data
             $jsonData = json_encode($inputs);
 
-        } elseif ($request->type == 'email_settings' || $request->type == 'payments') {
+        } elseif ($request->type == 'email_settings' || $request->type == 'payments' || $request->type == 'general') {
             $jsonData = json_encode($inputs);
 
         } else {
