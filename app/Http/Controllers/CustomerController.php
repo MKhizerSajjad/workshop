@@ -74,7 +74,7 @@ class CustomerController extends Controller
     public function edit($id)
     {
         $user = Customer::findOrFail($id);
-        $cases = Task::whereId($id)->get();
+        $cases = Task::where('customer_id', $id)->get();
         return view('customer.edit', compact('user', 'cases'));
     }
 
