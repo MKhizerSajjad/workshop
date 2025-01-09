@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\EmailService;
-use App\Services\StripeApiService;
+// use App\Services\StripeApiService;
 use Illuminate\Notifications\Notifiable;
 
 use Carbon\Carbon;
@@ -37,12 +37,12 @@ class TaskController extends Controller
     use Notifiable;
 
     protected $emailService;
-    protected $stripeApiService;
+    // protected $stripeApiService;
 
-    public function __construct(EmailService $emailService, StripeApiService $stripeApiService)
+    public function __construct(EmailService $emailService) //, StripeApiService $stripeApiService
     {
         $this->emailService = $emailService;
-        $this->stripeApiService = $stripeApiService;
+        // $this->stripeApiService = $stripeApiService;
     }
 
     public function index(Request $request)
