@@ -143,9 +143,17 @@ class TaskController extends Controller
     {
         $serviceLocationID = $request->input('services_location');
         $customerValidation = $this->validateCustomer($serviceLocationID, $request);
+        $customerNotExist = $this->customerNotExist($serviceLocationID, $request);
+
         if ($customerValidation) {
             return redirect()->back()->withInput()->withErrors([
                 'customer' => 'SUSPENDED – Please ask for help.'
+            ]);
+        }
+
+        if($customerNotExist) {
+            return redirect()->back()->withInput()->withErrors([
+                'customer' => 'Email and phone number combination is not valid, use other phone or email.'
             ]);
         }
 
@@ -153,6 +161,7 @@ class TaskController extends Controller
         $fieldsArray = json_decode($serviceLocationFields);
 
         $additionalRules = [
+            'platform_id' => 'required',
             'item' => 'required',
             'manufacturer' => 'required',
             'model' => 'required',
@@ -184,6 +193,8 @@ class TaskController extends Controller
         foreach ($fieldsArray as $field) {
             $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
         }
+
+        $customer['platform_id'] = $request->platform_id;
 
         $customerAdd = Customer::updateOrCreate(
             ['phone' => $phone],
@@ -461,13 +472,13 @@ class TaskController extends Controller
         ];
 
 
-        $response = $this->stripeApiService->createCustomer($customerAdd->email, $customerFullname);
-        logger('STRIPE createCustomer() RESPONSE : ');
-        logger(json_encode($response));
+        // $response = $this->stripeApiService->createCustomer($customerAdd->email, $customerFullname);
+        // logger('STRIPE createCustomer() RESPONSE : ');
+        // logger(json_encode($response));
 
-        $response = $this->stripeApiService->createPaymentMethod($customerAdd->email, $customerFullname);
-        logger('STRIPE createCustomer() RESPONSE : ');
-        logger(json_encode($response));
+        // $response = $this->stripeApiService->createPaymentMethod($customerAdd->email, $customerFullname);
+        // logger('STRIPE createCustomer() RESPONSE : ');
+        // logger(json_encode($response));
 
         $customerId   = $customerAdd->id;
         $paymentMethod = 'card';
@@ -476,9 +487,9 @@ class TaskController extends Controller
         $description   = $task->problem_description;
         $email         = $customerAdd->email;
 
-        $responsePayIntent = $this->stripeApiService->createPaymentIntent($customerId, $paymentMethod, $amount, $currency, $description, $email);
-        logger('STRIPE createPaymentIntent() RESPONSE : ');
-        logger(json_encode($responsePayIntent));
+        // $responsePayIntent = $this->stripeApiService->createPaymentIntent($customerId, $paymentMethod, $amount, $currency, $description, $email);
+        // logger('STRIPE createPaymentIntent() RESPONSE : ');
+        // logger(json_encode($responsePayIntent));
 
 
         $customerAdd->notify(new TaskCreateNotification($data));
@@ -1271,5 +1282,17 @@ class TaskController extends Controller
             ->first();
 
         return $suspendedCustomer ?? '';
+    }
+
+    private function customerNotExist($serviceLocationID, $request) {
+        $phone = $request->input($serviceLocationID . '-' . 'phone');
+        $email = $request->input($serviceLocationID . '-' . 'email');
+        $emailOrPhoneExist = Customer::where(function ($query) use ($phone, $email) {
+                $query->Where('email', $email)
+                    ->where('phone', '!=', $phone);
+            })
+            ->first();
+
+        return $emailOrPhoneExist ?? '';
     }
 }
