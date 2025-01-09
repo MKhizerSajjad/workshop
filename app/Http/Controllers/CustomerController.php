@@ -101,9 +101,9 @@ class CustomerController extends Controller
                 'last_name' => ['required', 'string', 'max:150'],
                 'email' => ['required', 'string', 'email', 'max:70', 'unique:customers,email,' . $id],
                 'phone' => ['required', 'string', 'regex:/^\+?[0-9]\d{1,14}$/', 'max:15', 'unique:customers,phone,' . $id],
-                'company' => ['required', 'string', 'max:50'],
-                'city' => ['required', 'string', 'max:50'],
-                'address' => ['required', 'string', 'max:255'],
+                // 'company' => ['required', 'string', 'max:50'],
+                // 'city' => ['required', 'string', 'max:50'],
+                // 'address' => ['required', 'string', 'max:255'],
             ]);
 
             $data = [

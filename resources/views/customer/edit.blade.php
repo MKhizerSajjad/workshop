@@ -102,7 +102,7 @@
 
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="company">Company <span class="text text-danger"> *</span></label>
+                                            <label for="company">Company </label>
                                             <input id="company" name="company" type="text" class="form-control @error('company') is-invalid @enderror" placeholder="Company" value="{{ old('company', $user->company) }}">
                                             @error('company')
                                                 <span class="invalid-feedback" role="alert">
@@ -114,7 +114,7 @@
 
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="city">City <span class="text text-danger"> *</span></label>
+                                            <label for="city">City </label>
                                             <input id="city" name="city" type="text" class="form-control @error('city') is-invalid @enderror" placeholder="City" value="{{ old('city', $user->city) }}">
                                             @error('city')
                                                 <span class="invalid-feedback" role="alert">
@@ -126,7 +126,7 @@
 
                                     <div class="col-sm-12">
                                         <div class="mb-3">
-                                            <label for="address">Address <span class="text text-danger"> *</span></label>
+                                            <label for="address">Address </label>
                                             <textarea id="address" name="address" class="form-control @error('address') is-invalid @enderror" placeholder="Address" rows="3">{{ old('address', $user->address) }}</textarea>
                                             @error('address')
                                                 <span class="invalid-feedback" role="alert">
