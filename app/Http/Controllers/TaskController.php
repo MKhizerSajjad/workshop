@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\EmailService;
+use App\Services\StripeApiService;
 use Illuminate\Notifications\Notifiable;
 
 use Carbon\Carbon;
@@ -36,10 +37,12 @@ class TaskController extends Controller
     use Notifiable;
 
     protected $emailService;
+    protected $stripeApiService;
 
-    public function __construct(EmailService $emailService)
+    public function __construct(EmailService $emailService, StripeApiService $stripeApiService)
     {
         $this->emailService = $emailService;
+        $this->stripeApiService = $stripeApiService;
     }
 
     public function index(Request $request)
@@ -442,10 +445,12 @@ class TaskController extends Controller
         $company = Setting::where('type', 'business_information')->first();
         $company = json_decode($company->data);
 
+        $customerFullname = $customerAdd->first_name . ' ' . $customerAdd->last_name;
+
         $data = [
             'customer_email' => $customerAdd->email,
             'customer_phone' => $customerAdd->phone,
-            'customer_name' => $customerAdd->first_name,
+            'customer_name' => $customerFullname,
             'case_number' => $task->code,
             'date_opened' => $task->date_opened,
             'problem_description' => $task->problem_description,
@@ -454,6 +459,27 @@ class TaskController extends Controller
             'company_email' => $company->company_email,
             'company_website' => $company->company_website,
         ];
+
+
+        $response = $this->stripeApiService->createCustomer($customerAdd->email, $customerFullname);
+        logger('STRIPE createCustomer() RESPONSE : ');
+        logger(json_encode($response));
+
+        $response = $this->stripeApiService->createPaymentMethod($customerAdd->email, $customerFullname);
+        logger('STRIPE createCustomer() RESPONSE : ');
+        logger(json_encode($response));
+
+        $customerId   = $customerAdd->id;
+        $paymentMethod = 'card';
+        $amount        = $task->total;
+        $currency      = 'EUR';
+        $description   = $task->problem_description;
+        $email         = $customerAdd->email;
+
+        $responsePayIntent = $this->stripeApiService->createPaymentIntent($customerId, $paymentMethod, $amount, $currency, $description, $email);
+        logger('STRIPE createPaymentIntent() RESPONSE : ');
+        logger(json_encode($responsePayIntent));
+
 
         $customerAdd->notify(new TaskCreateNotification($data));
 
@@ -1217,7 +1243,7 @@ class TaskController extends Controller
 
     public function generateInvoiceCode() {
         $currentYear = Carbon::now()->format('Y');
-        $code = intval(substr($currentYear, 2, 4));
+        $code = config('app.case_prefix') . intval(substr($currentYear, 2, 4));
         $todaysCount = Task::where('code', 'LIKE', $code.'%')->count();
         // Increment the max code number by 1, if null set it to 1
         return $code. str_pad(++$todaysCount, 5, '0', STR_PAD_LEFT);

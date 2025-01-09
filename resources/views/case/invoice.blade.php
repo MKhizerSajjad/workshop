@@ -31,8 +31,8 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="auth-logo mb-4">
-                                            <img src="{{ asset('images/logo.png') }}" alt="logo" class="auth-logo-dark" height="60"/>
-                                            <img src="{{ asset('images/logo.png') }}" alt="logo" class="auth-logo-light" height="60"/>
+                                            <img src="{{ asset('images/'.config('app.logo')) }}" alt="logo" class="auth-logo-dark" height="60"/>
+                                            <img src="{{ asset('images/'.config('app.logo')) }}" alt="logo" class="auth-logo-light" height="60"/>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 text-sm-end">
@@ -50,11 +50,11 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <address>
-                                        <strong>Servisas - FabiRide:</strong><br><br>
-                                        Technikas g. 7, Kaunas<br>
-                                        <b>Email: </b> servisas@fabiride.com<br>
-                                        <b>Phone: </b> +370 60415255<br>
-                                        Springfield, ST 54321
+                                        <strong>Servisas - {{ config('app.company_name') }}:</strong><br><br>
+                                        {{-- Technikas g. 7, Kaunas<br> --}}
+                                        <b>Email: </b> {{ config('app.company_email') }}<br>
+                                        <b>Phone: </b> {{ config('app.company_phone') }}<br>
+                                        {{ config('app.company_address') }}
                                     </address>
                                 </div>
                                 <div class="col-sm-6 text-sm-end">

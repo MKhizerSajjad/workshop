@@ -41,6 +41,16 @@ class AppSettingsServiceProvider extends ServiceProvider
                 $developedBy = $settingsData['developed_by'];
                 config(['app.developed_by' => $developedBy]);  // Dynamically set the company name
             }
+
+            if (isset($settingsData['case_prefix'])) {
+                $casePrefix = $settingsData['case_prefix'];
+                config(['app.case_prefix' => $casePrefix]);
+            }
+
+            if (isset($settingsData['currency'])) {
+                $currency = $settingsData['currency'];
+                config(['app.currency' => $currency]);
+            }
         }
 
 
@@ -56,6 +66,11 @@ class AppSettingsServiceProvider extends ServiceProvider
             if (isset($businessInformationData['favicon'])) {
                 $favicon = $businessInformationData['favicon'];
                 config(['app.favicon' => $favicon]);
+            }
+
+            if (isset($businessInformationData['company_name'])) {
+                $company_name = $businessInformationData['company_name'];
+                config(['app.company_name' => $company_name]);
             }
 
             if (isset($businessInformationData['company_email'])) {
