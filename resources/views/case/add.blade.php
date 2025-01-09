@@ -309,6 +309,20 @@
                                                 </div>
                                             @endforeach
                                         </div>
+                                        <div class="col-sm-12 px-3">
+                                            <label for="platform_id">Where Customer Found Us? {{old('platform_id')}}</label>
+                                            <select id="platform_id" name="platform_id" class="select2 form-control @error('platform_id') is-invalid @enderror">
+                                                <option value="">Select Platform </option>
+                                                @foreach (getPlatforms() as $platform)
+                                                    <option value="{{ $platform->id }}" {{ old('platform_id') == $platform->id ? 'selected' : '' }}>{{ $platform->name }}</option>
+                                                @endforeach
+                                                @error('platform_id')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </select>
+                                        </div>
                                         <div>
                                             <h4 class="card-title mt-5">Products</h4>
                                             <p class="card-title-desc">Products consumed in this case</p>
