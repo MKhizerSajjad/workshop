@@ -39,9 +39,9 @@
                                         <h4 class="float-end font-size-16">Order # {{$task->code}}</h4><br><br>
                                         <strong>Payment Status: </strong>{!! getPayment('status', $task->payment_status, 'badge') !!}<br>
                                         <strong>Order Status: </strong>{!! getCaseStatus('general', $task->status, 'badge') !!}<br>
-                                        <strong>Opened Date: </strong> {{ date('D d M Y', strtotime($task->date_opened)) }}<br>
+                                        <strong>Opened Date: </strong> {{ date('Y-m-d', strtotime($task->date_opened)) }}<br>
                                         @if (!empty($task->date_closed))
-                                            <strong>Completed Date: </strong> {{ date('D d M Y', strtotime($task->date_closed)) }}<br>
+                                            <strong>Completed Date: </strong> {{ date('Y-m-d', strtotime($task->date_closed)) }}<br>
                                         @endif
                                     </div>
                                 </div>
