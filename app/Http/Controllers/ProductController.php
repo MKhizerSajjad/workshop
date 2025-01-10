@@ -1,6 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductsReportExport;
 
 use Carbon\Carbon;
 use App\Models\Product;
@@ -116,6 +117,11 @@ class ProductController extends Controller
                 ->orderBy('products.name')
                 ->get();
 
+            // Check if the 'report' parameter exists in the request
+            if ($request->has('report')) {
+                // Export to Excel
+                return Excel::download(new ProductsReportExport($products), 'products_report.xlsx');
+            }
             return view('product.report',compact('products', 'from', 'to'));
         }
 

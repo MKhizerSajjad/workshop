@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ServicesReportExport;
 
 use Carbon\Carbon;
 use App\Models\Service;
@@ -132,6 +134,12 @@ class ServiceController extends Controller
                     ->groupBy('services.id', 'services.name')  // Group by service id and name
                     ->orderBy('services.name')
                     ->get();
+
+            // Check if the 'report' parameter exists in the request
+            if ($request->has('report')) {
+                // Export to Excel
+                return Excel::download(new ServicesReportExport($services), 'services_report.xlsx');
+            }
             return view('service.report',compact('services', 'from', 'to'));
         }
 

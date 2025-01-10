@@ -56,9 +56,17 @@
                         </div>
                     </div>
 
-                    @if (isset($products))
+                    @if (isset($products) && count($products) > 0)
                         <div class="card">
                             <div class="card-body">
+                                <form method="GET" action="{{ url('product/report') }}">
+                                    <input type="hidden" name="from" value="{{ $from ?? request('from') }}">
+                                    <input type="hidden" name="to" value="{{ $to ?? request('to') }}">
+                                    <input type="hidden" name="report" value="true">
+                                    <div class="float-end" bis_skin_checked="1">
+                                        <button type="submit" class="btn btn-success waves-effect waves-light me-1"><i class="fa fa-print"></i></button>
+                                    </div>
+                                </form>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -81,6 +89,12 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    @elseif(isset($products))
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="text text-danger text-center">No Record Found!</h4>
                             </div>
                         </div>
                     @endif
