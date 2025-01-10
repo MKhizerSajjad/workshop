@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">New Update Booking Form</h4>
+                        <h4 class="mb-sm-0 font-size-18">Update Booking Form <u>{{$data->task->code}}</u></h4>
                     </div>
                 </div>
             </div>
@@ -47,24 +47,40 @@
                                         <div class="col-md-12">
 
                                             {{-- top --}}
-                                            <div class="row nowrap align-items-end mb-1">
-                                                <div class="col-lg-4 col-md-6">
+                                            <div class="row nowrap align-items-end mb-3">
+                                                {{-- <div class="col-lg-3 col-md-6">
                                                     <label for="caseNumber" class="form-label">Case Number</label>
                                                     <input type="text" class="form-control" id="caseNumber" placeholder="{{$data->task->code}}" disabled>
+                                                </div> --}}
+                                                <div class="col-lg-3 col-md-12 d-flex justify-content-end">
+                                                    <div class="w-100 w-lg-auto">
+                                                        <label for="case_status" class="form-label">Case Status</label>
+                                                        <select class="form-control select2 @error('case_status') is-invalid @enderror" title="Case Status" name="case_status">
+                                                            <option value="">Select Case Status </option>
+                                                            @foreach (getCaseStatus('general') as $CSKey => $stauts)
+                                                                <option value="{{ $CSKey }}" @if ($CSKey == old('case_status', $data->task->status)) selected @endif>{{ $stauts }}</option>
+                                                            @endforeach
+                                                            @error('case_status')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-4 col-md-6">
+                                                <div class="col-lg-2 col-md-6">
                                                     <label for="bookingFilled" class="form-label">Booking Filled</label>
                                                     <input type="date" class="form-control" id="bookingFilled" name="date_opened" value="@php echo $data->task->date_opened ? date('Y-m-d', strtotime($data->task->date_opened)) : ''; @endphp">
                                                 </div>
-                                                {{-- <div class="col-lg-2 col-md-6">
+                                                <div class="col-lg-2 col-md-6">
                                                     <label for="itemDelivered" class="form-label">Item Delivered to Service</label>
                                                     <input type="date" class="form-control" id="itemDelivered"  name="date_service" value="@php echo $data->task->date_service ? date('Y-m-d', strtotime($data->task->date_service)) : ''; @endphp">
                                                 </div>
                                                 <div class="col-lg-2 col-md-6">
                                                     <label for="itemPickedUp" class="form-label">Item Picked Up / Sent Out</label>
                                                     <input type="date" class="form-control" id="itemPickedUp" name="date_closed" value="@php echo $data->task->date_closed ? date('Y-m-d', strtotime($data->task->date_closed)) : ''; @endphp">
-                                                </div> --}}
-                                                <div class="col-lg-4 col-md-12 d-flex justify-content-end">
+                                                </div>
+                                                <div class="col-lg-3 col-md-12 d-flex justify-content-end">
                                                     <div class="w-100 w-lg-auto">
                                                         <label for="technician" class="form-label">Technician</label>
                                                         <select class="form-control select2" title="Technician" name="technician_id">
@@ -76,24 +92,6 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="row nowrap align-items-end mb-4">
-                                                <div class="col-lg-3 col-md-6">
-                                                    <label for="dateRecieved" class="form-label">Delivered To Office</label>
-                                                    <input type="date" class="form-control" id="dateRecieved"  name="date_recieved" value="@php echo $data->task->date_recieved ? date('Y-m-d', strtotime($data->task->date_recieved)) : ''; @endphp">
-                                                </div>
-                                                <div class="col-lg-3 col-md-6">
-                                                    <label for="dateDispatched" class="form-label">Dispatched / Recieved</label>
-                                                    <input type="date" class="form-control" id="dateDispatched" name="date_dispatched" value="@php echo $data->task->date_dispatched ? date('Y-m-d', strtotime($data->task->date_dispatched)) : ''; @endphp">
-                                                </div>
-                                                <div class="col-lg-3 col-md-6">
-                                                    <label for="itemDelivered" class="form-label">Item Delivered to Service</label>
-                                                    <input type="date" class="form-control" id="itemDelivered"  name="date_service" value="@php echo $data->task->date_service ? date('Y-m-d', strtotime($data->task->date_service)) : ''; @endphp">
-                                                </div>
-                                                <div class="col-lg-3 col-md-6">
-                                                    <label for="itemPickedUp" class="form-label">Item Picked Up / Sent Out</label>
-                                                    <input type="date" class="form-control" id="itemPickedUp" name="date_closed" value="@php echo $data->task->date_closed ? date('Y-m-d', strtotime($data->task->date_closed)) : ''; @endphp">
                                                 </div>
                                             </div>
 
@@ -734,8 +732,7 @@
                                                         </label>
                                                     </div>
                                                     <div class="d-grid gap-2">
-                                                        <button type="submit"
-                                                            class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
+                                                        <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">UPDATE</button>
                                                     </div>
                                                 {{-- </form> --}}
                                             </div>

@@ -640,7 +640,7 @@ class TaskController extends Controller
             'service.*' => 'required',
             'parts.*' => 'required',
             'files.*' => 'required|file|mimes:jpeg,png,pdf,docx|max:10240000',
-            // 'status' => 'required',
+            'case_status' => 'required',
             // 'payment_status' => 'required',
         ];
 
@@ -696,9 +696,9 @@ class TaskController extends Controller
         $confirmation = json_encode($terms);
 
         $data = [
-            // 'status' => $request->input('status'),
             // 'payment_status' => $request->input('payment_status'),
 
+            'status' => $request->input('case_status'),
             'date_opened' => $request->input('date_opened'),
             'date_closed' => $request->input('date_closed'),
             'date_service' => $request->input('date_service'),
