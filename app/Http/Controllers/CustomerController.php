@@ -129,9 +129,9 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Customer $customer)
     {
-        User::find($user->id)->delete();
+        Customer::find($customer->id)->delete();
         return redirect()->route('customer.index')->with('success', 'Deleted successfully');
     }
 }
