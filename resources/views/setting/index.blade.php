@@ -64,7 +64,7 @@
                                 <input type="text" name="website_name" class="form-control" value="{{ $generalData['website_name'] }}" required>
                             </div>
                             <div class="mb-3">
-                                <label for="report_company">Report Company </label>
+                                <label for="report_company">Business name in case report </label>
                                 <input type="text" name="report_company" class="form-control" value="{{ $generalData['report_company'] }}" required>
                             </div>
                             <div class="mb-3">
