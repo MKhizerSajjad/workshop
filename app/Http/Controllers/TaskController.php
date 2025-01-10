@@ -700,8 +700,6 @@ class TaskController extends Controller
             // 'payment_status' => $request->input('payment_status'),
 
             'date_opened' => $request->input('date_opened'),
-            'date_recieved' => $request->input('date_recieved'),
-            'date_dispatched' => $request->input('date_dispatched'),
             'date_closed' => $request->input('date_closed'),
             'date_service' => $request->input('date_service'),
             'customer_id' => $customerAdd->id ?? $task->customer_id,
