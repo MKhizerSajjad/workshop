@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-                    @if (isset($products) && count($services) > 0)
+                    @if (isset($services) && count($services) > 0)
                         <div class="card">
                             <div class="card-body">
                                 <form method="GET" action="{{ url('service/report') }}">
@@ -89,7 +89,7 @@
                                 </table>
                             </div>
                         </div>
-                    @elseif(isset($products))
+                    @elseif(isset($services))
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="text text-danger text-center">No Record Found!</h4>
