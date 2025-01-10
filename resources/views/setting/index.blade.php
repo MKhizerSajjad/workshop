@@ -134,10 +134,10 @@
                                 <input type="color" name="main_color" class="form-control" value="{{ $businessData['main_color'] ?? '' }}" required>
                             </div>
                             <div class="mb-3">
-                                <label for="logo">Logo</label>
-                                <input type="file" name="logo" class="form-control">
-                                @if (isset($businessData['logo']))
-                                    <img src="{{ asset('images/'.$businessData['logo']) }}" width="50">
+                                <label for="report_invoice_logo">Job report & invoice logo</label>
+                                <input type="file" name="report_invoice_logo" class="form-control">
+                                @if (isset($businessData['report_invoice_logo']))
+                                    <img src="{{ asset('images/'.$businessData['report_invoice_logo']) }}" width="50">
                                 @endif
                             </div>
                             <div class="mb-3">
@@ -145,6 +145,13 @@
                                 <input type="file" name="favicon" class="form-control">
                                 @if (isset($businessData['favicon']))
                                     <img src="{{ asset('images/'.$businessData['favicon']) }}" width="50">
+                                @endif
+                            </div>
+                            <div class="mb-3">
+                                <label for="logo">Website Logo</label>
+                                <input type="file" name="logo" class="form-control">
+                                @if (isset($businessData['logo']))
+                                    <img src="{{ asset('images/'.$businessData['logo']) }}" width="50">
                                 @endif
                             </div>
                             <button type="submit" class="btn btn-primary waves-effect waves-light w-100">Update Business Information</button>
