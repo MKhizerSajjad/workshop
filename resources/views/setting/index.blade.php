@@ -68,6 +68,10 @@
                                 <input type="text" name="report_company" class="form-control" value="{{ $generalData['report_company'] }}" required>
                             </div>
                             <div class="mb-3">
+                                <label for="report_email">Case report email</label>
+                                <input type="email" name="report_email" class="form-control" value="{{ $generalData['report_email'] ?? '' }}" required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="currency">Currency </label>
                                 <select name="currency" class="form-control" required>
                                     <option value="">Select Currency</option>

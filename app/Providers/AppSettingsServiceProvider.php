@@ -40,6 +40,11 @@ class AppSettingsServiceProvider extends ServiceProvider
                 config(['app.report_company' => $websiteName]);
             }
 
+            if (isset($settingsData['report_email'])) {
+                $websiteName = $settingsData['report_email'];
+                config(['app.report_email' => $websiteName]);
+            }
+
             if (isset($settingsData['developed_by'])) {
                 $developedBy = $settingsData['developed_by'];
                 config(['app.developed_by' => $developedBy]);

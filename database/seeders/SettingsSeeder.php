@@ -17,7 +17,7 @@ class SettingsSeeder extends Seeder
             $data = [
                 [
                     'type'      => 'general',
-                    'data'      => '{"website_name": "FabiRide", "report_company": "FabiRide", "developed_by": "The Tech Shelf", "currency": "USD", "case_prefix": "CASE-"}',
+                    'data'      => '{"website_name": "FabiRide", "report_company": "FabiRide", "report_email": "customer@fabiRide.com", "developed_by": "The Tech Shelf", "currency": "USD", "case_prefix": "CASE-"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

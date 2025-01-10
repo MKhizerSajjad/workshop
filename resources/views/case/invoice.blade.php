@@ -52,7 +52,7 @@
                                     <address>
                                         <strong>{{ config('app.report_company') }}:</strong><br><br>
                                         {{-- Technikas g. 7, Kaunas<br> --}}
-                                        <b>Email: </b> {{ config('app.company_email') }}<br>
+                                        <b>Email: </b> {{ config('app.report_email') }}<br>
                                         <b>Phone: </b> {{ config('app.company_phone') }}<br>
                                         {{ config('app.company_address') }}
                                     </address>

@@ -48,6 +48,7 @@ class SettingController extends Controller
             $this->validate($request, [
                 'website_name' => 'nullable|string|max:25',
                 'report_company' => 'nullable|string|max:25',
+                'report_email' => 'nullable|string|max:50',
                 'currency' => 'required|string|max:10',
                 'case_prefix' => 'required|string|max:5'
             ]);
