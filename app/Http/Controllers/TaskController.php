@@ -997,8 +997,8 @@ class TaskController extends Controller
             'model' => $request->input('model') ?? $task->model,
             'year' => $request->input('year') ?? $task->year,
             'color' => $request->input('color') ?? $task->color,
-            'additional_info' => $request->input('additional_info') ?? $task->additional_info,
-            'problem_description' => $request->input('problem_description') ?? $task->problem_description,
+            'additional_info' => $request->input('additional_info'), // ?? $task->additional_info,
+            'problem_description' => $request->input('problem_description'), // ?? $task->problem_description,
         ];
 
         $taskId = $task->id;
