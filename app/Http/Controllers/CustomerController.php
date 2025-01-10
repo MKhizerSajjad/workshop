@@ -99,7 +99,7 @@ class CustomerController extends Controller
             $this->validate($request, [
                 'first_name' => ['required', 'string', 'max:255'],
                 'last_name' => ['required', 'string', 'max:150'],
-                'email' => ['required', 'string', 'email', 'max:70', 'unique:customers,email,' . $id],
+                'email' => ['nullable', 'string', 'email', 'max:70', 'unique:customers,email,' . $id],
                 'phone' => ['required', 'string', 'regex:/^\+?[0-9]\d{1,14}$/', 'max:15', 'unique:customers,phone,' . $id],
                 // 'company' => ['required', 'string', 'max:50'],
                 // 'city' => ['required', 'string', 'max:50'],

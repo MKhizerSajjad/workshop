@@ -78,7 +78,7 @@
 
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="email">Email <span class="text text-danger"> *</span></label>
+                                            <label for="email">Email</label>
                                             <input id="email" name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email', $user->email) }}">
                                             @error('email')
                                                 <span class="invalid-feedback" role="alert">
