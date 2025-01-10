@@ -30,16 +30,19 @@ class AppSettingsServiceProvider extends ServiceProvider
             // Decode the 'data' column which is in JSON format
             $settingsData = json_decode($generalSettings->data, true);
 
-            // Override APP_NAME if 'website_name' exists in the settings data
             if (isset($settingsData['website_name'])) {
                 $websiteName = $settingsData['website_name'];
-                config(['app.name' => $websiteName]);  // Override APP_NAME dynamically
+                config(['app.name' => $websiteName]);
             }
 
-            // Set the developed_by (or copyright company name)
+            if (isset($settingsData['report_company'])) {
+                $websiteName = $settingsData['report_company'];
+                config(['app.report_company' => $websiteName]);
+            }
+
             if (isset($settingsData['developed_by'])) {
                 $developedBy = $settingsData['developed_by'];
-                config(['app.developed_by' => $developedBy]);  // Dynamically set the company name
+                config(['app.developed_by' => $developedBy]);
             }
 
             if (isset($settingsData['case_prefix'])) {
@@ -57,6 +60,16 @@ class AppSettingsServiceProvider extends ServiceProvider
         if ($businessInformation) {
             // Decode the 'data' column which is in JSON format
             $businessInformationData = json_decode($businessInformation->data, true);
+
+            if (isset($businessInformationData['main_color'])) {
+                $main_color = $businessInformationData['main_color'];
+                config(['app.main_color' => $main_color]);
+            }
+
+            if (isset($businessInformationData['report_invoice_logo'])) {
+                $reportInvoiceLogo = $businessInformationData['report_invoice_logo'];
+                config(['app.report_invoice_logo' => $reportInvoiceLogo]);
+            }
 
             if (isset($businessInformationData['logo'])) {
                 $logo = $businessInformationData['logo'];

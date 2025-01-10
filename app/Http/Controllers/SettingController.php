@@ -65,8 +65,9 @@ class SettingController extends Controller
                 'working_hours.start' => 'required|date_format:H:i',
                 'working_hours.end' => 'required|date_format:H:i',
                 'main_color' => 'nullable|regex:/^#([A-Fa-f0-9]{3}){1,2}$/',
-                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+                'report_invoice_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'favicon' => 'nullable|mimes:jpeg,png,jpg,gif,ico,webp|max:1024',
+                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             ]);
         }
 
@@ -150,8 +151,8 @@ class SettingController extends Controller
             $favicon = $businessDetails->favicon ?? '';
 
             // Handle file uploads for logo
-            if ($request->hasFile('logo')) {
-                $logo = $this->uploadFile($request->file('logo'), 'logo');
+            if ($request->hasFile('report_invoice_logo')) {
+                $reportInvoiceLogo = $this->uploadFile($request->file('report_invoice_logo'), 'report_invoice_logo');
             }
 
             // Handle file uploads for favicon
@@ -159,8 +160,14 @@ class SettingController extends Controller
                 $favicon = $this->uploadFile($request->file('favicon'), 'favicon');
             }
 
-            $inputs['logo'] = $logo;
+            // Handle file uploads for logo
+            if ($request->hasFile('logo')) {
+                $logo = $this->uploadFile($request->file('logo'), 'logo');
+            }
+
+            $inputs['report_invoice_logo'] = $reportInvoiceLogo;
             $inputs['favicon'] = $favicon;
+            $inputs['logo'] = $logo;
 
             // Store the updated data
             $jsonData = json_encode($inputs);

@@ -23,7 +23,7 @@ class SettingsSeeder extends Seeder
                 ],
                 [
                     'type'      => 'business_information',
-                    'data'      => '{"company_name": "FabiRide", "company_email": "customer@fabiRide.com", "company_phone": "+1234567890", "company_website": "https://fabiride.lt", "company_address": "123 Street, City", "working_days": ["Mon", "Tue", "Wed", "Thu", "Fri"], "working_hours": {"start": "09:00", "end": "17:00"}, "main_color": "", "logo": "logo.jpg", "favicon": "favicon.ico"}',
+                    'data'      => '{"company_name": "FabiRide", "company_email": "customer@fabiRide.com", "company_phone": "+1234567890", "company_website": "https://fabiride.lt", "company_address": "123 Street, City", "working_days": ["Mon", "Tue", "Wed", "Thu", "Fri"], "working_hours": {"start": "09:00", "end": "17:00"}, "main_color": "", "report_invoice_logo": "report_invoice_logo.jpg", "favicon": "favicon.ico", "logo": "logo.jpg"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

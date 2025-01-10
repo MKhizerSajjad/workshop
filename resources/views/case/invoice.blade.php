@@ -31,8 +31,8 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="auth-logo mb-4">
-                                            <img src="{{ asset('images/'.config('app.logo')) }}" alt="logo" class="auth-logo-dark" height="60"/>
-                                            <img src="{{ asset('images/'.config('app.logo')) }}" alt="logo" class="auth-logo-light" height="60"/>
+                                            <img src="{{ asset('images/'.config('app.report_invoice_logo')) }}" alt="logo" class="auth-logo-dark" height="60"/>
+                                            <img src="{{ asset('images/'.config('app.report_invoice_logo')) }}" alt="logo" class="auth-logo-light" height="60"/>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 text-sm-end">
@@ -114,7 +114,7 @@
                                 <div class="col-sm-6">
                                     <div class="py-2 mt-1">
                                         <h3 class="font-size-15 fw-bold">Description of Problem / Failure</h3>
-                                        <p>{{ $task->problem_description }}aada</p>
+                                        <p>{{ $task->problem_description }}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
