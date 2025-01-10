@@ -615,6 +615,7 @@ class TaskController extends Controller
         $data->products = Product::where('status', 1)->orderBy('name')->get();
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
+        $data->cases = Task::where('customer_id', $data->task->customer_id)->get();
         $data->tax = getTax();
 
         // dd($data->task);

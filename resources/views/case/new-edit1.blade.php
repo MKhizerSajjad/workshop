@@ -1257,6 +1257,59 @@
                                 <textarea class="form-control" name="status_detail" placeholder="Reason for status update" required>{{ $data->task->customer->status_detail }}</textarea>
                             </div>
                         </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Cases</h4>
+                                @if (count($data->cases) > 0)
+                                    <div class="table-responsive" bis_skin_checked="1">
+                                        <table class="table mb-0 table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">#</th>
+                                                    <th>Case Number</th>
+                                                    <th>Date</th>
+                                                    <th>Spent Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @php
+                                                    $count = 0;
+                                                    $total = 0;
+                                                @endphp
+                                                @foreach ($data->cases as $key => $task)
+                                                    @php
+                                                        ++$count;
+                                                        $total = $total + $task->total;
+                                                    @endphp
+                                                    <tr>
+                                                        <td  class="text-center">{{ ++$key }}</td>
+                                                        <td>{{ $task->code }}</td>
+                                                        <td>{{ $task->date_opened }}</td>
+                                                        <td>{{ $task->total }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><b>Total Count : {{$count}} </b></td>
+                                                    <td></td>
+                                                    <td><b>Total Amount : {{$total}} </b></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                @else
+                                    <div class="noresult">
+                                        <div class="text-center">
+                                            <h4 class="mt-2 text-danger">Sorry! No Case Exist.</h4>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
