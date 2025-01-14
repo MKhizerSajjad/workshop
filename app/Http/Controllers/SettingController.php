@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use App\Notifications\TestNotification;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class SettingController extends Controller
 {
+    use Notifiable;
+
     /**
      * Display a listing of the resource.
      */
@@ -219,5 +224,23 @@ class SettingController extends Controller
         $filenameToStore = $type . '.' . $extension;
         $file->move(public_path('images/'), $filenameToStore);
         return $filenameToStore;
+    }
+
+    public function emailTest(Request $request)
+    {
+        $admin = Auth::user();
+        if ($admin && $admin->email) {
+            try {
+                $admin->notify(new TestNotification());
+                return redirect()->route('setting.index')->with('success', 'Test email sent successfully!');
+            } catch (\Exception $e) {
+                \Log::error('Failed to send test email: ' . $e->getMessage());
+                return redirect()->route('setting.index')
+                    ->withErrors(['smtp' => 'Failed to send test email. Please check your SMTP configuration.']);
+            }
+        }
+
+        return redirect()->route('setting.index')
+            ->withErrors(['admin_email' => 'Admin email is missing or something went wrong.']);
     }
 }

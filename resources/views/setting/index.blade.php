@@ -206,6 +206,12 @@
                             </div>
                             <button type="submit" class="btn btn-primary waves-effect waves-light w-100">Update Email Settings</button>
                         </form>
+
+                        <!-- Add Test Email Button -->
+                        <form method="POST" action="{{ route('email.test') }}" class="mt-3">
+                            @csrf
+                            <button type="submit" class="btn btn-secondary waves-effect waves-light w-100">Send Test Email</button>
+                        </form>
                     </div>
                 </div>
             </div>
