@@ -232,7 +232,7 @@ class SettingController extends Controller
         if ($admin && $admin->email) {
             try {
                 $admin->notify(new TestNotification());
-                return redirect()->route('setting.index')->with('success', 'Test email sent successfully!');
+                return redirect()->route('setting.index')->with('success', 'Test email sent successfully on : '. $admin->email );
             } catch (\Exception $e) {
                 \Log::error('Failed to send test email: ' . $e->getMessage());
                 return redirect()->route('setting.index')
