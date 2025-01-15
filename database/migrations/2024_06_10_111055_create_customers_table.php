@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('receive_newsletter')->default(1);
             $table->string('first_name', 200);
             $table->string('last_name', 200);
             $table->string('phone')->unique();

@@ -111,6 +111,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('newsletter.index') }}" class="waves-effect">
+                            <i class="bx bx-envelope"></i>
+                            <span key="t-authentication">News Letter</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('case.index') }}" class="waves-effect">
                             <i class="bx bx-receipt"></i>
                             <span key="t-authentication">Cases</span>

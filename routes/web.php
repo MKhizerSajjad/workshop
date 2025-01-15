@@ -18,6 +18,7 @@ use App\Http\Controllers\TechnicianController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PickupPointController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\AccessControlController;
 use App\Http\Controllers\SerivceLocationController;
 use App\Models\Technician;
@@ -90,6 +91,9 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
     });
 
     // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');
+    Route::resource('newsletter', NewsletterController::class)->names('newsletter')->middleware('access.level:1,2');
+    Route::post('newsletter/{id}/send', [NewsletterController::class, 'send'])->name('newsletter.send');
+
     Route::resource('settings', SettingController::class)->names('setting')->middleware('access.level:1,2');
     Route::post('email/test', [SettingController::class, 'emailTest'])->name('email.test')->middleware('access.level:1');
     Route::resource('item', ItemController::class)->names('item')->middleware('access.level:1,2,3');
