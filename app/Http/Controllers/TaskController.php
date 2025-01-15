@@ -30,6 +30,7 @@ use App\Models\Setting;
 use App\Models\TaskComment;
 use App\Models\TaskLeavePart;
 use App\Notifications\TaskCreateNotification;
+use App\Notifications\TaskNotification;
 use Symfony\Component\VarDumper\VarDumper;
 
 class TaskController extends Controller
@@ -644,6 +645,9 @@ class TaskController extends Controller
             // 'payment_status' => 'required',
         ];
 
+        $previousStatus = $task->status;
+        $newStatus = $request->input('case_status');
+
         $rules = $additionalRules;
         $serviceLocationID = $request->input('services_location');
         if($serviceLocationID) {
@@ -934,6 +938,33 @@ class TaskController extends Controller
         //     }
         // }
 
+
+        if($previousStatus != $newStatus) {
+
+            $customer = $task->customer;
+            $customerFullname = $customer->first_name . ' ' . $customer->last_name;
+
+            $message = 'Your case number ' . $task->code . ' status has been updated from ' . getCaseStatus('general', $previousStatus) . ' to ' . getCaseStatus('general', $newStatus) . '.';
+
+            $baseUrl = url('/');
+            $trackingLink = $baseUrl . '/booking/status_search?_token=z6oZeY6Nk52fFBc8sYKKxMkv1sGZowc12eLRsaWV&case_number='. $task->code .' phonne=' . $customer->phone;
+
+            $company = Setting::where('type', 'business_information')->first();
+            $company = json_decode($company->data);
+
+            $data = [
+                'subject' => 'Status Update',
+                'customer_name' => $customerFullname,
+                'case_number' => $task->code,
+                'message' => $message,
+                'tracking_link' => $trackingLink,
+                'company_email' => $company->company_email,
+                'company_website' => $company->company_website,
+            ];
+
+            $customer->notify(new TaskNotification($data));
+        }
+
         return redirect()->route('case.edit1', $task->id)->with('success','Record update successfully');
     }
 
@@ -971,6 +1002,43 @@ class TaskController extends Controller
             'pending' => $pending,
             'paid' => $paid
         ]);
+
+        $customer = $task->customer;
+
+        if ($customer) {
+
+            $settings = Setting::query()->get();
+
+
+            $genral = $settings->firstWhere('type', 'general')->data;
+            $company = $settings->firstWhere('type', 'business_information')->data;
+
+            $genral = json_decode($genral);
+            $company = json_decode($company);
+
+            $baseUrl = url('/');
+            $trackingLink = $baseUrl . '/booking/status_search?_token=z6oZeY6Nk52fFBc8sYKKxMkv1sGZowc12eLRsaWV&case_number='. $task->code .' phonne=' . $customer->phone;
+
+            if($payment_status == 1) {
+                $message = 'Your payment against case number ' . $task->code . ' is received and the case is now fully paid.';
+            } else {
+                $message = 'We have received your payment of ' . $amount .' '. $genral->currency . ' against case number ' . $task->code . '. Your remaining balance is ' . $pending .' '. $genral->currency . '.';
+            }
+
+            $customerFullname = $customer->first_name . ' ' . $customer->last_name;
+
+            $data = [
+                'subject' => 'Payment Update',
+                'customer_name' => $customerFullname,
+                'case_number' => $task->code,
+                'message' => $message,
+                'tracking_link' => $trackingLink,
+                'company_email' => $company->company_email,
+                'company_website' => $company->company_website,
+            ];
+
+            $customer->notify(new TaskNotification($data));
+        }
 
         return redirect()->route('case.edit1', $taskId)->with('success','Payment added successfully');
     }
@@ -1201,15 +1269,21 @@ class TaskController extends Controller
         return view('case.take_back',compact('data'));
     }
 
-    public function saveTakeBack(Request $request, Task $task)
+    public function saveTakeBack(Request $request, $id)
     {
+        $request->validate([
+            'pickup_point' => 'required|integer',
+            'is_servised' => 'required',
+            'is_satisfied' => 'required',
+        ]);
+
         $data = [
-            'pickup_point_id' => $request->input('pickup_ponint_id'),
+            'pickup_point_id' => $request->input('pickup_point'),
             'is_servised' => $request->input('is_servised'),
             'is_satisfied' => $request->input('is_satisfied'),
         ];
 
-        $taskId = $task->id;
+        $taskId = $id;
         $task = Task::updateOrCreate(['id' => $taskId], $data);
 
         $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
@@ -1249,6 +1323,36 @@ class TaskController extends Controller
                 }
             }
         }
+
+
+        $customer = $task->customer;
+        $customerFullname = $customer->first_name . ' ' . $customer->last_name;
+
+        $message = 'Your case number ' . $task->code . ' has been took back.';
+
+        $baseUrl = url('/');
+        $trackingLink = $baseUrl . '/booking/status_search?_token=z6oZeY6Nk52fFBc8sYKKxMkv1sGZowc12eLRsaWV&case_number='. $task->code .' phonne=' . $customer->phone;
+
+        $company = Setting::where('type', 'business_information')->first();
+        $company = json_decode($company->data);
+
+        $data = [
+            'subject' => 'Take Back',
+            'customer_name' => $customerFullname,
+            'case_number' => $task->code,
+            'message' => $message,
+            'tracking_link' => $trackingLink,
+            'company_email' => $company->company_email,
+            'company_website' => $company->company_website,
+        ];
+
+        $customer->notify(new TaskNotification($data));
+
+        return redirect()->route('takeBackDetails', [
+            '_token' => csrf_token(),
+            'case_number' => $task->code,
+            'phone' => $task->phone
+        ])->with('success', 'Take back submitted successfully.');
     }
 
     public function generateInvoiceCode() {

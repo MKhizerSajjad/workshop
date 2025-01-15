@@ -86,6 +86,20 @@
                         </div>
                     </div>
                 </div>
+            @elseif (isset($data) && $data->task->is_servised == 1)
+                <div class="checkout-tabs">
+                    <div class="row">
+                        <div class="col-xl-12 col-sm-12">
+
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h3 class="text text-danger">Your case is servised.</h3>
+                                    <span class="font-size-14">You has been taken back</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @elseif (isset($data) && $data != null)
                 <div class="checkout-tabs">
                     <div class="row">
@@ -97,19 +111,30 @@
                             @endphp
 
                             <div class="card">
+
+                                @if ($errors->any())
+                                    <div class="alert alert-danger alert-border-left alert-dismissible fade show auto-colse-3" role="alert">
+                                        <i class="fa fa-ban me-1 align-middle fs-16"></i><strong>Alert! </strong>
+                                            @foreach ($errors->all() as $error)
+                                                <br>{{ $error }}
+                                            @endforeach
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @endif
+
                                 <div class="card-body">
                                     <div class="tab-content" id="v-pills-tabContent">
                                         <div class="text-center">
-                                            @if ($data->task->status == 1)
+                                            @if ($data->task->payment_status == 1)
                                                 <h3>Great! Your invoice has been fully paid</h3>
-                                            @elseif ($data->task->status == 2)
+                                            @elseif ($data->task->payment_status == 2)
                                                 <h3>Oops! Your invoice is not fully paid, please complete your payment.</h3>
-                                            @elseif ($data->task->status == 3 || $data->task->status == 4)
+                                            @elseif ($data->task->payment_status == 3 || $data->task->payment_status == 4)
                                                 <h3>Oops! Your invoice is not paid, please complete your payment.</h3>
                                             @endif
                                             <div class="row">
                                                 <div class="col-md-1 offset-md-4">
-                                                    <span class="font-size-20">{!! getPayment('status', $data->task->status, 'badge') !!}</span>
+                                                    <span class="font-size-20">{!! getPayment('status', $data->task->payment_status, 'badge') !!}</span>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <h4><a href="{{ route('caseInvoice', $data->task->id) }}" target="_blank" class="badge bg-primary font-size-18"><i class="bx bx-receipt"></i> Invoice</a></h4>
@@ -125,9 +150,10 @@
                                             <div>
                                                 <h4 class="card-title">Customer Details</h4>
                                                 <p class="card-title-desc">Fill all information below</p>
-                                                <form method="POST" action="{{ route('case.update', $data->task->id) }}" class="form" enctype="multipart/form-data">
+                                                <form method="POST" action="{{ route('saveTakeBack', $data->task->id) }}" class="form" enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
+                                                    <input type="hidden" name="id" value="{{$data->task->id}}">
                                                     <div class="form-group row mb-2">
                                                         <div class="col-md-6">
                                                             <label for="code" class="form-label">Case Number</label>
@@ -167,25 +193,40 @@
                                                         </div>
                                                         <div class="col-md-6 mt-2 mb-2">
                                                             <label class="col-form-label">Pickup Point</label>
-                                                            <select class="form-control select2" title="pickup_ponint_id" name="pickup_ponint_id">
+                                                            <select class="form-control select2 @error('pickup_point') is-invalid @enderror" title="pickup_point" name="pickup_point">
                                                                 <option value="">Select Pickup Point </option>
                                                                 @foreach ($data->pickupPoints as $pickupPoint)
                                                                     {{-- @if($pickupPoint->id == $data->task->payment_status) selected @endif --}}
-                                                                    <option value="{{ $pickupPoint->id }}">{{ $pickupPoint->name }}</option>
+                                                                    <option value="{{ $pickupPoint->id }}"  {{ old('pickup_point') == $pickupPoint->id ? 'selected' : '' }}>{{ $pickupPoint->name }}</option>
                                                                 @endforeach
+                                                                @error('pickup_point')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
                                                             </select>
                                                         </div>
                                                         <div class="col-md-12 mt-2">
-                                                            <input class="form-check-input" type="checkbox" value="1" name="is_servised" id="is_servised">
+                                                            <input class="form-check-input @error('is_servised') is-invalid @enderror" type="checkbox" value="1" name="is_servised" id="is_servised" required>
                                                             <label class="form-check-label" for="is_servised">
                                                                 <h5>I confirmed that my order is servised</h5>
                                                             </label>
+                                                            @error('is_servised')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-12 mt-2">
-                                                            <input class="form-check-input" type="checkbox" value="1" name="is_satisfied" id="is_satisfied">
+                                                            <input class="form-check-input" type="checkbox" value="1" name="is_satisfied" id="is_satisfied" required>
                                                             <label class="form-check-label" for="is_satisfied">
                                                                 <h5>I confirmed I inspected the item and its confirmed that I'm satisfied</h5>
                                                             </label>
+                                                            @error('is_satisfied')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-12 mb-3">
                                                             <h4 class="card-title mt-2">Medias</h4>
@@ -195,9 +236,12 @@
                                                             </label>
                                                             <div id="imagesBody"></div>
                                                         </div>
-                                                        <div class="d-grid gap-2 mt-3">
-                                                            <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
-                                                        </div>
+
+                                                        @if ($data->task->payment_status == 1)
+                                                            <div class="d-grid gap-2 mt-3">
+                                                                <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </form>
                                             </div>
