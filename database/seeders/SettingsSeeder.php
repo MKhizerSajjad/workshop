@@ -13,7 +13,11 @@ class SettingsSeeder extends Seeder
      */
     public function run(): void
     {
-        if (Setting::count() == 0) {
+
+        // Truncate the table to remove existing data
+        Setting::truncate();
+
+        // if (Setting::count() == 0) {
             $data = [
                 [
                     'type'      => 'general',
@@ -81,6 +85,6 @@ class SettingsSeeder extends Seeder
                 ]
             ];
             Setting::insert($data);
-        }
+        // }
     }
 }

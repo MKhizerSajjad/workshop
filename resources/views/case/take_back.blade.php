@@ -124,7 +124,7 @@
 
                                 <div class="card-body">
                                     <div class="tab-content" id="v-pills-tabContent">
-                                        <div class="text-center">
+                                        <div class="col-md-12 text-center">
                                             @if ($data->task->payment_status == 1)
                                                 <h3>Great! Your invoice has been fully paid</h3>
                                             @elseif ($data->task->payment_status == 2)
@@ -132,16 +132,31 @@
                                             @elseif ($data->task->payment_status == 3 || $data->task->payment_status == 4)
                                                 <h3>Oops! Your invoice is not paid, please complete your payment.</h3>
                                             @endif
-                                            <div class="row">
-                                                <div class="col-md-1 offset-md-4">
+
+                                            <div class="d-flex justify-content-center align-items-center flex-wrap mb-2 fw-bold text-center">
+                                                <div class="me-2 mt-1">
                                                     <span class="font-size-20">{!! getPayment('status', $data->task->payment_status, 'badge') !!}</span>
                                                 </div>
-                                                <div class="col-md-2">
-                                                    <h4><a href="{{ route('caseInvoice', $data->task->id) }}" target="_blank" class="badge bg-primary font-size-18"><i class="bx bx-receipt"></i> Invoice</a></h4>
+                                                <div class="me-2 mt-1">
+                                                    <a href="{{ route('caseInvoice', $data->task->id) }}" target="_blank" class="badge bg-primary font-size-14">
+                                                        <i class="bx bx-receipt"></i> Invoice
+                                                    </a>
                                                 </div>
-                                                @if ($data->task->status != 1)
-                                                    <div class="col-md-2">
-                                                        <a href="" class="badge bg-primary font-size-18"><i class="bx bx-loader-circle"></i> Refresh Payment</a>
+                                                @if ($data->task->payment_status != 1)
+                                                    {{-- <div class="me-2 mt-1">
+                                                        <a href="" class="badge bg-primary font-size-14">
+                                                            <i class="bx bx-credit-card"></i> Card Payment
+                                                        </a>
+                                                    </div> --}}
+                                                    <div class="me-2 mt-1">
+                                                        <a href="#" class="badge bg-primary font-size-14" data-bs-toggle="modal" data-bs-target="#bankDetailModal">
+                                                            <i class="bx bx-building"></i> Bank Detail
+                                                        </a>
+                                                    </div>
+                                                    <div class="me-2 mt-1">
+                                                        <a href="" class="badge bg-primary font-size-14">
+                                                            <i class="bx bx-loader-circle"></i> Refresh Payment
+                                                        </a>
                                                     </div>
                                                 @endif
                                             </div>
@@ -256,6 +271,37 @@
             @endif
         </div>
     </div>
+
+    <!-- Bank Detail Modal --><!-- Bank Detail Modal -->
+<!-- Bank Detail Modal -->
+<div class="modal fade" id="bankDetailModal" tabindex="-1" aria-labelledby="bankDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bankDetailModalLabel">Bank Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center">
+                    <h6>Bank accounts to direct send payment</h6>
+                    @foreach (getBankDetails() as $bank)
+                    <div class="col-md-12 col-lg-6 mb-3">
+                        <div class="card border-primary shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{ $bank->bank_name }}</h5>
+                                <p class="mb-2"><strong>Account Name:</strong> {{ $bank->account_name }}</p>
+                                <p class="mb-2"><strong>Account Number:</strong> {{ $bank->account_number }}</p>
+                                <p class="mb-2"><strong>SWIFT Code:</strong> {{ $bank->swift_code }}</p>
+                                <p class="mb-2"><strong>IBAN:</strong> {{ $bank->iban }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

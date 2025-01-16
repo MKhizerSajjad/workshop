@@ -189,6 +189,11 @@ function getTax() {
     return json_decode($tax)[0]->percentage;
 }
 
+
+function getBankDetails() {
+    $banks = Setting::where('type', 'bank_accounts')->pluck('data')->first();
+    return json_decode($banks);
+}
 function numberFormat($amount, $type=null) {
     $formatted = number_format($amount, 2, '.', ',');
 
