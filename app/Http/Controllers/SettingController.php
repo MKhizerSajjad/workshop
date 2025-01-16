@@ -26,6 +26,7 @@ class SettingController extends Controller
             'business_information' => $settings->firstWhere('type', 'business_information'),
             'email_settings' => $settings->firstWhere('type', 'email_settings'),
             'payments' => $settings->firstWhere('type', 'payments'),
+            'bank_accounts' => $settings->firstWhere('type', 'bank_accounts'),
             'woocommerece' => $settings->firstWhere('type', 'woocommerece'),
         ];
 
@@ -110,53 +111,18 @@ class SettingController extends Controller
             ]);
         }
 
+
+        if($request->type == 'tax') {
+            $this->validate($request, [
+                'account_name.*' => 'required',
+                'bank_name.*' => 'required',
+                'swift_code.*' => 'required',
+                'iban.*' => 'required',
+                'account_number.*' => 'required',
+            ]);
+        }
+
         $inputs = $request->except(['_token', 'type']);
-
-
-         // If the request type is business_information or email_settings or payments, we just save the form data as is.
-        // if ($request->type == 'business_information') {
-
-        //     $logo = '';
-        //     $favicon = '';
-        //     if (!$request->hasFile('logo') || !$request->hasFile('favicon')) {
-        //         $settings = Setting::where('type', 'business_information')->first();
-        //         $businessDetails = json_decode($settings->data);
-        //         $logo = $businessDetails->logo;
-        //         $favicon = $businessDetails->favicon;
-        //     }
-
-        //     // For business information, we might also handle file uploads (logo and favicon)
-        //     if ($request->hasFile('logo')) {
-        //         $file = $request->logo;
-
-        //         $filenameWithExt = $file->getClientOriginalName();
-        //         $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        //         $extension = $file->getClientOriginalExtension();
-        //         $fileNameToStore = 'logo.' . $extension;
-        //         $file->move(public_path('images/'), $fileNameToStore);
-        //         $inputs['logo'] = $fileNameToStore;
-        //     } else {
-        //         $inputs['logo'] = $logo;
-        //     }
-
-        //     if ($request->hasFile('favicon')) {
-        //         $file = $request->favicon;
-        //         $filenameWithExt = $file->getClientOriginalName();
-        //         $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-        //         $extension = $file->getClientOriginalExtension();
-        //         $fileNameToStore = 'favicon.' . $extension;
-        //         $file->move(public_path('images/'), $fileNameToStore);
-        //         $inputs['favicon'] = $fileNameToStore;
-
-
-        //         // $favicon = $request->file('favicon')->store('favicons', 'public');
-        //         // $inputs['favicon'] = $favicon;
-        //     } else {
-        //         $inputs['favicon'] = $favicon;
-        //     }
-
-        //     $jsonData = json_encode($inputs);
-        // }
 
         if ($request->type == 'business_information') {
             // Fetch current business details if no new files are uploaded
@@ -193,6 +159,7 @@ class SettingController extends Controller
         } else {
             // For tax or term, process the arrays
             $keys = array_keys($inputs);
+
             $data = [];
             $numItems = count($inputs[$keys[0]]);
             for ($i = 0; $i < $numItems; $i++) {
@@ -204,20 +171,6 @@ class SettingController extends Controller
             }
             $jsonData = json_encode($data);
         }
-
-
-        // $keys = array_keys($inputs);
-        // $data = [];
-        // $numItems = count($inputs[$keys[0]]);
-        // for ($i = 0; $i < $numItems; $i++) {
-        //     $item = [];
-        //     foreach ($keys as $key) {
-        //         $item[$key] = $inputs[$key][$i];
-        //     }
-        //     $data[] = $item;
-        // }
-
-        // $jsonData = json_encode($data);
 
         Setting::updateOrCreate(
             ['type' => $request->type],

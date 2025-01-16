@@ -47,6 +47,7 @@
             $taxData = json_decode($data['tax']['data'] ?? '[]', true);
             $termsData = json_decode($data['term']['data'] ?? '[]', true);
             $wcData = json_decode($data['woocommerece']['data'] ?? '[]', true);
+            $banksData = json_decode($data['bank_accounts']['data'] ?? '[]', true);
         @endphp
 
         <div class="row">
@@ -218,7 +219,6 @@
             </div>
         </div>
 
-        <!-- Dynamic Forms (Tax & Terms) -->
         <div class="row">
             <div class="col-md-6 col-sm-12">
                 <div class="card">
@@ -325,7 +325,47 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Bank Accounts</h4>
+                        <form method="POST" action="{{ route('setting.store') }}">
+                            @csrf
+                            <input type="hidden" name="type" value="bank_accounts">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                <div class="me-0" style="width: 20%;">Acc. Name</div>
+                                <div class="me-0" style="width: 20%;">Bank Name</div>
+                                <div class="me-0" style="width: 15%;">SWIFT Code</div>
+                                <div class="me-0" style="width: 20%;">IBAN</div>
+                                <div class="me-0" style="width: 20%;">Acc. No.</div>
+                            </div>
+                            <div id="banks-container">
+                                @foreach ($banksData as $bank)
+                                <div class="d-flex align-items-center banks-row mb-2">
+                                    <input type="text" name="account_name[]" class="form-control me-2" value="{{ $bank['account_name'] ?? '' }}" placeholder="Account Name" required>
+                                    <input type="text" name="bank_name[]" class="form-control me-2" value="{{ $bank['bank_name'] ?? '' }}" placeholder="Bank Name" required>
+                                    <input type="text" name="swift_code[]" class="form-control me-2" value="{{ $bank['swift_code'] ?? '' }}" placeholder="SWIFT Code" required>
+                                    <input type="text" name="iban[]" class="form-control me-2" value="{{ $bank['iban'] ?? '' }}" placeholder="IBAN" required>
+                                    <input type="text" name="account_number[]" class="form-control me-2" value="{{ $bank['account_number'] ?? '' }}" placeholder="Account Number" required>
+                                    <button type="button" class="btn btn-danger btn-remove-banks">
+                                        <i class="bx bx-minus-circle me-1"></i>
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" id="btn-add-banks" class="btn btn-success">
+                                    <i class="bx bx-plus-circle me-1"></i>
+                                </button>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Update Bank Accounts</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 
@@ -379,6 +419,28 @@
         $(document).on('click', '.btn-remove-terms', function () {
             $(this).closest('.terms-row').remove();
         });
+
+        // Add Bank Row
+        $('#btn-add-banks').on('click', function () {
+            $('#banks-container').append(`
+                <div class="d-flex align-items-center banks-row mb-2">
+                    <input type="text" name="account_name[]" class="form-control me-2" placeholder="Account Name" required>
+                    <input type="text" name="account_number[]" class="form-control me-2" placeholder="Account Number" required>
+                    <input type="text" name="bank_name[]" class="form-control me-2" placeholder="Bank Name" required>
+                    <input type="text" name="swift_code[]" class="form-control me-2" placeholder="SWIFT Code" required>
+                    <input type="text" name="iban[]" class="form-control me-2" placeholder="IBAN" required>
+                    <button type="button" class="btn btn-danger btn-remove-banks">
+                        <i class="bx bx-minus-circle me-1"></i>
+                    </button>
+                </div>
+            `);
+        });
+
+        // Remove Bank Row
+        $(document).on('click', '.btn-remove-banks', function () {
+            $(this).closest('.banks-row').remove();
+        });
+
     });
 </script>
 @endsection

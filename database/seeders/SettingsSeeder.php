@@ -41,6 +41,27 @@ class SettingsSeeder extends Seeder
                     'updated_at' => now(),
                 ],
                 [
+                    'type'      => 'bank_accounts',
+                    'data'      => '[
+                        {
+                            "account_name": "John Doe",
+                            "account_number": "1234567890",
+                            "bank_name": "Bank of Example",
+                            "swift_code": "EXAMPLSWIFT",
+                            "iban": "GB33BUKB20201555555555"
+                        },
+                        {
+                            "account_name": "Jane Smith",
+                            "account_number": "0987654321",
+                            "bank_name": "Another Bank",
+                            "swift_code": "ANOTHERSWIFT",
+                            "iban": "GB33BUKB20201555555522"
+                        }
+                    ]',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
                     'type'      => 'tax',
                     'data'      => '[{"name": "VAT", "status": 1, "percentage": 21}]',
                     'created_at' => now(),
