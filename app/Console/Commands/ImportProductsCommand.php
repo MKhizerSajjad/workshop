@@ -44,8 +44,17 @@ class ImportProductsCommand extends Command
             // Create cURL resource
             $ch = curl_init();
 
+            $baseUrl = config('app.base_url');
+            $consumerKey = config('app.consumer_key');
+            $consumerSecret = config('app.consumer_secret');
+
+            if(!$baseUrl || !$consumerKey || !$consumerSecret) {
+                logger('WooCommerece details are not set in Settings');
+                exit();
+            }
+
             // Set cURL options
-            $url = "https://fabiride.lt/wp-json/wc/v3/products?consumer_key=ck_dcbbdf7257210c6ec110cfc9ab1c9b04d8678701&consumer_secret=cs_1d8ac8681c8c09cf5fe89dc017780fa5394f129c&per_page={$per_page}&page={$page}";
+            $url = $baseUrl."/wp-json/wc/v3/products?consumer_key=".$consumerKey."&consumer_secret=".$consumerSecret."&per_page={$per_page}&page={$page}";
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -131,8 +140,8 @@ class ImportProductsCommand extends Command
                 }
             } catch (\Illuminate\Database\QueryException $e) {
 
-                $this->info($productData['id'] . 'Error-----');
-                logger($productData['id'] . 'Error----- <br>');
+                // $this->info($productData['id'] . 'Error-----');
+                // logger($productData['id'] . 'Error----- <br>');
                 continue;
             }
 

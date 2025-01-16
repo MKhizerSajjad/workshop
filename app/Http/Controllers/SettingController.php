@@ -26,6 +26,7 @@ class SettingController extends Controller
             'business_information' => $settings->firstWhere('type', 'business_information'),
             'email_settings' => $settings->firstWhere('type', 'email_settings'),
             'payments' => $settings->firstWhere('type', 'payments'),
+            'woocommerece' => $settings->firstWhere('type', 'woocommerece'),
         ];
 
         return view('setting.index', compact('data'));
@@ -56,6 +57,14 @@ class SettingController extends Controller
                 'report_email' => 'nullable|string|max:50',
                 'currency' => 'required|string|max:10',
                 'case_prefix' => 'required|string|max:5'
+            ]);
+        }
+
+        if($request->type == 'woocommerece') {
+            $this->validate($request, [
+                'base_url' => 'required',
+                'consumer_key' => 'required',
+                'consumer_secret' => 'required',
             ]);
         }
 
@@ -178,7 +187,7 @@ class SettingController extends Controller
             // Store the updated data
             $jsonData = json_encode($inputs);
 
-        } elseif ($request->type == 'email_settings' || $request->type == 'payments' || $request->type == 'general') {
+        } elseif ($request->type == 'email_settings' || $request->type == 'payments' || $request->type == 'general' || $request->type == 'woocommerece') {
             $jsonData = json_encode($inputs);
 
         } else {

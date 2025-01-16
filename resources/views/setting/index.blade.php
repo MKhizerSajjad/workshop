@@ -46,6 +46,7 @@
             $emailData = json_decode($data['email_settings']['data'] ?? '{}', true);
             $taxData = json_decode($data['tax']['data'] ?? '[]', true);
             $termsData = json_decode($data['term']['data'] ?? '[]', true);
+            $wcData = json_decode($data['woocommerece']['data'] ?? '[]', true);
         @endphp
 
         <div class="row">
@@ -222,6 +223,31 @@
             <div class="col-md-6 col-sm-12">
                 <div class="card">
                     <div class="card-body">
+                        <h4 class="card-title">WooCommerce Sotre Settings</h4>
+                        <form method="POST" action="{{ route('setting.store') }}">
+                            @csrf
+                            <input type="hidden" name="type" value="woocommerece">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                <div class="me-2" style="width: 33%;">Base Url</div>
+                                <div class="me-2" style="width: 33%;">Consumer Key</div>
+                                <div class="me-2" style="width: 33%;">Consumer Secret</div>
+                            </div>
+                            <div id="tax-container">
+                                <div class="d-flex align-items-center tax-row mb-2">
+                                    <input type="text" name="base_url" class="form-control me-2" value="{{ $wcData['base_url'] ?? '' }}" placeholder="Tax Name" required>
+                                    <input type="text" name="consumer_key" class="form-control me-2" value="{{ $wcData['consumer_key'] ?? '' }}" placeholder="Consumer Key" required>
+                                    <input type="text" name="consumer_secret" class="form-control me-2" value="{{ $wcData['consumer_secret'] ?? '' }}" placeholder="Consumer Secret" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Update WooCommerce Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
                         <h4 class="card-title">Tax Settings</h4>
                         <form method="POST" action="{{ route('setting.store') }}">
                             @csrf
@@ -259,7 +285,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-6 col-sm-12">
                 <div class="card">
                     <div class="card-body">

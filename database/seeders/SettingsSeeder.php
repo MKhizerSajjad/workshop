@@ -51,6 +51,12 @@ class SettingsSeeder extends Seeder
                     'data'      => '[{"link": "http://185.229.32.17", "title": "I read and agree with terms of service", "is_required": "1"}, {"link": "http://185.229.32.17", "title": "I read and agree with service pricing", "is_required": "1"}, {"link": "http://185.229.32.17", "title": "I agree to receive newsletter", "is_required": "2"}, {"link": "http://185.229.32.17", "title": "I read with GDR", "is_required": "1"}]',
                     'created_at' => now(),
                     'updated_at' => now(),
+                ],
+                [
+                    'type'      => 'woocommerece',
+                    'data'      => '{"base_url": "https://fabiride.lt", "consumer_key": "ck_dcbbdf7257210c6ec110cfc9ab1c9b04d8678701", "consumer_secret": "cs_1d8ac8681c8c09cf5fe89dc017780fa5394f129c"}',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]
             ];
             Setting::insert($data);
