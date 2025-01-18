@@ -28,6 +28,7 @@ class SettingController extends Controller
             'payments' => $settings->firstWhere('type', 'payments'),
             'bank_accounts' => $settings->firstWhere('type', 'bank_accounts'),
             'woocommerece' => $settings->firstWhere('type', 'woocommerece'),
+            'task_additional_price' => $settings->firstWhere('type', 'task_additional_price'),
         ];
 
         return view('setting.index', compact('data'));
@@ -57,6 +58,7 @@ class SettingController extends Controller
                 'report_company' => 'nullable|string|max:25',
                 'report_email' => 'nullable|string|max:50',
                 'currency' => 'required|string|max:10',
+                'currency_symbol' => 'required|string|max:1',
                 'case_prefix' => 'required|string|max:5'
             ]);
         }
@@ -111,6 +113,11 @@ class SettingController extends Controller
             ]);
         }
 
+        if($request->type == 'task_additional_price') {
+            $this->validate($request, [
+                'amount' => 'required',
+            ]);
+        }
 
         if($request->type == 'tax') {
             $this->validate($request, [
@@ -153,7 +160,7 @@ class SettingController extends Controller
             // Store the updated data
             $jsonData = json_encode($inputs);
 
-        } elseif ($request->type == 'email_settings' || $request->type == 'payments' || $request->type == 'general' || $request->type == 'woocommerece') {
+        } elseif ($request->type == 'email_settings' || $request->type == 'payments' || $request->type == 'general' || $request->type == 'woocommerece' || $request->type == 'task_additional_price') {
             $jsonData = json_encode($inputs);
 
         } else {

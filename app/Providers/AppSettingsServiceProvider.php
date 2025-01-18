@@ -25,6 +25,7 @@ class AppSettingsServiceProvider extends ServiceProvider
         $emailSettings = Setting::where('type', 'email_settings')->first();
         $businessInformation = Setting::where('type', 'business_information')->first();
         $wcInformation = Setting::where('type', 'woocommerece')->first();
+        $inspectionInformation = Setting::where('type', 'task_additional_price')->first();
 
         // If general settings exist, update APP_NAME dynamically
         if ($generalSettings) {
@@ -170,6 +171,14 @@ class AppSettingsServiceProvider extends ServiceProvider
             if (isset($wcData['consumer_secret'])) {
                 $wc_consumer_secret = $wcData['consumer_secret'];
                 config(['app.consumer_secret' => $wc_consumer_secret]);
+            }
+        }
+
+        if($inspectionInformation) {
+            $inspectionData = json_decode($inspectionInformation->data, true);
+
+            if (isset($inspectionData['amount'])) {
+                config(['app.insp_diag_amount' => $inspectionData['amount']]);
             }
         }
     }

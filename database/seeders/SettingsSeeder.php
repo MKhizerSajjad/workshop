@@ -21,7 +21,7 @@ class SettingsSeeder extends Seeder
             $data = [
                 [
                     'type'      => 'general',
-                    'data'      => '{"website_name": "FabiRide", "report_company": "FabiRide", "report_email": "customer@fabiRide.com", "developed_by": "The Tech Shelf", "currency": "USD", "case_prefix": "CASE-"}',
+                    'data'      => '{"website_name": "FabiRide", "report_company": "FabiRide", "report_email": "customer@fabiRide.com", "developed_by": "The Tech Shelf", "currency": "1", "case_prefix": "CASE-"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -72,8 +72,15 @@ class SettingsSeeder extends Seeder
                     'updated_at' => now(),
                 ],
                 [
+                    'type'      => 'task_additional_price',
+                    'data'      => '{"name": "inspection_diagnose", "amount": 35}',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
                     'type'      => 'term',
-                    'data'      => '[{"link": "http://185.229.32.17", "title": "I read and agree with terms of service", "is_required": "1"}, {"link": "http://185.229.32.17", "title": "I read and agree with service pricing", "is_required": "1"}, {"link": "http://185.229.32.17", "title": "I agree to receive newsletter", "is_required": "2"}, {"link": "http://185.229.32.17", "title": "I read with GDR", "is_required": "1"}]',
+                    'data'      => '[{"link": "http://185.229.32.17", "title": "I read and agree with terms of service", "is_required": "1"}, {"link": "http://185.229.32.17", "title": "I read and agree with service pricing", "is_required": "1"}, {"link": "http://185.229.32.17", "title": "I read with GDR", "is_required": "1"}]',
+                    // , {"link": "http://185.229.32.17", "title": "I agree to receive newsletter", "is_required": "2"}
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

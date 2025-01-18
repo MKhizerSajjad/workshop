@@ -48,6 +48,7 @@
             $termsData = json_decode($data['term']['data'] ?? '[]', true);
             $wcData = json_decode($data['woocommerece']['data'] ?? '[]', true);
             $banksData = json_decode($data['bank_accounts']['data'] ?? '[]', true);
+            $inspectionData = json_decode($data['task_additional_price']['data'] ?? '[]', true);
         @endphp
 
         <div class="row">
@@ -77,8 +78,8 @@
                                 <label for="currency">Currency </label>
                                 <select name="currency" class="form-control" required>
                                     <option value="">Select Currency</option>
-                                    @foreach (['EUR', 'USD', 'GBP'] as $currency)
-                                        <option value="{{ $currency }}"  @if($currency == $generalData['currency']) selected @endif>{{ $currency }}</option>
+                                    @foreach (getPayment('currency') as $keyC => $currency)
+                                        <option value="{{ $keyC }}"  @if($keyC == $generalData['currency']) selected @endif>{{ $currency }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -360,6 +361,28 @@
                                 </button>
                             </div>
                             <button type="submit" class="btn btn-primary mt-3 w-100">Update Bank Accounts</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Inspection and diagnostics</h4>
+                        <form method="POST" action="{{ route('setting.store') }}">
+                            @csrf
+                            <input type="hidden" name="type" value="task_additional_price">
+                            <input type="hidden" name="name" value="inspection_diagnose">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                <div class="me-2">Pricing for Inspection and diagnostics</div>
+                            </div>
+                            <div id="tax-container">
+                                <div class="d-flex align-items-center tax-row mb-2">
+                                    <input type="number" name="amount" class="form-control me-2" value="{{ $inspectionData['amount'] ?? '' }}" placeholder="Pricing for Inspection and diagnostics" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Update inspection and diagnostics amount</button>
                         </form>
                     </div>
                 </div>

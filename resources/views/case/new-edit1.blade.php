@@ -233,7 +233,7 @@
                                                                 $selectedPriority = $data->priorities->where('id', $taskPriority)->first();
                                                             @endphp
                                                             <span class="btn btn-info" id="currentPriority">{{ $selectedPriority->name }} - <b
-                                                                    class="font-size-16">{{ number_format($selectedPriority->price, 0) }}€</b></span>
+                                                                    class="font-size-16">{{ number_format($selectedPriority->price, 0) }}{{getPayment('currency', config('app.currency'), 'badge')}}</b></span>
                                                             <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editPriority"><i
                                                                     class="fa fa-edit"></i></span>
 
@@ -245,7 +245,7 @@
                                                                             {{ $priority->id == $data->task->priority_id ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13"
                                                                             for="priority-{{ $priority->id }}">
-                                                                            {{ $priority->name }} - {{ number_format($priority->price, 0) }}€
+                                                                            {{ $priority->name }} - {{ number_format($priority->price, 0) }}{{getPayment('currency', config('app.currency'), 'badge')}}
                                                                         </label>
                                                                     </div>
                                                                 @endforeach
@@ -258,9 +258,9 @@
 
                                                             <span class="btn btn-info" id="currentInspection">
                                                                 @if ($data->task->inspection_diagnose == 1)
-                                                                    Inspection & Diagnostics - <b class="font-size-16">35€</b>
+                                                                    Inspection & Diagnostics - <b class="font-size-16">35{{getPayment('currency', config('app.currency'), 'badge')}}</b>
                                                                 @else
-                                                                    Without Diagnostics - <b class="font-size-16">0€</b>
+                                                                    Without Diagnostics - <b class="font-size-16">0{{getPayment('currency', config('app.currency'), 'badge')}}</b>
                                                                 @endif
                                                             </span>
                                                             <span class="btn btn-warning font-weight-bold font-size-16 p-1" id="editInspection">
@@ -279,8 +279,8 @@
                                                                             {{ $data->task->inspection_diagnose == 1 ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13" for="inspection">
                                                                             <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
-                                                                            Inspection and Diagnostics - <b class="font-size-16">35€</b>
-                                                                            <br><span class="text text-danger">35€ would extra add on</span>
+                                                                            Inspection and Diagnostics - <b class="font-size-16">35{{getPayment('currency', config('app.currency'), 'badge')}}</b>
+                                                                            <br><span class="text text-danger">35{{getPayment('currency', config('app.currency'), 'badge')}} would extra add on</span>
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -291,7 +291,7 @@
                                                                             {{ $data->task->inspection_diagnose != 1 ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13" for="withoutinspection2">
                                                                             <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
-                                                                            Without Diagnostics - <b class="font-size-16">0€</b>
+                                                                            Without Diagnostics - <b class="font-size-16">0{{getPayment('currency', config('app.currency'), 'badge')}}</b>
                                                                             <br><span class="text text-danger">Repair, according to the problem named
                                                                                 and described by the customer</span>
                                                                         </label>
@@ -390,7 +390,7 @@
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
-                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' €</b></span>' : '' !!}
+                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' {{getPayment('currency', config('app.currency'), 'badge')}}</b></span>' : '' !!}
                                                                 </h5>
                                                             </label>
                                                         </div>
@@ -414,7 +414,7 @@
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
-                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' €</b></span>' : '' !!}
+                                                                    {!! $service->show_price == 1 ? '<span class="font-size-14"><b>' . number_format($service->price) . ' {{getPayment('currency', config('app.currency'), 'badge')}}</b></span>' : '' !!}
                                                                 </h5>
                                                             </label>
                                                         </div>
@@ -533,13 +533,13 @@
                                                     <div class="col-md-12 add_service_template_area"></div>
 
                                                     <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
-                                                        <label>Selected Services Total (€)</label>
+                                                        <label>Selected Services Total ({{getPayment('currency', config('app.currency'), 'badge')}})</label>
                                                         <input type="number" name="service_total" id="service-total"
                                                             class="form-control" placeholder="Total Services Amount"
                                                             value="{{ $totalServicesPrice }}" readonly>
                                                     </div>
                                                     {{-- <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
-                                                        <label>Give your's if price is over (€)</label>
+                                                        <label>Give your's if price is over ({{getPayment('currency', config('app.currency'), 'badge')}})</label>
                                                         <input type="text" name="service_desired_total"
                                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control"
                                                             placeholder="Your Desired Amount"
@@ -740,21 +740,21 @@
                                                 <ul class="list-unstyled d-flex flex-column gap-2 w-100">
                                                     <li class="w-100"><a href="{{ route('case.invoice', $data->task->id) }}"
                                                             class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
-                                                            <i class="bx fs-16 bx-receipt"></i></a>
+                                                            <i class="fs-16 bx bx-receipt"></i></a>
                                                     </li>
                                                     <li class="w-100"><a href="{{ route('case.show', $data->task->id) }}"
                                                             class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
-                                                            <i class="bx fs-16 bx-bullseye"></i></a>
+                                                            <i class="fs-16 bx bx-bullseye"></i></a>
                                                     </li>
 
                                                     @if ($data->task->payment_status != 1)
                                                         <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $data->task->id }}"
                                                                 class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2"><i
-                                                                    class="bx fs-16 bx-euro"></i></a>
+                                                                    class="fs-16 bx bx-euro"></i></a>
                                                         </li>
                                                         <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $data->task->id }}"
                                                                 class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
-                                                                <i class="bx fs-16 bx-message"></i></a>
+                                                                <i class="fs-16 bx bx-message"></i></a>
                                                         </li>
                                                     @endif
                                                 </ul>
@@ -796,7 +796,7 @@
                                                                     <div class="flex-grow-1">
                                                                         <div>
                                                                             <h5 class="font-size-15"><a href="javascript: void(0);"
-                                                                                    class="text-dark">{{ numberFormat($payment->amount, 'euro') }}</a>
+                                                                                    class="text-dark">{{ numberFormat($payment->amount) . getPayment('currency', config('app.currency'), 'badge') }}</a>
                                                                             </h5>
                                                                         </div>
                                                                     </div>
@@ -827,7 +827,7 @@
 
                             <div class="card border-0 mb-2">
                                 <div class="card-body">
-                                    <strong class="fs-16 d-block text-center w-100 mb-1">Custom Budget (€)</strong>
+                                    <strong class="fs-16 d-block text-center w-100 mb-1">Custom Budget ({{getPayment('currency', config('app.currency'), 'badge')}})</strong>
                                     <input type="text" name="service_desired_total"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control"
                                             placeholder="Your Desired Amount"

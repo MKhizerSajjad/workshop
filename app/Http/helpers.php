@@ -96,6 +96,11 @@ function getPayment($prefix, $status = null, $type = null)
             '3' => ['Bank Transfer', '<span class="badge bg-info">Bank Transfer</span>'],
             '4' => ['Card', '<span class="badge bg-info">Card</span>'],
             '5' => ['Stripe', '<span class="badge bg-info">Stripe</span>'],
+        ],
+        'currency'=> [
+            '1' => ['EUR', '€'],
+            '2' => ['USD', '$'],
+            '3' => ['GBP', '£'],
         ]
     ];
 

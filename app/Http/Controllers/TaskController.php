@@ -196,6 +196,7 @@ class TaskController extends Controller
         }
 
         $customer['platform_id'] = $request->platform_id;
+        $customer['receive_newsletter'] = $request->receive_newsletter ?? 0;
 
         $customerAdd = Customer::updateOrCreate(
             ['phone' => $phone],
