@@ -94,6 +94,9 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
     Route::resource('newsletter', NewsletterController::class)->names('newsletter')->middleware('access.level:1,2');
     Route::post('newsletter/{id}/send', [NewsletterController::class, 'send'])->name('newsletter.send');
 
+    Route::get('settings/business', [SettingController::class, 'business'])->name('settingBusiness')->middleware('access.level:1,2');
+    Route::get('settings/payment', [SettingController::class, 'payment'])->name('settingPayment')->middleware('access.level:1,2');
+    Route::get('settings/email', [SettingController::class, 'email'])->name('settingEmail')->middleware('access.level:1,2');
     Route::resource('settings', SettingController::class)->names('setting')->middleware('access.level:1,2');
     Route::post('email/test', [SettingController::class, 'emailTest'])->name('email.test')->middleware('access.level:1');
     Route::resource('item', ItemController::class)->names('item')->middleware('access.level:1,2,3');
