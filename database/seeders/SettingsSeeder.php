@@ -21,7 +21,7 @@ class SettingsSeeder extends Seeder
             $data = [
                 [
                     'type'      => 'general',
-                    'data'      => '{"website_name": "FabiRide", "report_company": "FabiRide", "report_email": "customer@fabiRide.com", "developed_by": "The Tech Shelf", "currency": "1", "case_prefix": "CASE-"}',
+                    'data'      => '{"website_name": "FabiRide", "report_company": "FabiRide", "report_email": "customer@fabiRide.com", "developed_by": "The Tech Shelf"}', //,  "currency": "1", "case_prefix": "CASE-"
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -32,9 +32,9 @@ class SettingsSeeder extends Seeder
                     'updated_at' => now(),
                 ],
                 [
-                    'type'      => 'email_settings',
+                    'type'      => 'email',
                     // 'data'      => '[{"invoice_email": "invoice@mywebsite.com", "notification_email": "notifications@mywebsite.com", "homepage_email": "contact@mywebsite.com"}]',
-                    'data'      => '{"mail_mailer": "smtp", "mail_host": "mail.mkhizersajjad.com", "mail_port": 587, "mail_username": "info@mkhizersajjad.com", "mail_password": "mail_mks@123", "mail_encryption": "tls", "mail_from_address": "info@mkhizersajjad.com", "mail_from_name": "FabiRide"}',
+                    'data'      => '{"report_email": "customer@fabiRide.com", "mail_mailer": "smtp", "mail_host": "mail.mkhizersajjad.com", "mail_port": 587, "mail_username": "info@mkhizersajjad.com", "mail_password": "mail_mks@123", "mail_encryption": "tls", "mail_from_address": "info@mkhizersajjad.com", "mail_from_name": "FabiRide"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -87,6 +87,24 @@ class SettingsSeeder extends Seeder
                 [
                     'type'      => 'woocommerece',
                     'data'      => '{"base_url": "https://fabiride.lt", "consumer_key": "ck_dcbbdf7257210c6ec110cfc9ab1c9b04d8678701", "consumer_secret": "cs_1d8ac8681c8c09cf5fe89dc017780fa5394f129c"}',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'type'      => 'language',
+                    'data'      => '{"language": "en"}',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'type'      => 'case',
+                    'data'      => '{"case_prefix": "FR-"}',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'type'      => 'currency',
+                    'data'      => '{"currency": "1"}',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]

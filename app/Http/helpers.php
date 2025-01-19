@@ -2,6 +2,7 @@
 use App\Models\User;
 use App\Models\Setting;
 use App\Models\Platform;
+use App\Models\priority;
 
 function statusReturn($prefix, $statuses, $status = null, $type = null)
 {
@@ -145,6 +146,19 @@ function getService($prefix, $status = null, $type = null)
     return statusReturn($prefix, $statuses, $status, $type );
 }
 
+function getLang($prefix, $status = null, $type = null)
+{
+    $statuses = [
+        'lang'=> [
+            'en' => ['en', '<span class="badge bg-primary">English</span>'],
+            'lat' => ['lat', '<span class="badge bg-warning">Latin</span>'],
+            'fr' => ['fr', '<span class="badge bg-danger">French</span>'],
+        ],
+    ];
+
+    return statusReturn($prefix, $statuses, $status, $type );
+}
+
 function getFields($prefix, $status = null, $type = null)
 {
     $statuses = [
@@ -199,6 +213,16 @@ function getBankDetails() {
     $banks = Setting::where('type', 'bank_accounts')->pluck('data')->first();
     return json_decode($banks);
 }
+
+function getSettingData($type) {
+    $data = Setting::where('type', $type)->pluck('data')->first();
+    return json_decode($data);
+}
+
+function getPriorities() {
+    return Priority::orderBy('price')->get();
+}
+
 function numberFormat($amount, $type=null) {
     $formatted = number_format($amount, 2, '.', ',');
 

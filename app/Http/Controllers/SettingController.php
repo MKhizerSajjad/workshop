@@ -24,14 +24,30 @@ class SettingController extends Controller
             'term' => $settings->firstWhere('type', 'term'),
             'general' => $settings->firstWhere('type', 'general'),
             'business_information' => $settings->firstWhere('type', 'business_information'),
-            'email_settings' => $settings->firstWhere('type', 'email_settings'),
+            'email' => $settings->firstWhere('type', 'email'),
             'payments' => $settings->firstWhere('type', 'payments'),
             'bank_accounts' => $settings->firstWhere('type', 'bank_accounts'),
             'woocommerece' => $settings->firstWhere('type', 'woocommerece'),
             'task_additional_price' => $settings->firstWhere('type', 'task_additional_price'),
+            'language' => $settings->firstWhere('type', 'language'),
         ];
 
         return view('setting.index', compact('data'));
+    }
+
+    public function payment()
+    {
+        return view('setting.payment');
+    }
+
+    public function email()
+    {
+        return view('setting.email');
+    }
+
+    public function business()
+    {
+        return view('setting.business');
     }
 
     public function store(Request $request)
@@ -90,8 +106,9 @@ class SettingController extends Controller
         }
 
         // Validation for Email Settings
-        if ($request->type == 'email_settings') {
+        if ($request->type == 'email') {
             $this->validate($request, [
+                'report_email' => 'required|string|max:255',
                 'mail_mailer' => 'required|string|max:255',
                 'mail_host' => 'required|string|max:255',
                 'mail_port' => 'required|integer',
@@ -129,6 +146,18 @@ class SettingController extends Controller
             ]);
         }
 
+        if($request->type == 'language') {
+            $this->validate($request, [
+                'language' => 'required',
+            ]);
+        }
+
+        if($request->type == 'case') {
+            $this->validate($request, [
+                'case_prefix' => 'required',
+            ]);
+        }
+
         $inputs = $request->except(['_token', 'type']);
 
         if ($request->type == 'business_information') {
@@ -160,7 +189,7 @@ class SettingController extends Controller
             // Store the updated data
             $jsonData = json_encode($inputs);
 
-        } elseif ($request->type == 'email_settings' || $request->type == 'payments' || $request->type == 'general' || $request->type == 'woocommerece' || $request->type == 'task_additional_price') {
+        } elseif ($request->type == 'email' || $request->type == 'payments' || $request->type == 'general' || $request->type == 'woocommerece' || $request->type == 'task_additional_price' || $request->type == 'language' || $request->type == 'case' || $request->type == 'tax' || $request->type == 'currency') {
             $jsonData = json_encode($inputs);
 
         } else {
@@ -184,7 +213,8 @@ class SettingController extends Controller
             ['data' => $jsonData]
         );
 
-        return redirect()->route('setting.index')->with('success','Updated successfully');
+        return redirect()->back()->with('success', 'Updated successfully');
+        // return redirect()->route('setting.index')->with('success','Updated successfully');
     }
 
     private function uploadFile($file, $type)

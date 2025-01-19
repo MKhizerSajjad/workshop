@@ -77,11 +77,17 @@
                             <span key="t-settings">Settings</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{ route('setting.index') }}" key="t-products">General</a></li>
-                            <li><a href="{{ route('priority.index') }}" key="t-products">Priority</a></li>
-                            <li><a href="{{ route('pickup-point.index') }}" key="t-orders">Pickup Points</a></li>
+                            <li><a href="{{ route('settingBusiness') }}" key="t-products">Business</a></li>
+                            <li><a href="{{ route('platform.index') }}" key="t-products">General</a></li>
+                            <li><a href="{{ route('pickup-point.index') }}" key="t-products">Cases Settings</a></li>
+                            <li><a href="{{ route('settingPayment') }}" key="t-products">Payment & Integration</a></li>
+                            <li><a href="{{ route('settingEmail') }}" key="t-products">Email Setting</a></li>
+
+                            {{-- <li><a href="{{ route('setting.index') }}" key="t-products">General <span class="badge badge-success">Old</span></a></li>
+                            <li><a href="{{ route('priority.index') }}" key="t-products">Priority <span class="badge badge-success">Old</span></a></li>
+                            <li><a href="{{ route('pickup-point.index') }}" key="t-orders">Pickup Points  <span class="badge badge-success">Old</span></a></li>
                             <li><a href="{{ route('platform.index') }}" key="t-products">Social Platform</a></li>
-                            <li><a href="{{ route('service-location.index') }}" key="t-orders">Service Location</a></li>
+                            <li><a href="{{ route('service-location.index') }}" key="t-orders">Service Location</a></li> --}}
                             @if (in_array(auth()->user()->user_type , [1]))
                                 <li><a href="{{ route('access.index') }}" key="t-orders">Access Control</a></li>
                             @endif
@@ -123,6 +129,49 @@
                         </a>
                     </li>
                 @endif
+
+                {{-- <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-cog"></i>
+                        <span key="t-settings">Settings</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ route('platform.index') }}" key="t-products">General</a></li>
+                        <li><a href="{{ route('priority.index') }}" key="t-products">Cases Settings</a></li>
+                        <li><a href="{{ route('setting.index') }}" key="t-products">General <span class="badge badge-success">Old</span></a></li>
+                        <li><a href="{{ route('priority.index') }}" key="t-products">Cases Settings <span class="badge badge-success">Old</span></a></li>
+                        <li><a href="{{ route('pickup-point.index') }}" key="t-orders">Payments & Integrations</a></li>
+                        <li><a href="{{ route('platform.index') }}" key="t-products">Email settings</a></li>
+                        <li><a href="{{ route('service-location.index') }}" key="t-orders">Business information</a></li>
+                        <li><a href="{{ route('service-location.index') }}" key="t-orders">Access control</a></li>
+                        <li><a href="{{ route('service-location.index') }}" key="t-orders">Language</a></li>
+                    </ul>
+                </li>
+
+                <li class="mm-active">
+                    <a class="has-arrow" href="#">
+                        <i class="bx bx-share-alt"></i>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sub-menu mm-collapse mm-show" style="">
+                        <li><a href="#">Level 1.1</a></li>
+                        <li class="mm-active"><a class="has-arrow" href="#">General</a>
+                            <ul class="sub-menu mm-collapse mm-show" style="">
+                                <li><a href="#">Recommended place</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Select main language</a></li>
+                            </ul>
+                        </li>
+                        <li class="mm-active"><a class="has-arrow" href="#">Cases Settings</a>
+                            <ul class="sub-menu mm-collapse mm-show" style="">
+                                <li><a href="#">Case priority</a></li>
+                                <li><a href="#">Pickup points for service</a></li>
+                                <li><a href="#">Terms</a></li>
+                                <li><a href="#">Select main language</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li> --}}
             </ul>
         </div>
         <!-- Sidebar -->

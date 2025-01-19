@@ -40,19 +40,19 @@
             </div>
         @endif
 
-        @php
+        {{-- @php
             $generalData = json_decode($data['general']['data'] ?? '{}', true);
             $businessData = json_decode($data['business_information']['data'] ?? '{}', true);
-            $emailData = json_decode($data['email']['data'] ?? '{}', true);
+            $emailData = json_decode($data['email_settings']['data'] ?? '{}', true);
             $taxData = json_decode($data['tax']['data'] ?? '[]', true);
             $termsData = json_decode($data['term']['data'] ?? '[]', true);
             $wcData = json_decode($data['woocommerece']['data'] ?? '[]', true);
             $banksData = json_decode($data['bank_accounts']['data'] ?? '[]', true);
             $inspectionData = json_decode($data['task_additional_price']['data'] ?? '[]', true);
             $langData = json_decode($data['language']['data'] ?? '[]', true);
-        @endphp
+        @endphp --}}
 
-        <div class="row">
+        {{-- <div class="row">
 
             <!-- Business Information -->
             <div class="col-md-4 col-sm-12">
@@ -75,7 +75,7 @@
                                 <label for="report_email">Case report email</label>
                                 <input type="email" name="report_email" class="form-control" value="{{ $generalData['report_email'] ?? '' }}" required>
                             </div>
-                            {{-- <div class="mb-3">
+                            <div class="mb-3">
                                 <label for="currency">Currency </label>
                                 <select name="currency" class="form-control" required>
                                     <option value="">Select Currency</option>
@@ -83,7 +83,7 @@
                                         <option value="{{ $keyC }}"  @if($keyC == $generalData['currency']) selected @endif>{{ $currency }}</option>
                                     @endforeach
                                 </select>
-                            </div> --}}
+                            </div>
                             <div class="mb-3">
                                 <label for="case_prefix">Case Prefix</label>
                                 <input type="text" name="case_prefix" class="form-control" value="{{ $generalData['case_prefix'] ?? '' }}" required>
@@ -175,7 +175,7 @@
                         <h4 class="card-title">Email Settings</h4>
                         <form method="POST" action="{{ route('setting.store') }}">
                             @csrf
-                            <input type="hidden" name="type" value="email">
+                            <input type="hidden" name="type" value="email_settings">
                             <div class="mb-3">
                                 <label for="mail_mailer">Mailer</label>
                                 <input type="text" name="mail_mailer" class="form-control" value="{{ $emailData['mail_mailer'] ?? '' }}" required>
@@ -219,7 +219,13 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
+
+        @php
+            $wcData = getSettingData('woocommerece');
+            $banksData = getSettingData('bank_accounts');
+            $currencyData = getSettingData('currency');
+        @endphp
 
         <div class="row">
             <div class="col-md-6 col-sm-12">
@@ -237,92 +243,12 @@
                             </div>
                             <div id="tax-container">
                                 <div class="d-flex align-items-center tax-row mb-2">
-                                    <input type="text" name="base_url" class="form-control me-2" value="{{ $wcData['base_url'] ?? '' }}" placeholder="Tax Name" required>
-                                    <input type="text" name="consumer_key" class="form-control me-2" value="{{ $wcData['consumer_key'] ?? '' }}" placeholder="Consumer Key" required>
-                                    <input type="text" name="consumer_secret" class="form-control me-2" value="{{ $wcData['consumer_secret'] ?? '' }}" placeholder="Consumer Secret" required>
+                                    <input type="text" name="base_url" class="form-control me-2" value="{{ $wcData->base_url ?? '' }}" placeholder="Tax Name" required>
+                                    <input type="text" name="consumer_key" class="form-control me-2" value="{{ $wcData->consumer_key ?? '' }}" placeholder="Consumer Key" required>
+                                    <input type="text" name="consumer_secret" class="form-control me-2" value="{{ $wcData->consumer_secret ?? '' }}" placeholder="Consumer Secret" required>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary mt-3 w-100">Update WooCommerce Settings</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Tax Settings</h4>
-                        <form method="POST" action="{{ route('setting.store') }}">
-                            @csrf
-                            <input type="hidden" name="type" value="tax">
-                            <!-- Titles Row -->
-                            <div class="d-flex align-items-center mb-2 fw-bold">
-                                <div class="me-2" style="width: 33%;">Tax Name</div>
-                                <div class="me-2" style="width: 33%;">Percentage</div>
-                                <div class="me-2" style="width: 33%;">Status</div>
-                            </div>
-                            <div id="tax-container">
-                                @foreach ($taxData as $tax)
-                                <div class="d-flex align-items-center tax-row mb-2">
-                                    <input type="text" name="name[]" class="form-control me-2" value="{{ $tax['name'] ?? '' }}" placeholder="Tax Name" required>
-                                    <input type="number" name="percentage[]" class="form-control me-2" value="{{ $tax['percentage'] ?? '' }}" placeholder="Percentage" required>
-                                    <select id="statusTax" name="status[]" class="form-control me-2" required>
-                                        <option value="">Select Option </option>
-                                        @foreach (getGenStatus('bool') as $key => $status)
-                                            <option value="{{ ++$key }}" @if($key == $tax['status']) selected @endif>{{ $status }}</option>
-                                        @endforeach
-                                    </select>
-                                    {{-- <button type="button" class="btn btn-danger btn-remove-tax">
-                                        <i class="bx bx-plus-circle me-1"></i>
-                                    </button> --}}
-                                </div>
-                                @endforeach
-                            </div>
-                            {{-- <div class="d-flex justify-content-end">
-                                <button type="button" id="btn-add-tax" class="btn btn-success">
-                                    <i class="bx bx-plus-circle me-1"></i>
-                                </button>
-                            </div> --}}
-                            <button type="submit" class="btn btn-primary mt-3 w-100">Update Tax</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Terms</h4>
-                        <form method="POST" action="{{ route('setting.store') }}">
-                            @csrf
-                            <input type="hidden" name="type" value="term">
-                            <!-- Titles Row -->
-                            <div class="d-flex align-items-center mb-2 fw-bold">
-                                <div class="me-2" style="width: 30%;">Title</div>
-                                <div class="me-2" style="width: 30%;">Link</div>
-                                <div class="me-2" style="width: 30%;">Required</div>
-                            </div>
-                            <div id="terms-container">
-                                @foreach ($termsData as $term)
-                                <div class="d-flex align-items-center terms-row mb-2">
-                                    <input type="text" name="title[]" class="form-control me-2" value="{{ $term['title'] ?? '' }}" placeholder="Title" required>
-                                    <input type="text" name="link[]" class="form-control me-2" value="{{ $term['link'] ?? '' }}" placeholder="Link" required>
-                                    <select id="is_required" name="is_required[]" class="form-control me-2" required>
-                                        <option value="">Select Option </option>
-                                        @foreach (getGenStatus('bool') as $key => $status)
-                                            <option value="{{ ++$key }}" @if($key == $term['is_required']) selected @endif>{{ $status }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button type="button" class="btn btn-danger btn-remove-terms">
-                                        <i class="bx bx-minus-circle me-1"></i>
-                                    </button>
-                                </div>
-                                @endforeach
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" id="btn-add-terms" class="btn btn-success ">
-                                    <i class="bx bx-plus-circle me-1"></i>
-                                </button>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3 w-100">Update Terms</button>
                         </form>
                     </div>
                 </div>
@@ -345,11 +271,11 @@
                             <div id="banks-container">
                                 @foreach ($banksData as $bank)
                                 <div class="d-flex align-items-center banks-row mb-2">
-                                    <input type="text" name="account_name[]" class="form-control me-2" value="{{ $bank['account_name'] ?? '' }}" placeholder="Account Name" required>
-                                    <input type="text" name="bank_name[]" class="form-control me-2" value="{{ $bank['bank_name'] ?? '' }}" placeholder="Bank Name" required>
-                                    <input type="text" name="swift_code[]" class="form-control me-2" value="{{ $bank['swift_code'] ?? '' }}" placeholder="SWIFT Code" required>
-                                    <input type="text" name="iban[]" class="form-control me-2" value="{{ $bank['iban'] ?? '' }}" placeholder="IBAN" required>
-                                    <input type="text" name="account_number[]" class="form-control me-2" value="{{ $bank['account_number'] ?? '' }}" placeholder="Account Number" required>
+                                    <input type="text" name="account_name[]" class="form-control me-2" value="{{ $bank->account_name ?? '' }}" placeholder="Account Name" required>
+                                    <input type="text" name="bank_name[]" class="form-control me-2" value="{{ $bank->bank_name ?? '' }}" placeholder="Bank Name" required>
+                                    <input type="text" name="swift_code[]" class="form-control me-2" value="{{ $bank->swift_code ?? '' }}" placeholder="SWIFT Code" required>
+                                    <input type="text" name="iban[]" class="form-control me-2" value="{{ $bank->iban ?? '' }}" placeholder="IBAN" required>
+                                    <input type="text" name="account_number[]" class="form-control me-2" value="{{ $bank->account_number ?? '' }}" placeholder="Account Number" required>
                                     <button type="button" class="btn btn-danger btn-remove-banks">
                                         <i class="bx bx-minus-circle me-1"></i>
                                     </button>
@@ -366,50 +292,25 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12">
+
+            <!-- Business Information -->
+            <div class="col-md-4 col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Inspection and diagnostics</h4>
-                        <form method="POST" action="{{ route('setting.store') }}">
+                        <h4 class="card-title">General Information</h4>
+                        <form method="POST" action="{{ route('setting.store') }}" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="type" value="task_additional_price">
-                            <input type="hidden" name="name" value="inspection_diagnose">
-                            <!-- Titles Row -->
-                            <div class="d-flex align-items-center mb-2 fw-bold">
-                                <div class="me-2">Pricing for Inspection and diagnostics</div>
+                            <input type="hidden" name="type" value="currency">
+                            <div class="mb-3">
+                                <label for="currency">Currency </label>
+                                <select name="currency" class="form-control" required>
+                                    <option value="">Select Currency</option>
+                                    @foreach (getPayment('currency') as $keyC => $currency)
+                                        <option value="{{ $keyC }}"  @if($keyC == $currencyData->currency) selected @endif>{{ $currency }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div id="tax-container">
-                                <div class="d-flex align-items-center tax-row mb-2">
-                                    <input type="number" name="amount" class="form-control me-2" value="{{ $inspectionData['amount'] ?? '' }}" placeholder="Pricing for Inspection and diagnostics" required>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3 w-100">Update inspection and diagnostics amount</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Language</h4>
-                        <form method="POST" action="{{ route('setting.store') }}">
-                            @csrf
-                            <input type="hidden" name="type" value="language">
-                            <!-- Titles Row -->
-                            <div class="d-flex align-items-center mb-2 fw-bold">
-                                <div class="me-2">Language</div>
-                            </div>
-                            <div id="tax-container">
-                                <div class="d-flex align-items-center tax-row mb-2">
-                                    <select name="language" class="form-control" required>
-                                        <option value="">Select Language</option>
-                                        @foreach (getLang('lang') as $keyL => $lang)
-                                            <option value="{{ $lang }}"  @if($lang == $langData['language']) selected @endif>{{ $lang }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3 w-100">Update inspection and diagnostics amount</button>
+                            <button type="submit" class="btn btn-primary waves-effect waves-light w-100">Update Currency</button>
                         </form>
                     </div>
                 </div>
@@ -444,30 +345,6 @@
         // Remove Tax Row
         $(document).on('click', '.btn-remove-tax', function () {
             $(this).closest('.tax-row').remove();
-        });
-
-        // Add Terms Row
-        $('#btn-add-terms').on('click', function () {
-            $('#terms-container').append(`
-                <div class="d-flex align-items-center terms-row mb-2">
-                    <input type="text" name="title[]" class="form-control me-2" placeholder="Title" required>
-                    <input type="text" name="link[]" class="form-control me-2" placeholder="Link" required>
-                    <select id="is_required" name="is_required[]" class="form-control me-2" required>
-                        <option value="">Select Option </option>
-                        @foreach (getGenStatus('bool') as $key => $status)
-                            <option value="{{ ++$key }}" @if($key == $term['is_required']) selected @endif>{{ $status }}</option>
-                        @endforeach
-                    </select>
-                    <button type="button" class="btn btn-danger btn-remove-terms">
-                        <i class="bx bx-minus-circle me-1"></i>
-                    </button>
-                </div>
-            `);
-        });
-
-        // Remove Terms Row
-        $(document).on('click', '.btn-remove-terms', function () {
-            $(this).closest('.terms-row').remove();
         });
 
         // Add Bank Row

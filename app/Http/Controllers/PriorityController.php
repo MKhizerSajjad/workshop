@@ -36,7 +36,7 @@ class PriorityController extends Controller
 
         Priority::create($data);
 
-        return redirect()->route('priority.index')->with('success','Record created successfully');
+        return redirect()->back()->with('success','Record created successfully');
     }
 
     public function show(priority $priority)
@@ -74,7 +74,7 @@ class PriorityController extends Controller
 
         $updated = Priority::find($priority->id)->update($data);
 
-        return redirect()->route('priority.index')->with('success','Updated successfully');
+        return redirect()->back()->with('success','Updated successfully');
     }
 
     public function destroy(priority $priority)
