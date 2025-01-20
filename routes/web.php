@@ -74,7 +74,7 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
         Route::get('create', [TaskController::class, 'create'])->name('case.create');
         Route::post('/store', [TaskController::class, 'store'])->name('case.store');
         Route::get('{task}', [TaskController::class, 'show'])->name('case.show');
-        Route::get('{task}/edit', [TaskController::class, 'edit'])->name('case.edit');
+        // Route::get('{task}/edit', [TaskController::class, 'edit'])->name('case.edit');
         Route::get('{task}/edit1', [TaskController::class, 'edit1'])->name('case.edit1');
         Route::put('{task}/update', [TaskController::class, 'update'])->name('case.update');
         Route::put('{task}/status-update', [TaskController::class, 'statusUpdate'])->name('case.status-update');
@@ -87,7 +87,8 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
 
         Route::post('{task}/comment', [TaskController::class, 'comment'])->name('case.comment');
         Route::post('{task}/comment/{comment_id}', [TaskController::class, 'commentUpdate'])->name('case.commentUpdate');
-        Route::delete('{task}/comment/{comment_id}', [TaskController::class, 'commentDelete'])->name('case.commentDelete');
+        Route::delete('{task}/comment/{comment_id}', [TaskController::class, 'commentDelete'])->name('case.commentDelete')->middleware('access.level:1,2,3');
+        Route::delete('{task}/log/{log_id}', [TaskController::class, 'logDelete'])->name('case.logDelete')->middleware('access.level:1,2,3');
     });
 
     // Route::resource('case',  ::class)->names('case')->middleware('access.level:1,2,3');

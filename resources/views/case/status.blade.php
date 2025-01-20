@@ -97,7 +97,7 @@
                                 </a>
                                 <a class="nav-link" id="v-media-tab" data-bs-toggle="pill" href="#v-media" role="tab" aria-controls="v-media" aria-selected="false">
                                     <i class= "fa fa-th-large d-block check-nav-icon mt-4 mb-2"></i>
-                                    <p class="fw-bold mb-4">Media</p>
+                                    <p class="fw-bold mb-4">Media & Logs</p>
                                 </a>
                                 <a class="nav-link" id="v-services-tab" data-bs-toggle="pill" href="#v-services" role="tab" aria-controls="v-services" aria-selected="false">
                                     <i class= "fa fa-cog d-block check-nav-icon mt-4 mb-2"></i>
@@ -310,6 +310,25 @@
                                                         @endforeach
                                                     @else
                                                         <h5 class="text text-danger text-center">No media uploaded by service center</h5>
+                                                    @endif
+                                                </div>
+
+                                                <h4 class="card-title mt-5">Case Logs</h4>
+                                                <div id="logsBody">
+                                                    @if (count($data->logs) > 0)
+                                                        @foreach ($data->logs as $key => $log)
+                                                            <div class="row"> {{-- mb-2 py-2 border-bottom --}}
+                                                                <div class="col-md-9 col-sm-9">
+                                                                    <span class="fs-14 d-block mb-1">{{ $log->created_at }}</span>
+                                                                </div>
+                                                                <div class="col-md-3 col-sm-3">
+                                                                    {!! getCaseStatus('general', $log->status, 'badge') !!}
+                                                                </div>
+                                                            </div>
+                                                            <hr class="draw-line">
+                                                        @endforeach
+                                                    @else
+                                                        <p class="text-muted mb-0 text-center">No information yet.</p>
                                                     @endif
                                                 </div>
                                             </div>

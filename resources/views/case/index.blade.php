@@ -96,10 +96,6 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($data as $key => $task)
-                                                @php
-                                                    $tootal = $task->total + ($task->inspection_diagnose == 1 ? config('app.insp_diag_amount') : 0);
-                                                @endphp
-
                                                 <tr>
                                                     <td class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $task->code }}</td>
@@ -107,7 +103,7 @@
                                                     <td>{{ $task->manufacturer . ' - ' . $task->model }}</td> {{--  . ' ' . $task->year --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
                                                     <td>{{ date('Y-m-d', strtotime($task->date_opened)) }}</td>
-                                                    <td>{{ numberFormat($tootal) . getPayment('currency', config('app.currency'), 'badge') }}</td>
+                                                    <td>{{ numberFormat($task->total) . getPayment('currency', config('app.currency'), 'badge') }}</td>
                                                     {{-- <td>{{ numberFormat($task->paid, 'euro') }}</td>
                                                     <td>{{ numberFormat($task->pending, 'euro') }}</td> --}}
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>
