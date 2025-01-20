@@ -45,6 +45,10 @@ return new class extends Migration
             $table->text('details');
             $table->text('notes')->nullable();
             $table->text('customer_response')->nullable();
+
+            $table->boolean('cash')->default(1);
+            $table->boolean('bank')->default(1);
+            $table->boolean('card')->default(1);
             $table->timestamps();
 
             $table->foreign('technician_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');

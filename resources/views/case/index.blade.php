@@ -103,7 +103,7 @@
                                                     <td>{{ $task->manufacturer . ' - ' . $task->model }}</td> {{--  . ' ' . $task->year --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
                                                     <td>{{ date('Y-m-d', strtotime($task->date_opened)) }}</td>
-                                                    <td>{{ numberFormat($task->total) . getPayment('currency', config('app.currency'), 'badge') }}</td>
+                                                    <td>{{ numberFormat($task->total) . config('app.currency') }}</td>
                                                     {{-- <td>{{ numberFormat($task->paid, 'euro') }}</td>
                                                     <td>{{ numberFormat($task->pending, 'euro') }}</td> --}}
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>

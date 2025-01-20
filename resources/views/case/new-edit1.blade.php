@@ -752,7 +752,7 @@
                                                                 class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2"><i
                                                                     class="fs-16 bx bx-euro"></i></a>
                                                         </li>
-                                                        <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $data->task->id }}"
+                                                        <li class="w-100"><a href="#" data-bs-toggle="modal" data-bs-target="#paymentRestriction-{{ $data->task->id }}"
                                                                 class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
                                                                 <i class="fs-16 bx bx-message"></i></a>
                                                         </li>
@@ -1497,6 +1497,40 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div class="modal fade" id="paymentRestriction-{{ $data->task->id }}" tabindex="-1" aria-labelledby="paymentRestrictionLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentRestrictionLabel">Add New Comments for <b>{{$data->task->code}}</b></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{ route('case.payment-methods', $data->task->id) }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="task_id" value="{{ $data->task->id }}">
+
+                        <div class="mt-0">
+
+                            <input class="form-check-input" type="checkbox" value="1" name="cash_payment" id="cash_payment" {!! $data->task->cash == 1 ? 'checked' : ''  !!}>
+                            <label class="form-check-label" for="cash_payment"><h5>Allow Cash Payment</h5></label>
+                            <br>
+                            <input class="form-check-input" type="checkbox" value="1" name="bank_transfer" id="bank_transfer" {!! $data->task->bank == 1 ? 'checked' : ''  !!}>
+                            <label class="form-check-label" for="bank_transfer"><h5>Allow Bank Transfer</h5></label>
+                            <br>
+                            <input class="form-check-input" type="checkbox" value="1" name="card_payment" id="card_payment" {!! $data->task->card == 1 ? 'checked' : ''  !!}>
+                            <label class="form-check-label" for="card_payment"><h5>Allow Card Payment</h5></label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>

@@ -370,11 +370,7 @@
                                                                 <div class="mb-2 form-check form-check-inline font-size-16">
                                                                     <input class="form-check-input" type="checkbox" value="1" name="receive_newsletter" id="receive_newsletter" checked {{ old("terms[{$sanitizedTitle}][status]", '0') == '1' ? 'checked' : '' }}>
                                                                     <label class="form-check-label" for="receive_newsletter">
-                                                                        <h5>
-                                                                            @if(!empty($term->link))
-                                                                                <p>I agree to receive newsletter</p>
-                                                                            @endif
-                                                                        </h5>
+                                                                        <h5>I agree to receive newsletter</h5>
                                                                     </label>
                                                                 </div>
                                                             @endif

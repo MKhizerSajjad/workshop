@@ -143,16 +143,22 @@
                                                     </a>
                                                 </div>
                                                 @if ($data->task->payment_status != 1)
-                                                    {{-- <div class="me-2 mt-1">
-                                                        <a href="" class="badge bg-primary font-size-14">
-                                                            <i class="bx bx-credit-card"></i> Card Payment
-                                                        </a>
-                                                    </div> --}}
-                                                    <div class="me-2 mt-1">
-                                                        <a href="#" class="badge bg-primary font-size-14" data-bs-toggle="modal" data-bs-target="#bankDetailModal">
-                                                            <i class="bx bx-building"></i> Bank Detail
-                                                        </a>
-                                                    </div>
+                                                    @if ($data->task->card == 1)
+                                                        <div class="me-2 mt-1">
+                                                            <a href="" class="badge bg-primary font-size-14">
+                                                                <i class="bx bx-credit-card"></i> Card Payment
+                                                            </a>
+                                                        </div>
+                                                    @endif
+
+                                                    @if ($data->task->bank == 1)
+                                                        <div class="me-2 mt-1">
+                                                            <a href="#" class="badge bg-primary font-size-14" data-bs-toggle="modal" data-bs-target="#bankDetailModal">
+                                                                <i class="bx bx-building"></i> Bank Detail
+                                                            </a>
+                                                        </div>
+                                                    @endif
+
                                                     <div class="me-2 mt-1">
                                                         <a href="" class="badge bg-primary font-size-14">
                                                             <i class="bx bx-loader-circle"></i> Refresh Payment

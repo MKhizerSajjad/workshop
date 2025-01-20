@@ -85,6 +85,7 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
         Route::post('{task}/item-info', [TaskController::class, 'itemInfoUpdate'])->name('case.item-info');
         Route::post('{task}/customer-info', [TaskController::class, 'customerInfoUpdate'])->name('case.customer-info');
 
+        Route::post('{task}/payment-methods', [TaskController::class, 'paymentMethods'])->name('case.payment-methods');
         Route::post('{task}/comment', [TaskController::class, 'comment'])->name('case.comment');
         Route::post('{task}/comment/{comment_id}', [TaskController::class, 'commentUpdate'])->name('case.commentUpdate');
         Route::delete('{task}/comment/{comment_id}', [TaskController::class, 'commentDelete'])->name('case.commentDelete')->middleware('access.level:1,2,3');

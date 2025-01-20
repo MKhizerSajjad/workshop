@@ -1159,6 +1159,20 @@ class TaskController extends Controller
         return redirect()->route('case.edit1', $task->id)->with('success','Record update successfully');
     }
 
+    public function paymentMethods(Request $request, Task $task)
+    {
+        $taskId = $task->id;
+        $task = Task::whereId($task->id)->first();
+        $data = [
+            'cash' => $request->input('cash_payment') ?? 0,
+            'bank' => $request->input('bank_transfer') ?? 0,
+            'card' => $request->input('card_payment') ?? 0,
+        ];
+        $task->update($data);
+
+        return redirect()->route('case.edit1', $taskId)->with('success','Allowed payment methods updated successfully');
+    }
+
     public function comment(Request $request, Task $task)
     {
         $this->validate($request, [
