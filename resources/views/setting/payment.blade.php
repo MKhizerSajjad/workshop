@@ -294,15 +294,15 @@
             </div>
 
             <!-- Business Information -->
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-6 col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">General Information</h4>
+                        <h4 class="card-title">Currency</h4>
                         <form method="POST" action="{{ route('setting.store') }}" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="type" value="currency">
                             <div class="mb-3">
-                                <label for="currency">Currency </label>
+                                {{-- <label for="currency">Currency </label> --}}
                                 <select name="currency" class="form-control" required>
                                     <option value="">Select Currency</option>
                                     @foreach (getPayment('currency') as $keyC => $currency)
@@ -315,6 +315,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Inspection and diagnostics charges</h4>
+                        <form method="POST" action="{{ route('setting.store') }}">
+                            @csrf
+                            <input type="hidden" name="type" value="task_additional_price">
+                            <input type="hidden" name="name" value="inspection_diagnose">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                {{-- <div class="me-2">Pricing for Inspection and diagnostics</div> --}}
+                            </div>
+                            <div id="tax-container">
+                                <div class="d-flex align-items-center tax-row mb-2">
+                                    <input type="number" name="amount" class="form-control me-2" value="{{ getSettingData('task_additional_price')->amount ?? '' }}" placeholder="Pricing for Inspection and diagnostics" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Update inspection and diagnostics amount</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>
