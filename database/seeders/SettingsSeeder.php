@@ -104,7 +104,13 @@ class SettingsSeeder extends Seeder
                 ],
                 [
                     'type'      => 'currency',
-                    'data'      => '{"currency": "1"}',
+                    'data'      => '{"currency": "$"}',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'type'      => 'currencies',
+                    'data'      => '[{"name": "EUR", "symbol": "€", "status": 1}, {"name": "USD", "symbol": "$", "status": 1}, {"name": "GBP", "symbol": "£", "status": 1}]',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]

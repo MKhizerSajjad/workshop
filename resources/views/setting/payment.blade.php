@@ -225,6 +225,7 @@
             $wcData = getSettingData('woocommerece');
             $banksData = getSettingData('bank_accounts');
             $currencyData = getSettingData('currency');
+            $currenciesData = getSettingData('currencies');
         @endphp
 
         <div class="row">
@@ -305,8 +306,8 @@
                                 {{-- <label for="currency">Currency </label> --}}
                                 <select name="currency" class="form-control" required>
                                     <option value="">Select Currency</option>
-                                    @foreach (getPayment('currency') as $keyC => $currency)
-                                        <option value="{{ ++$keyC }}"  @if($keyC == $currencyData->currency) selected @endif>{{ $currency }}</option>
+                                    @foreach (getSettingData('currencies') as $keyC => $currency)
+                                        <option value="{{ $currency->symbol }}"  @if($currency->symbol == $currencyData->currency) selected @endif>{{ $currency->symbol .' - '. $currency->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -334,6 +335,41 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary mt-3 w-100">Update inspection and diagnostics amount</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Currencies</h4>
+                        <form method="POST" action="{{ route('setting.store') }}">
+                            @csrf
+                            <input type="hidden" name="type" value="currencies">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                <div class="me-2" style="width: 50%;">Name</div>
+                                <div class="me-2" style="width: 50%;">Symbol</div>
+                            </div>
+                            <div id="curr-container">
+                                @foreach ($currenciesData as $curr)
+                                <div class="d-flex align-items-center curr-row mb-2">
+                                    <input type="hidden" name="status[]" value="1">
+                                    <input type="text" name="name[]" class="form-control me-2" value="{{ $curr->name ?? '' }}" placeholder="Name" required>
+                                    <input type="text" name="symbol[]" class="form-control me-2" value="{{ $curr->symbol ?? '' }}" placeholder="Symbol" required>
+                                    <button type="button" class="btn btn-danger btn-remove-curr">
+                                        <i class="bx bx-minus-circle me-1"></i>
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" id="btn-add-currencies" class="btn btn-success ">
+                                    <i class="bx bx-plus-circle me-1"></i>
+                                </button>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Update Currencies</button>
                         </form>
                     </div>
                 </div>
@@ -390,6 +426,25 @@
         // Remove Bank Row
         $(document).on('click', '.btn-remove-banks', function () {
             $(this).closest('.banks-row').remove();
+        });
+
+        // Add Terms Row
+        $('#btn-add-currencies').on('click', function () {
+            $('#curr-container').append(`
+                <div class="d-flex align-items-center curr-row mb-2">
+                    <input type="hidden" name="status[]" value="1">
+                    <input type="text" name="name[]" class="form-control me-2" value="{{ $term['name'] ?? '' }}" placeholder="Name" required>
+                    <input type="text" name="symbol[]" class="form-control me-2" value="{{ $term['symbol'] ?? '' }}" placeholder="Symbol" required>
+                    <button type="button" class="btn btn-danger btn-remove-curr">
+                        <i class="bx bx-minus-circle me-1"></i>
+                    </button>
+                </div>
+            `);
+        });
+
+        // Remove Terms Row
+        $(document).on('click', '.btn-remove-curr', function () {
+            $(this).closest('.curr-row').remove();
         });
 
     });

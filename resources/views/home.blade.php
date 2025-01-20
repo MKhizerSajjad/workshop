@@ -134,7 +134,7 @@
                                     <div class="d-flex">
                                         <div class="flex-grow-1">
                                             <p class="text-muted fw-medium">Total Amount</p>
-                                            <h4 class="mb-0">{{ numberFormat($data['case_total']) . getPayment('currency', config('app.currency'), 'badge') }}</h4>
+                                            <h4 class="mb-0">{{ numberFormat($data['case_total']) . config('app.currency') }}</h4>
                                         </div>
 
                                         <div class="flex-shrink-0 align-self-center">
@@ -154,7 +154,7 @@
                                     <div class="d-flex">
                                         <div class="flex-grow-1">
                                             <p class="text-muted fw-medium">Average Price</p>
-                                            <h4 class="mb-0">{{ numberFormat($data['case_average']) . getPayment('currency', config('app.currency'), 'badge') }}</h4>
+                                            <h4 class="mb-0">{{ numberFormat($data['case_average']) . config('app.currency') }}</h4>
                                         </div>
 
                                         <div class="flex-shrink-0 align-self-center">

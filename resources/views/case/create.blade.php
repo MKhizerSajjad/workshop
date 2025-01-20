@@ -185,7 +185,7 @@
                                                         <div class="form-check form-check-inline font-size-16">
                                                             <input class="form-check-input" type="radio" name="priority" value="{{$priority->id}}" id="priority-{{$priority->id}}" {{ old('priority') == $priority->id ? 'checked' : ($priority->id == 1 ? 'checked' : '') }}>
                                                             <label class="form-check-label font-size-13" for="priority-{{$priority->id}}">
-                                                                {{ $priority->name }} - {{ number_format($priority->price, 0) }}({{ getPayment('currency', config('app.currency'), 'badge') }})
+                                                                {{ $priority->name }} - {{ number_format($priority->price, 0) }}({{ config('app.currency') }})
                                                             </label>
                                                         </div>
                                                     @endforeach
@@ -200,8 +200,8 @@
                                                             <input class="form-check-input" type="radio" value="1" name="inspection" id="inspection"  {{ (old('inspection', '1') == '1' || old('inspection', '1') != '2')? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="inspection">
                                                                 <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
-                                                                Inspection and diagnostics - <b class="font-size-16">{{ config('app.insp_diag_amount') }}({{ getPayment('currency', config('app.currency'), 'badge') }})</b>
-                                                                <br><span class="text text-danger">{{ config('app.insp_diag_amount') }}({{ getPayment('currency', config('app.currency'), 'badge') }}) would extra add on</span>
+                                                                Inspection and diagnostics - <b class="font-size-16">{{ config('app.insp_diag_amount') }}({{ config('app.currency') }})</b>
+                                                                <br><span class="text text-danger">{{ config('app.insp_diag_amount') }}({{ config('app.currency') }}) would extra add on</span>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -210,7 +210,7 @@
                                                             <input class="form-check-input" type="radio" value="2" name="inspection" id="withoutinspection2" {{ old('inspection', '1') == '2' ? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="withoutinspection2">
                                                                 <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
-                                                                Without diagnostics - <b class="font-size-16">0({{ getPayment('currency', config('app.currency'), 'badge') }})</b>
+                                                                Without diagnostics - <b class="font-size-16">0({{ config('app.currency') }})</b>
                                                                 <br><span class="text text-danger">Repair, according to the problem named and described by the customer</span>
                                                             </label>
                                                         </div>
@@ -227,11 +227,11 @@
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
-                                                                    {{-- getPayment('currency', config('app.currency'), 'badge')  --}}
+                                                                    {{-- config('app.currency')  --}}
                                                                     @if ($service->show_price == 1)
                                                                         <span class="font-size-14">
                                                                             <b>
-                                                                                {{ number_format($service->price) . getPayment('currency', config('app.currency'), 'badge') }}
+                                                                                {{ number_format($service->price) . config('app.currency') }}
                                                                             </b>
                                                                         </span>
                                                                     @endif
@@ -257,7 +257,7 @@
                                                                     @if ($service->show_price == 1)
                                                                         <span class="font-size-14">
                                                                             <b>
-                                                                                {{ number_format($service->price) . getPayment('currency', config('app.currency'), 'badge') }}
+                                                                                {{ number_format($service->price) . config('app.currency') }}
                                                                             </b>
                                                                         </span>
                                                                     @endif
@@ -273,11 +273,11 @@
                                                     @enderror
 
                                                     <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
-                                                        <label>Selected Services Total (({{ getPayment('currency', config('app.currency'), 'badge') }}))</label>
+                                                        <label>Selected Services Total ({{ config('app.currency') }})</label>
                                                         <input type="number" name="service_total" id="service-total" class="form-control" placeholder="Total Services Amount" value="{{ old('service_total') }}" readonly>
                                                     </div>
                                                     <div class="mb-3 col-sm-12 offset-sm-0 col-md-4 offset-md-8">
-                                                        <label>Give your's if price is over (({{ getPayment('currency', config('app.currency'), 'badge') }}))</label>
+                                                        <label>Give your's if price is over ({{ config('app.currency') }})</label>
                                                         <input type="text" name="service_desired_total" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" class="form-control" placeholder="Your Desired Amount" value="{{ old('service_desired_total') }}">
                                                     </div>
                                                 </div>

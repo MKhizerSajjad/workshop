@@ -158,6 +158,13 @@ class SettingController extends Controller
             ]);
         }
 
+        if($request->type == 'currencies') {
+            $this->validate($request, [
+                'name.*' => 'required',
+                'symbol.*' => 'required'
+            ]);
+        }
+
         $inputs = $request->except(['_token', 'type']);
 
         if ($request->type == 'business_information') {
