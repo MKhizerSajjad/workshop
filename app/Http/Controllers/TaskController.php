@@ -216,6 +216,9 @@ class TaskController extends Controller
         }
         $confirmation = json_encode($terms);
 
+
+        $priorityAmount = Priority::where('id', $request->input('priority'))->pluck('price')->first();
+
         $invoce = $request->input('case_number') ??$this->generateInvoiceCode();
         $data = [
             'code' => $invoce,
@@ -231,6 +234,7 @@ class TaskController extends Controller
             'additional_info' => $request->input('additional_info'),
             'problem_description' => $request->input('problem_description'),
             'priority_id' => $request->input('priority'),
+            'priority_amount' => $priorityAmount,
             'inspection_diagnose' => $request->input('inspection'),
             'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0,
             'services_location' => $request->input('services_location'),
@@ -418,7 +422,7 @@ class TaskController extends Controller
 
         $totalAmount = 0;
         $inspDiagAmount = $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0;
-        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount;
+        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount + $priorityAmount;
 
         $task->update(['total' => $totalAmount, 'pending' => $totalAmount]);
         // Get extra-parts from request and process them
@@ -702,6 +706,9 @@ class TaskController extends Controller
         }
         $confirmation = json_encode($terms);
 
+        $priorityId = $request->input('priority') ?? $task->priority;
+        $priorityAmount = Priority::where('id', $priorityId)->pluck('price')->first();
+
         $data = [
             // 'payment_status' => $request->input('payment_status'),
 
@@ -719,7 +726,8 @@ class TaskController extends Controller
             'color' => $request->input('color') ?? $task->color,
             'additional_info' => $request->input('additional_info') ?? $task->additional_info,
             'problem_description' => $request->input('problem_description') ?? $task->problem_description,
-            'priority_id' => $request->input('priority') ?? $task->priority,
+            'priority_id' => $priorityId,
+            'priority_amount' => $priorityAmount,
             'inspection_diagnose' => $request->input('inspection') ?? $task->inspection,
             'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : $task->inspection_diagnose_amount,
             'services_location' => $request->input('services_location') ?? $task->services_location,
@@ -917,7 +925,7 @@ class TaskController extends Controller
         $totalAmount = 0;
 
         $inspDiagAmount = $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0;
-        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount;
+        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount + $priorityAmount;
         $pending = $totalAmount - $task->paid;
 
         $task->update(['total' => $totalAmount, 'pending' => $pending]);
