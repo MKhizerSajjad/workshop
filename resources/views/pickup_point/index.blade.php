@@ -49,7 +49,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Pickup Points List</h4>
+                            <h4 class="card-title">A way to pick up the item list</h4>
                             <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
                                 <a href="{{ route('pickup-point.create') }}" class="btn btn-primary waves-effect waves-light"> <i class="bx bx-plus me-1"></i> Add New</a>
                             </div>
