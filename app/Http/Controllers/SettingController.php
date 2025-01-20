@@ -99,9 +99,9 @@ class SettingController extends Controller
                 'working_hours.start' => 'required|date_format:H:i',
                 'working_hours.end' => 'required|date_format:H:i',
                 'main_color' => 'nullable|regex:/^#([A-Fa-f0-9]{3}){1,2}$/',
-                'report_invoice_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+                'report_invoice_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
                 'favicon' => 'nullable|mimes:jpeg,png,jpg,gif,ico,webp|max:1024',
-                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             ]);
         }
 
