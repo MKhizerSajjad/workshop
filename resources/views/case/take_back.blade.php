@@ -253,6 +253,13 @@
                                                         </div>
 
                                                         @if ($data->task->payment_status == 1)
+
+                                                            <div class="col-md-12 mb-3">
+                                                                <label for="response_message" class="form-label">Additional Information</label>
+                                                                <div class="col-md-12">
+                                                                    <textarea class="form-control" name="response_message" id="response_message" placeholder="Enter Response Message">{{ old('response_message') }}</textarea>
+                                                                </div>
+                                                            </div>
                                                             <div class="d-grid gap-2 mt-3">
                                                                 <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
                                                             </div>

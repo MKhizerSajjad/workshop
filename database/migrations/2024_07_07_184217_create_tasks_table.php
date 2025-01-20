@@ -44,6 +44,7 @@ return new class extends Migration
             $table->boolean('is_satisfied')->nullable();
             $table->text('details');
             $table->text('notes')->nullable();
+            $table->text('customer_response')->nullable();
             $table->timestamps();
 
             $table->foreign('technician_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');

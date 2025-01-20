@@ -1324,12 +1324,14 @@ class TaskController extends Controller
             'pickup_point' => 'required|integer',
             'is_servised' => 'required',
             'is_satisfied' => 'required',
+            'response_message' => 'nullable'
         ]);
 
         $data = [
             'pickup_point_id' => $request->input('pickup_point'),
             'is_servised' => $request->input('is_servised'),
             'is_satisfied' => $request->input('is_satisfied'),
+            'customer_response' => $request->input('response_message'),
         ];
 
         $taskId = $id;
