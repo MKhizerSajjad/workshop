@@ -138,8 +138,8 @@
                                                     <span class="font-size-20">{!! getPayment('status', $data->task->payment_status, 'badge') !!}</span>
                                                 </div>
                                                 <div class="me-2 mt-1">
-                                                    <a href="{{ route('caseInvoice', $data->task->id) }}" target="_blank" class="badge bg-primary font-size-14">
-                                                        <i class="bx bx-receipt"></i> Invoice
+                                                    <a href="{{ route('caseReport', $data->task->id) }}" target="_blank" class="badge bg-primary font-size-14">
+                                                        <i class="bx bx-receipt"></i> Report
                                                     </a>
                                                 </div>
                                                 @if ($data->task->payment_status != 1)

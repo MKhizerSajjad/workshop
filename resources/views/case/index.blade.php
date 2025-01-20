@@ -107,13 +107,13 @@
                                                     <td>{{ $task->manufacturer . ' - ' . $task->model }}</td> {{--  . ' ' . $task->year --}}
                                                     <td>{{ optional($task->technician)->first_name . ' ' . optional($task->technician)->last_name }}</td>
                                                     <td>{{ date('Y-m-d', strtotime($task->date_opened)) }}</td>
-                                                    <td>{{ numberFormat($tootal) }} {{ getPayment('currency', config('app.currency'), 'badge') }}</td>
+                                                    <td>{{ numberFormat($tootal) . getPayment('currency', config('app.currency'), 'badge') }}</td>
                                                     {{-- <td>{{ numberFormat($task->paid, 'euro') }}</td>
                                                     <td>{{ numberFormat($task->pending, 'euro') }}</td> --}}
                                                     <td>{!! getCaseStatus('general', $task->status, 'badge') !!}</td>
                                                     <td>{!! getPayment('status', $task->payment_status, 'badge') !!}</td>
                                                     <td class="text-center">
-                                                        <a href="{{ route('case.invoice', $task->id) }}"><i class="bx bx-receipt"></i></a>
+                                                        <a href="{{ route('case.report', $task->id) }}"><i class="bx bx-receipt"></i></a>
                                                         {{-- @if ($task->payment_status != 1)
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#paymentModal-{{ $task->id }}"><i class="bx bx-euro"></i></a>
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#commentsModal-{{ $task->id }}"><i class="bx bx-message"></i></a>

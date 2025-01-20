@@ -306,7 +306,7 @@
                                 <select name="currency" class="form-control" required>
                                     <option value="">Select Currency</option>
                                     @foreach (getPayment('currency') as $keyC => $currency)
-                                        <option value="{{ $keyC }}"  @if($keyC == $currencyData->currency) selected @endif>{{ $currency }}</option>
+                                        <option value="{{ ++$keyC }}"  @if($keyC == $currencyData->currency) selected @endif>{{ $currency }}</option>
                                     @endforeach
                                 </select>
                             </div>

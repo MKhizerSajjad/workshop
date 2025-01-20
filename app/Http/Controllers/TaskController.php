@@ -1190,7 +1190,7 @@ class TaskController extends Controller
         // $task->media()->delete();
     }
 
-    public function invoice(Task $task)
+    public function report(Task $task)
     {
         return view('case.invoice', compact('task'));
     }

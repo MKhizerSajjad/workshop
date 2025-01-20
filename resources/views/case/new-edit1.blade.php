@@ -738,7 +738,7 @@
                                             </div>
                                             <div class="col-2 d-flex flex-column align-items-center justify-content-center">
                                                 <ul class="list-unstyled d-flex flex-column gap-2 w-100">
-                                                    <li class="w-100"><a href="{{ route('case.invoice', $data->task->id) }}"
+                                                    <li class="w-100"><a href="{{ route('case.report', $data->task->id) }}"
                                                             class="btn btn-sm btn-info px-3 d-flex align-items-center justify-content-center py-2">
                                                             <i class="fs-16 bx bx-receipt"></i></a>
                                                     </li>

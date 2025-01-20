@@ -50,7 +50,7 @@ Route::get('/booking/status_search', [TaskController::class, 'statusSearch'])->n
 Route::get('/booking/takeback', [TaskController::class, 'takeBack'])->name('takeBack');
 Route::get('/booking/takeback/details', [TaskController::class, 'takeBackDetails'])->name('takeBackDetails');
 Route::put('/booking/takeback/{task}/save', [TaskController::class, 'saveTakeBack'])->name('saveTakeBack');
-Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('caseInvoice');
+Route::get('{task}/report', [TaskController::class, 'report'])->name('caseReport');
 // Route::get('service-location/{locationId}/fields', [SerivceLocationController::class, 'locationDetail']);
 
 Route::get('products', [ProductController::class, 'list'])->name('productsList');
@@ -80,7 +80,7 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
         Route::put('{task}/status-update', [TaskController::class, 'statusUpdate'])->name('case.status-update');
         Route::delete('{task}/delete', [TaskController::class, 'destroy'])->name('case.destroy');
         Route::get('{task}/delete-media', [TaskController::class, 'destroyMedia'])->name('case.destroyMedia');
-        Route::get('{task}/invoice', [TaskController::class, 'invoice'])->name('case.invoice');
+        Route::get('{task}/report', [TaskController::class, 'report'])->name('case.report');
 
         Route::post('{task}/item-info', [TaskController::class, 'itemInfoUpdate'])->name('case.item-info');
         Route::post('{task}/customer-info', [TaskController::class, 'customerInfoUpdate'])->name('case.customer-info');
