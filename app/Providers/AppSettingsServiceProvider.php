@@ -26,6 +26,9 @@ class AppSettingsServiceProvider extends ServiceProvider
         $businessInformation = Setting::where('type', 'business_information')->first();
         $wcInformation = Setting::where('type', 'woocommerece')->first();
         $inspectionInformation = Setting::where('type', 'task_additional_price')->first();
+        $languageInformation = Setting::where('type', 'language')->first();
+        $caseInformation = Setting::where('type', 'case')->first();
+        $currencyInformation = Setting::where('type', 'currency')->first();
 
         // If general settings exist, update APP_NAME dynamically
         if ($generalSettings) {
@@ -179,6 +182,30 @@ class AppSettingsServiceProvider extends ServiceProvider
 
             if (isset($inspectionData['amount'])) {
                 config(['app.insp_diag_amount' => $inspectionData['amount']]);
+            }
+        }
+
+        if($languageInformation) {
+            $langData = json_decode($languageInformation->data, true);
+
+            if (isset($langData['language'])) {
+                config(['app.language' => $langData['language']]);
+            }
+        }
+
+        if($caseInformation) {
+            $caseData = json_decode($caseInformation->data, true);
+
+            if (isset($caseData['case_prefix'])) {
+                config(['app.case_prefix' => $caseData['case_prefix']]);
+            }
+        }
+
+        if($currencyInformation) {
+            $currencyData = json_decode($currencyInformation->data, true);
+
+            if (isset($currencyData['currency'])) {
+                config(['app.currency' => $currencyData['currency']]);
             }
         }
     }
