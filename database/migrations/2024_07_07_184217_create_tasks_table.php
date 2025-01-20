@@ -31,8 +31,9 @@ return new class extends Migration
             $table->longText('additional_info')->nullable()->comment('additional information about item');
             $table->longText('problem_description')->nullable()->comment('Description of the problem / failure');
             $table->bigInteger('priority_id')->unsigned()->nullable();
-            $table->boolean('inspection_diagnose')->default(1)->comment('Inspection and diagnostics fix charges i.e: 35Eur');
             $table->boolean('services_location')->default(1)->comment('where from service get');
+            $table->boolean('inspection_diagnose')->default(1)->comment('Inspection and diagnostics fix charges i.e: 35Eur');
+            $table->decimal('inspection_diagnose_amount', 10, 2)->nullable();
             $table->decimal('total', 10, 2)->nullable();
             $table->decimal('paid', 10, 2)->nullable();
             $table->decimal('pending', 10, 2)->nullable();

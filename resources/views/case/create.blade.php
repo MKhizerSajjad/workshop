@@ -200,8 +200,8 @@
                                                             <input class="form-check-input" type="radio" value="1" name="inspection" id="inspection"  {{ (old('inspection', '1') == '1' || old('inspection', '1') != '2')? 'checked' : '' }}>
                                                             <label class="form-check-label font-size-13" for="inspection">
                                                                 <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
-                                                                Inspection and diagnostics - <b class="font-size-16">35({{ getPayment('currency', config('app.currency'), 'badge') }})</b>
-                                                                <br><span class="text text-danger">35({{ getPayment('currency', config('app.currency'), 'badge') }}) would extra add on</span>
+                                                                Inspection and diagnostics - <b class="font-size-16">{{ config('app.insp_diag_amount') }}({{ getPayment('currency', config('app.currency'), 'badge') }})</b>
+                                                                <br><span class="text text-danger">{{ config('app.insp_diag_amount') }}({{ getPayment('currency', config('app.currency'), 'badge') }}) would extra add on</span>
                                                             </label>
                                                         </div>
                                                     </div>

@@ -232,6 +232,7 @@ class TaskController extends Controller
             'problem_description' => $request->input('problem_description'),
             'priority_id' => $request->input('priority'),
             'inspection_diagnose' => $request->input('inspection'),
+            'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0,
             'services_location' => $request->input('services_location'),
             'service_desired_total' => $request->input('service_desired_total') ?? null,
         ];
@@ -416,7 +417,8 @@ class TaskController extends Controller
         // }
 
         $totalAmount = 0;
-        $totalAmount = $totalServiceAmount + $totalProductAmount;
+        $inspDiagAmount = $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0;
+        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount;
 
         $task->update(['total' => $totalAmount, 'pending' => $totalAmount]);
         // Get extra-parts from request and process them
@@ -719,6 +721,7 @@ class TaskController extends Controller
             'problem_description' => $request->input('problem_description') ?? $task->problem_description,
             'priority_id' => $request->input('priority') ?? $task->priority,
             'inspection_diagnose' => $request->input('inspection') ?? $task->inspection,
+            'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : $task->inspection_diagnose_amount,
             'services_location' => $request->input('services_location') ?? $task->services_location,
             'service_desired_total' => $request->input('service_desired_total') ?? $task->service_desired_total,
         ];
@@ -912,7 +915,9 @@ class TaskController extends Controller
         // }
 
         $totalAmount = 0;
-        $totalAmount = $totalServiceAmount + $totalProductAmount;
+
+        $inspDiagAmount = $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0;
+        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount;
         $pending = $totalAmount - $task->paid;
 
         $task->update(['total' => $totalAmount, 'pending' => $pending]);

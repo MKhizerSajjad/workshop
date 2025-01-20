@@ -258,7 +258,7 @@
 
                                                             <span class="btn btn-info" id="currentInspection">
                                                                 @if ($data->task->inspection_diagnose == 1)
-                                                                    Inspection & Diagnostics - <b class="font-size-16">35{{getPayment('currency', config('app.currency'), 'badge')}}</b>
+                                                                    Inspection & Diagnostics - <b class="font-size-16">{{config('app.insp_diag_amount')}} {{getPayment('currency', config('app.currency'), 'badge')}}</b>
                                                                 @else
                                                                     Without Diagnostics - <b class="font-size-16">0{{getPayment('currency', config('app.currency'), 'badge')}}</b>
                                                                 @endif
@@ -279,8 +279,8 @@
                                                                             {{ $data->task->inspection_diagnose == 1 ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13" for="inspection">
                                                                             <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
-                                                                            Inspection and Diagnostics - <b class="font-size-16">35{{getPayment('currency', config('app.currency'), 'badge')}}</b>
-                                                                            <br><span class="text text-danger">35{{getPayment('currency', config('app.currency'), 'badge')}} would extra add on</span>
+                                                                            Inspection and Diagnostics - <b class="font-size-16">{{config('app.insp_diag_amount')}} {{getPayment('currency', config('app.currency'), 'badge')}}</b>
+                                                                            <br><span class="text text-danger">{{config('app.insp_diag_amount')}} {{getPayment('currency', config('app.currency'), 'badge')}} would extra add on</span>
                                                                         </label>
                                                                     </div>
                                                                 </div>
