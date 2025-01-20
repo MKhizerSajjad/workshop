@@ -237,7 +237,7 @@ class TaskController extends Controller
             'priority_id' => $request->input('priority'),
             'priority_amount' => $priorityAmount,
             'inspection_diagnose' => $request->input('inspection'),
-            'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0,
+            'inspection_diagnose_amount' => config('app.insp_diag_amount') ?? 0,
             'services_location' => $request->input('services_location'),
             'service_desired_total' => $request->input('service_desired_total') ?? null,
         ];
@@ -741,7 +741,7 @@ class TaskController extends Controller
             'priority_id' => $priorityId,
             'priority_amount' => $priorityAmount,
             'inspection_diagnose' => $request->input('inspection') ?? $task->inspection,
-            'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : $task->inspection_diagnose_amount,
+            // 'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : $task->inspection_diagnose_amount,
             'services_location' => $request->input('services_location') ?? $task->services_location,
             'service_desired_total' => $request->input('service_desired_total') ?? $task->service_desired_total,
         ];
@@ -936,7 +936,7 @@ class TaskController extends Controller
 
         $totalAmount = 0;
 
-        $inspDiagAmount = $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0;
+        $inspDiagAmount = $request->input('inspection') == 1 ? $task->inspection_diagnose_amount : 0;
         $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount + $priorityAmount;
         $pending = $totalAmount - $task->paid;
 
