@@ -83,6 +83,9 @@
             <div class="col-md-12">
                 <div class="card shadow-lg border-light">
                     <div class="card-body">
+                        @php
+                            $lang = request()->get('lang') ?? 'en';
+                        @endphp
                         <!-- Filters and Actions -->
                         <div class="row mb-3">
                             <div class="col-lg-4">
@@ -91,9 +94,6 @@
                             <div class="col-lg-8 text-end">
                                 <form method="GET" class="d-inline-flex align-items-center">
                                     <select name="lang" id="lang" class="form-select" style="max-width: 150px;">
-                                        @php
-                                            $lang = request()->get('lang') ?? 'en';
-                                        @endphp
                                         <option value=""> Select Language </option>
                                         @foreach($languages as $language)
                                             <option value="{{ $language }}" {{ $lang == $language ? 'selected' : '' }}>{{ strtoupper($language) }}</option>
@@ -110,7 +110,7 @@
                         <!-- Existing Translations Table -->
                         <form action="{{ route('translations.updateMultiple') }}" method="POST">
                             @csrf
-                            <input type="hidden" name="language" value="{{ request('language') }}">
+                            <input type="hidden" name="language" value="{{$lang}}">
 
                             <table class="table table-bordered table-striped">
                                 <thead>

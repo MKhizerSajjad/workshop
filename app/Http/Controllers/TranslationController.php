@@ -43,7 +43,7 @@ class TranslationController extends Controller
             }
         }
 
-        return redirect()->route('translations.index')->with('success', 'Translations updated successfully.');
+        return redirect()->route('translations')->with('success', 'Translations updated successfully.');
     }
 
     public function store(Request $request)
