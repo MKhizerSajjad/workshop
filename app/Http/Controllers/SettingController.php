@@ -196,7 +196,25 @@ class SettingController extends Controller
             // Store the updated data
             $jsonData = json_encode($inputs);
 
-        } elseif ($request->type == 'email' || $request->type == 'payments' || $request->type == 'general' || $request->type == 'woocommerece' || $request->type == 'task_additional_price' || $request->type == 'language' || $request->type == 'case' || $request->type == 'tax' || $request->type == 'currency') {
+        } elseif ($request->type == 'payments') {
+
+            $data = [
+                [
+                    // 'paypal' => [
+                    //     'api_key' => $inputs['api_key'],
+                    //     'enabled' => $inputs['enable'] == true
+                    // ],
+                    'stripe' => [
+                        'api_key' => $inputs['api_key'],
+                        'enabled' => $inputs['enable'] == true
+                    ],
+                    'cash_payment_enabled' => true
+                ]
+            ];
+            $jsonData = json_encode($data);
+
+        } elseif ($request->type == 'email' || $request->type == 'general' || $request->type == 'woocommerece' || $request->type == 'task_additional_price' || $request->type == 'language' || $request->type == 'case' || $request->type == 'tax' || $request->type == 'currency') {
+
             $jsonData = json_encode($inputs);
 
         } else {

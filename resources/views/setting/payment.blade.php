@@ -226,6 +226,8 @@
             $banksData = getSettingData('bank_accounts');
             $currencyData = getSettingData('currency');
             $currenciesData = getSettingData('currencies');
+            $payments = getSettingData('payments');
+            $stripeData = $payments[0]->stripe;
         @endphp
 
         <div class="row">
@@ -257,38 +259,20 @@
             <div class="col-md-6 col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Bank Accounts</h4>
+                        <h4 class="card-title">Stripe Settings</h4>
                         <form method="POST" action="{{ route('setting.store') }}">
                             @csrf
-                            <input type="hidden" name="type" value="bank_accounts">
-                            <!-- Titles Row -->
+                            <input type="hidden" name="type" value="payments">
                             <div class="d-flex align-items-center mb-2 fw-bold">
-                                <div class="me-0" style="width: 20%;">Acc. Name</div>
-                                <div class="me-0" style="width: 20%;">Bank Name</div>
-                                <div class="me-0" style="width: 15%;">SWIFT Code</div>
-                                <div class="me-0" style="width: 20%;">IBAN</div>
-                                <div class="me-0" style="width: 20%;">Acc. No.</div>
+                                <div class="me-2" style="width: 50%;">API Key</div>
                             </div>
-                            <div id="banks-container">
-                                @foreach ($banksData as $bank)
-                                <div class="d-flex align-items-center banks-row mb-2">
-                                    <input type="text" name="account_name[]" class="form-control me-2" value="{{ $bank->account_name ?? '' }}" placeholder="Account Name" required>
-                                    <input type="text" name="bank_name[]" class="form-control me-2" value="{{ $bank->bank_name ?? '' }}" placeholder="Bank Name" required>
-                                    <input type="text" name="swift_code[]" class="form-control me-2" value="{{ $bank->swift_code ?? '' }}" placeholder="SWIFT Code" required>
-                                    <input type="text" name="iban[]" class="form-control me-2" value="{{ $bank->iban ?? '' }}" placeholder="IBAN" required>
-                                    <input type="text" name="account_number[]" class="form-control me-2" value="{{ $bank->account_number ?? '' }}" placeholder="Account Number" required>
-                                    <button type="button" class="btn btn-danger btn-remove-banks">
-                                        <i class="bx bx-minus-circle me-1"></i>
-                                    </button>
+                            <div id="stripe-container">
+                                <div class="d-flex align-items-center stripe-row mb-2">
+                                    <input type="hidden" name="enable" value="true">
+                                    <input type="text" name="api_key" class="form-control me-2" value="{{ $stripeData->api_key ?? '' }}" placeholder="Api Key" required>
                                 </div>
-                                @endforeach
                             </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" id="btn-add-banks" class="btn btn-success">
-                                    <i class="bx bx-plus-circle me-1"></i>
-                                </button>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3 w-100">Update Bank Accounts</button>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Update Stripe Key</button>
                         </form>
                     </div>
                 </div>
@@ -326,11 +310,11 @@
                             <input type="hidden" name="type" value="task_additional_price">
                             <input type="hidden" name="name" value="inspection_diagnose">
                             <!-- Titles Row -->
-                            <div class="d-flex align-items-center mb-2 fw-bold">
+                            <div class="d-flex align-items-center fw-bold">
                                 {{-- <div class="me-2">Pricing for Inspection and diagnostics</div> --}}
                             </div>
                             <div id="tax-container">
-                                <div class="d-flex align-items-center tax-row mb-2">
+                                <div class="d-flex align-items-center tax-row">
                                     <input type="number" name="amount" class="form-control me-2" value="{{ getSettingData('task_additional_price')->amount ?? '' }}" placeholder="Pricing for Inspection and diagnostics" required>
                                 </div>
                             </div>
@@ -370,6 +354,46 @@
                                 </button>
                             </div>
                             <button type="submit" class="btn btn-primary mt-3 w-100">Update Currencies</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Bank Accounts</h4>
+                        <form method="POST" action="{{ route('setting.store') }}">
+                            @csrf
+                            <input type="hidden" name="type" value="bank_accounts">
+                            <!-- Titles Row -->
+                            <div class="d-flex align-items-center mb-2 fw-bold">
+                                <div class="me-0" style="width: 20%;">Acc. Name</div>
+                                <div class="me-0" style="width: 20%;">Bank Name</div>
+                                <div class="me-0" style="width: 15%;">SWIFT Code</div>
+                                <div class="me-0" style="width: 20%;">IBAN</div>
+                                <div class="me-0" style="width: 20%;">Acc. No.</div>
+                            </div>
+                            <div id="banks-container">
+                                @foreach ($banksData as $bank)
+                                <div class="d-flex align-items-center banks-row mb-2">
+                                    <input type="text" name="account_name[]" class="form-control me-2" value="{{ $bank->account_name ?? '' }}" placeholder="Account Name" required>
+                                    <input type="text" name="bank_name[]" class="form-control me-2" value="{{ $bank->bank_name ?? '' }}" placeholder="Bank Name" required>
+                                    <input type="text" name="swift_code[]" class="form-control me-2" value="{{ $bank->swift_code ?? '' }}" placeholder="SWIFT Code" required>
+                                    <input type="text" name="iban[]" class="form-control me-2" value="{{ $bank->iban ?? '' }}" placeholder="IBAN" required>
+                                    <input type="text" name="account_number[]" class="form-control me-2" value="{{ $bank->account_number ?? '' }}" placeholder="Account Number" required>
+                                    <button type="button" class="btn btn-danger btn-remove-banks">
+                                        <i class="bx bx-minus-circle me-1"></i>
+                                    </button>
+                                </div>
+                                @endforeach
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" id="btn-add-banks" class="btn btn-success">
+                                    <i class="bx bx-plus-circle me-1"></i>
+                                </button>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3 w-100">Update Bank Accounts</button>
                         </form>
                     </div>
                 </div>
