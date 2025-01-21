@@ -46,19 +46,19 @@
                                 <div class="col-sm-4 col-6">
                                     <div class="mt-4">
                                         <h5 class="font-size-14"><i class="bx bx-euro me-1 text-primary"></i> Total Amount</h5>
-                                        <p class="text-muted mb-0">{{ numberFormat($data->total, 'euro') }}</p>
+                                        <p class="text-muted mb-0">{{ numberFormat($data->total) . config('app.currency') }}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-4 col-6">
                                     <div class="mt-4">
                                         <h5 class="font-size-14"><i class="bx bx-euro me-1 text-primary"></i> Paid</h5>
-                                        <p class="text-muted mb-0">{{ numberFormat($data->paid, 'euro') }}</p>
+                                        <p class="text-muted mb-0">{{ numberFormat($data->paid) . config('app.currency') }}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-4 col-6">
                                     <div class="mt-4">
                                         <h5 class="font-size-14"><i class="bx bx-euro me-1 text-primary"></i> Pending</h5>
-                                        <p class="text-muted mb-0">{{ numberFormat($data->pending, 'euro') }}</p>
+                                        <p class="text-muted mb-0">{{ numberFormat($data->pending) . config('app.currency') }}</p>
                                     </div>
                                 </div>
                                 <div class="col-sm-4 col-6">
@@ -150,7 +150,7 @@
                                             {!! getPayment('via', $payment->via, 'badge') !!}
                                         </div>
                                         <div class="flex-grow-1">
-                                            <h5 class="font-size-15"><a href="javascript: void(0);" class="text-dark">{{  numberFormat($payment->amount, 'euro') }}</a></h5>
+                                            <h5 class="font-size-15"><a href="javascript: void(0);" class="text-dark">{{  numberFormat($payment->amount) . config('app.currency') }}</a></h5>
                                             <p class="text-muted mb-1">
                                                 {{ $payment->note }}
                                             </p>

@@ -66,9 +66,9 @@
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->sort_order }}</td>
-                                                    <td>{{ numberFormat($product->price, 'euro') }}</td>
-                                                    <td>{{ numberFormat($taxAmount, 'euro') }}</td>
-                                                    <td>{{  numberFormat(($product->price + $taxAmount), 'euro') }}</td>
+                                                    <td>{{ numberFormat($product->price) . config('app.currency') }}</td>
+                                                    <td>{{ numberFormat($taxAmount) . config('app.currency') }}</td>
+                                                    <td>{{  numberFormat($product->price + $taxAmount) . config('app.currency') }}</td>
                                                     <td>{{ $product->time }}</td>
                                                     <td>{{ $product->service->name ?? '' }}</td>
                                                     <td>{!! getGenStatus('bool', $product->show_price, 'badge') !!}</td>

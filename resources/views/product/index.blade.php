@@ -96,9 +96,9 @@
                                                     <td  class="text-center">{{ ++$key }}</td>
                                                     <td><img src=" {{ $product->img_url }}" alt="{{ $product->name }}" width="50px" height="50px" onerror="this.onerror=null;this.src='{{ asset('images/brands/bitbucket.png') }}'"></td>
                                                     <td>{{ $product->name }}</td>
-                                                    <td>{{ numberFormat($product->price, 'euro') }}</td>
-                                                    <td>{{ numberFormat($taxAmount, 'euro') }}</td>
-                                                    <td>{{  numberFormat(($product->price + $taxAmount), 'euro') }}</td>
+                                                    <td>{{ numberFormat($product->price) . config('app.currency') }}</td>
+                                                    <td>{{ numberFormat($taxAmount) . config('app.currency') }}</td>
+                                                    <td>{{  numberFormat(($product->price + $taxAmount)) . config('app.currency') }}</td>
                                                     <td>{{ $product->stock_quantity }}</td>
                                                     <td>{!! getStockStatus('woocommerce', $product->stock_status, 'badge') !!}</td>
                                                     {{-- <td>{!! getGenStatus('general', $product->status, 'badge') !!}</td> --}}
