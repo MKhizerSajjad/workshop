@@ -22,7 +22,7 @@ class AppSettingsServiceProvider extends ServiceProvider
     {
         // Fetch the 'general' settings from the database
         $generalSettings = Setting::where('type', 'general')->first();
-        $emailSettings = Setting::where('type', 'email_settings')->first();
+        $emailSettings = Setting::where('type', 'email')->first();
         $businessInformation = Setting::where('type', 'business_information')->first();
         $wcInformation = Setting::where('type', 'woocommerece')->first();
         $inspectionInformation = Setting::where('type', 'task_additional_price')->first();

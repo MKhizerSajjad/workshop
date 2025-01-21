@@ -18,7 +18,7 @@ return new class extends Migration
             $table->tinyInteger('visibility')->default(1)->comment('visibility');
             $table->boolean('status')->nullable();
             $table->text('comment')->nullable();
-            $table->foreignId('user_id')->constrained()->onDelete('No Action');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('No Action');
             $table->timestamps();
         });
     }
