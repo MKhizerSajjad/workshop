@@ -128,6 +128,7 @@
                             @php
                                 $priorityAmount = 0;
                                 $inspecDiagAmount = 0;
+                                $totalAddOns = 0;
                                 $settingTax = getTax();
                                 $totalServiceTax = 0;
                                 $totalServicePrice = 0;
@@ -135,41 +136,41 @@
                                 $totalProductPrice = 0;
                             @endphp
 
-<div class="py-2 mt-1">
-    <h3 class="font-size-15 fw-bold">Add Ons </h3>
-</div>
-<div class="table-responsive">
-    <table class="table table-nowrap">
-        <thead>
-            <tr>
-                <th style="width: 70%">Name</th>
-                <th style="width: 30%" class="text-end">Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($task->taskServices as $service)
-                @php
-                    $priorityAmount = $task->priority_amount;
-                    $inspecDiagAmount = $task->inspection_diagnose == 1 ? $task->inspection_diagnose_amount : 0;
-                    $totalAddOns = $priorityAmount + $inspecDiagAmount;
-                @endphp
-                <tr>
-                    <td>Priority of Case</td>
-                    <td class="text-end">{{ numberFormat($priorityAmount) }}</td>
-                </tr>
-                <tr>
-                    <td>Inspection and diagnostics</td>
-                    <td class="text-end">{{ numberFormat($inspecDiagAmount) }}</td>
-                </tr>
-            @endforeach
+                            <div class="py-2 mt-1">
+                                <h3 class="font-size-15 fw-bold">Add Ons </h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 70%">Name</th>
+                                            <th style="width: 30%" class="text-end">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($task->taskServices as $service)
+                                            @php
+                                                $priorityAmount = $task->priority_amount;
+                                                $inspecDiagAmount = $task->inspection_diagnose == 1 ? $task->inspection_diagnose_amount : 0;
+                                                $totalAddOns = $priorityAmount + $inspecDiagAmount;
+                                            @endphp
+                                            <tr>
+                                                <td>Priority of Case</td>
+                                                <td class="text-end">{{ numberFormat($priorityAmount) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Inspection and diagnostics</td>
+                                                <td class="text-end">{{ numberFormat($inspecDiagAmount) }}</td>
+                                            </tr>
+                                        @endforeach
 
-            <tr>
-                <td colspan="5" class="text-end">Total Add Ons</td>
-                <td class="text-end">{{ numberFormat($totalAddOns) }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                                        <tr>
+                                            <td colspan="5" class="text-end">Total Add Ons</td>
+                                            <td class="text-end">{{ numberFormat($totalAddOns) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
                             @if (count($task->taskServices) > 0)
                                 <div class="py-2 mt-1">
