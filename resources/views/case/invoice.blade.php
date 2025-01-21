@@ -148,22 +148,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($task->taskServices as $service)
-                                            @php
-                                                $priorityAmount = $task->priority_amount;
-                                                $inspecDiagAmount = $task->inspection_diagnose == 1 ? $task->inspection_diagnose_amount : 0;
-                                                $totalAddOns = $priorityAmount + $inspecDiagAmount;
-                                            @endphp
-                                            <tr>
-                                                <td>Priority of Case</td>
-                                                <td class="text-end">{{ numberFormat($priorityAmount) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Inspection and diagnostics</td>
-                                                <td class="text-end">{{ numberFormat($inspecDiagAmount) }}</td>
-                                            </tr>
-                                        @endforeach
-
+                                        @php
+                                            $priorityAmount = $task->priority_amount;
+                                            $inspecDiagAmount = $task->inspection_diagnose == 1 ? $task->inspection_diagnose_amount : 0;
+                                            $totalAddOns = $priorityAmount + $inspecDiagAmount;
+                                        @endphp
+                                        <tr>
+                                            <td>Priority of Case</td>
+                                            <td class="text-end">{{ numberFormat($priorityAmount) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Inspection and diagnostics</td>
+                                            <td class="text-end">{{ numberFormat($inspecDiagAmount) }}</td>
+                                        </tr>
                                         <tr>
                                             <td colspan="5" class="text-end">Total Add Ons</td>
                                             <td class="text-end">{{ numberFormat($totalAddOns) }}</td>
