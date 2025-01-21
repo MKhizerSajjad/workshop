@@ -45,7 +45,7 @@
                 <div class="col-md-12 col-sm-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Plaforms List</h4>
+                            <h4 class="card-title">Recommendation Places List</h4>
                             <div class="d-flex justify-content-end gap-2" bis_skin_checked="1">
                                 <a href="{{ route('platform.create') }}" class="btn btn-primary waves-effect waves-light"> <i class="bx bx-plus me-1"></i> Add New</a>
                             </div>

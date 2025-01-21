@@ -8,10 +8,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Platform</h4>
+                        <h4 class="mb-sm-0 font-size-18">Recommendation Place </h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class=""><a href="javascript: void(0);">Platform</a></li>
+                                <li class=""><a href="javascript: void(0);">Recommendation Place</a></li>
                                 <li class="mx-1"><a href="javascript: void(0);"> > </a></li>
                                 <li class="breadcrumb-item active">Add New</li>
                             </ol>
@@ -25,7 +25,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Add New Platform</h4>
+                            <h4 class="card-title">Add New Recommendation Place</h4>
                             {{-- <p class="card-title-desc">Fill all information below</p> --}}
                             <form method="POST" action="{{ route('platform.store') }}">
                                 @csrf
