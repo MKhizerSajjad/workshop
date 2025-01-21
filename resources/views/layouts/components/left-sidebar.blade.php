@@ -87,8 +87,8 @@
                             {{-- <li><a href="{{ route('setting.index') }}" key="t-products">General <span class="badge badge-success">Old</span></a></li>
                             <li><a href="{{ route('priority.index') }}" key="t-products">Priority <span class="badge badge-success">Old</span></a></li>
                             <li><a href="{{ route('pickup-point.index') }}" key="t-orders">Pickup Points  <span class="badge badge-success">Old</span></a></li>
-                            <li><a href="{{ route('platform.index') }}" key="t-products">Social Platform</a></li>
-                            <li><a href="{{ route('service-location.index') }}" key="t-orders">Service Location</a></li> --}}
+                            <li><a href="{{ route('platform.index') }}" key="t-products">Social Platform</a></li> --}}
+                            <li><a href="{{ route('service-location.index') }}" key="t-orders">Service Location</a></li>
                             @if (in_array(auth()->user()->user_type , [1]))
                                 <li><a href="{{ route('access.index') }}" key="t-orders">Access Control</a></li>
                             @endif
