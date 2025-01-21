@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('task_comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained()->onDelete('No Action');
-            $table->tinyInteger('type')->default(1);
+            $table->tinyInteger('type')->default(1)->comment('log or comment');
+            $table->tinyInteger('visibility')->default(1)->comment('visibility');
+            $table->boolean('status')->nullable();
             $table->text('comment')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('No Action');
             $table->timestamps();

@@ -459,15 +459,16 @@ class TaskController extends Controller
             }
         }
 
-
         $logCommentUser = auth()->check() ? auth()->user()->first_name . '(staff)' : 'customer';
-
         $taskData = [
-            'task_id' => $task->id,
-            'comment' => 'case creted by ' . $logCommentUser,
-            'user_id' => auth()->check() ? auth()->id() : null,
+            'task_id'       => $task->id,
+            'type'          => 1,
+            'visibility'    => 1,
+            'status'        => 1,
+            'comment'       => 'case creted by ' . $logCommentUser,
+            'user_id'       => auth()->check() ? auth()->id() : null,
         ];
-        TaskLog::create($taskData);
+        TaskComment::create($taskData);
 
         $baseUrl = url('/');
         $trackingLink = $baseUrl . '/booking/status_search?_token=z6oZeY6Nk52fFBc8sYKKxMkv1sGZowc12eLRsaWV&case_number='. $task->code .' phonne=' . $customerAdd->phone;
@@ -635,7 +636,8 @@ class TaskController extends Controller
         $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
         $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
         $data->cases = Task::where('customer_id', $data->task->customer_id)->get();
-        $data->logs = TaskLog::where('task_id', $data->task->id)->get();
+        $data->comments = TaskComment::where('task_id', $data->task->id)->orderByDesc('created_at')->get();
+        // $data->logs = TaskLog::where('task_id', $data->task->id)->get();
         $data->tax = getTax();
 
         // dd($data->task);
@@ -966,15 +968,16 @@ class TaskController extends Controller
 
 
         if($previousStatus != $newStatus) {
-
             $logCommentUser = auth()->check() ? auth()->user()->first_name . '(staff)' : 'customer';
             $taskData = [
-                'status' => $newStatus,
                 'task_id' => $task->id,
+                'type'          => 1,
+                'visibility'    => 1,
+                'status'        => $newStatus,
                 'comment' => 'updated by ' . $logCommentUser,
                 'user_id' => auth()->check() ? auth()->id() : null,
             ];
-            TaskLog::create($taskData);
+            TaskComment::create($taskData);
 
             $customer = $task->customer;
             $customerFullname = $customer->first_name . ' ' . $customer->last_name;
@@ -1182,7 +1185,8 @@ class TaskController extends Controller
         $taskId = $task->id;
         $data = [
             'task_id' => $taskId,
-            'type' => $request->input('visibility') ?? 1,
+            'type' => 2,
+            'visibility' => $request->input('visibility') ?? 1,
             'comment' => $request->input('comment'),
             'user_id' => Auth::user()->id
         ];
@@ -1227,7 +1231,7 @@ class TaskController extends Controller
 
     public function logDelete(Request $request, $taskId, $logId)
     {
-        $log = TaskLog::where('task_id', $taskId)->find($logId);
+        $log = TaskComment::where('task_id', $taskId)->find($logId);
 
         if ($log) {
             $log->delete();
@@ -1288,7 +1292,8 @@ class TaskController extends Controller
             $data->products = Product::where('status', 1)->orderBy('name')->get();
             $data->serviceLocations = SerivceLocation::where('status', 1)->orderBy('id')->get();
             $data->technicians = User::where([['status', 1],['user_type', 3]])->orderBy('first_name')->get();
-            $data->logs = TaskLog::where('task_id', $task->id)->get();
+            $data->comments = TaskComment::where('task_id', $task->id)->get();
+            // $data->logs = TaskLog::where('task_id', $task->id)->get();
         }
 
         return view('case.status',compact('data'));

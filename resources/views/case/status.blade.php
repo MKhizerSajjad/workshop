@@ -313,20 +313,32 @@
                                                     @endif
                                                 </div>
 
-                                                <h4 class="card-title mt-5">Case Logs</h4>
+                                                <h4 class="card-title mt-5">Case log</h4>
                                                 <div id="logsBody">
-                                                    @if (count($data->logs) > 0)
-                                                        @foreach ($data->logs as $key => $log)
-                                                            <div class="row"> {{-- mb-2 py-2 border-bottom --}}
-                                                                <div class="col-md-9 col-sm-9">
-                                                                    <span class="fs-14 d-block mb-1">{{ $log->created_at }}</span>
+                                                    @if (count($data->comments) > 0)
+                                                        <ul>
+                                                        @foreach ($data->comments as $key => $comment)
+                                                            @if($comment->visibility == 1)
+                                                            <li>
+                                                                <div class="row">
+                                                                    <div class="col-md-9 col-sm-9">
+                                                                        @if ($comment->type == 2)
+                                                                            <span class="fs-14 d-block mb-4">{{ $comment->comment }}</span>
+                                                                            {{-- <span class="fs-14 d-block mb-1">Added By: {{ $comment->user->first_name }}</span> --}}
+                                                                        @endif
+                                                                        <span class="fs-14 d-block mb-1">{{ $comment->created_at }}</span>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-3">
+                                                                        @if ($comment->type == 1)
+                                                                            {!! getCaseStatus('general', $comment->status, 'badge') !!}
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
-                                                                <div class="col-md-3 col-sm-3">
-                                                                    {!! getCaseStatus('general', $log->status, 'badge') !!}
-                                                                </div>
-                                                            </div>
-                                                            <hr class="draw-line">
+                                                                <hr class="draw-line">
+                                                            </li>
+                                                            @endif
                                                         @endforeach
+                                                        </ul>
                                                     @else
                                                         <p class="text-muted mb-0 text-center">No information yet.</p>
                                                     @endif

@@ -245,7 +245,7 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title mb-4">Comments</h4>
+                            <h4 class="card-title mb-4">Case Logs</h4>
                             @if($data->taskComments && count($data->taskComments) > 0)
                                 @foreach ($data->taskComments as $key => $comments)
 

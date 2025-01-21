@@ -835,7 +835,8 @@
                                 </div>
                             </div>
 
-                            <div class="card mb-2">
+                            {{-- LOGS USE PRE, CAN DELETE --}}
+                            {{-- <div class="card mb-2">
                                 <div class="card-body">
                                     <div class="mt-3">
                                         <div class="d-flex align-items-start mb-4">
@@ -849,8 +850,8 @@
                                                     @foreach ($data->logs as $key => $log)
                                                         <div class="row">
                                                             <div class="col-md-9 col-sm-9">
-                                                                {{-- <span class="fs-14 d-block mb-4">{{ $log->comment }}</span> --}}
-                                                                {{-- <span class="fs-14 d-block mb-1">Added By: {{ $log->user->first_name }}</span> --}}
+                                                                <span class="fs-14 d-block mb-4">{{ $log->comment }}</span>
+                                                                <span class="fs-14 d-block mb-1">Added By: {{ $log->user->first_name }}</span>
                                                                 {!! getCaseStatus('general', $log->status, 'badge') !!}
                                                                 <span class="fs-14 d-block mb-1">{{ $log->created_at }}</span>
                                                             </div>
@@ -874,8 +875,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                            </div> --}}
 
                             {{-- Comment --}}
                             <div class="card mb-2">
@@ -883,7 +883,7 @@
                                     <div class="mt-3">
                                         <div class="d-flex align-items-start mb-4">
                                             <div class="flex-grow-1">
-                                                <h5 class="card-title mb-4">Comments</h5>
+                                                <h5 class="card-title mb-4">Case log</h5>
                                             </div>
                                             @if ($data->task->payment_status != 1)
                                                 <a href="#" class="badge bg-info font-size-14 flex-shrink-0 " data-bs-toggle="modal"
@@ -891,41 +891,48 @@
                                                     Add Comment</a>
                                             @endif
                                         </div>
-                                        <div data-simplebar="init" class="simplebar-scrollable-y" style="max-height: 280px;">
+                                        <div data-simplebar="init" class="simplebar-scrollable-y" style="max-height: 280px; overflow: hidden; overflow-y: auto;">
                                             <div>
-                                                @if (count($data->task->taskComments) > 0)
-                                                    @foreach ($data->task->taskComments as $key => $comment)
+                                                @if (count($data->comments) > 0)
+                                                    @foreach ($data->comments as $key => $comment)
                                                         <div class="row"> {{-- mb-2 py-2 border-bottom --}}
-                                                            <div class="col-md-9 col-sm-9">
-
-                                                                <span class="fs-14 d-block mb-4">{{ $comment->comment }}</span>
-                                                                <span class="fs-14 d-block mb-1">Added By: {{ $comment->user->first_name }}</span>
+                                                            <div class="col-md-8 col-sm-8">
+                                                                @if ($comment->type == 1)
+                                                                    {!! getCaseStatus('general', $comment->status, 'badge') !!}
+                                                                @else
+                                                                    <span class="fs-14 d-block mb-4">{{ $comment->comment }}</span>
+                                                                    <span class="fs-14 d-block mb-1">Added By: {{ $comment->user->first_name }}</span>
+                                                                @endif
                                                                 <span class="fs-14 d-block mb-1">{{ $comment->created_at }}</span>
-                                                                {{-- <p class="text-muted mb-1 font-size-16">
-                                                                    {{ $comment->comment }}
-                                                                </p>
-                                                                <p class="pt-0">Added By:
-                                                                    {{ $comment->user_id }}
-                                                                    <br>
-                                                                    {{ $comment->created_at }}
-                                                                </p> --}}
                                                             </div>
                                                             <div class="col-md-3 col-sm-3">
                                                                 {{--  text-center p-0 editable-btn --}}
-                                                                {!! getGenStatus('visibility', $comment->type, 'badge') !!}
-                                                                <div class="row text-center d-flex justify-content-center mt-2">
-                                                                    <div class="col-md-6">
-                                                                        <span class="btn btn-warning font-weight-bold p-1" data-bs-toggle="modal" data-bs-target="#editCommentModal-{{ $comment->id }}">
-                                                                            <i class="fa fa-edit"></i>
-                                                                        </span>
+
+                                                                @if ($comment->type == 1)
+                                                                    <div class="row text-center d-flex justify-content-center mt-2">
+                                                                        <div class="col-md-6">
+                                                                            <span class="btn btn-danger font-weight-bold p-1 deleteLogModal" data-id="{{ $comment->id }}" data-task-id="{{ $data->task->id }}">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-md-6">
-                                                                        <span class="btn btn-danger font-weight-bold p-1" data-bs-toggle="modal" data-bs-target="#deleteCommentModal-{{ $comment->id }}">
-                                                                            <i class="fa fa-trash"></i>
-                                                                        </span>
+                                                                @else
+                                                                    {!! getGenStatus('visibility', $comment->type, 'badge') !!}
+                                                                    <div class="row text-center d-flex justify-content-center mt-2">
+                                                                        <div class="col-md-6">
+                                                                            <span class="btn btn-warning font-weight-bold p-1" data-bs-toggle="modal" data-bs-target="#editCommentModal-{{ $comment->id }}">
+                                                                                <i class="fa fa-edit"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <span class="btn btn-danger font-weight-bold p-1" data-bs-toggle="modal" data-bs-target="#deleteCommentModal-{{ $comment->id }}">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
+                                                                @endif
                                                             </div>
+                                                            <div class="col-md-1 col-sm-1"></div>
                                                         </div>
 
                                                         <!-- Edit Comment Modal -->
@@ -996,7 +1003,7 @@
                                                         <hr class="draw-line">
                                                     @endforeach
                                                 @else
-                                                    <p class="text-muted mb-0 text-center">No comment yet.</p>
+                                                    <p class="text-muted mb-0 text-center"> No information yet.</p>
                                                 @endif
                                             </div>
                                         </div>
@@ -1503,7 +1510,7 @@
         </div>
     </div>
 
-    <!-- Comments Modal -->
+    <!-- Payment Restriction -->
     <div class="modal fade" id="paymentRestriction-{{ $data->task->id }}" tabindex="-1" aria-labelledby="paymentRestrictionLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1850,6 +1857,7 @@
             $('#form-location-' + locationId).show();
         });
 
+        // when log table was seprate
         $(document).on('click', '.deleteLogModal', function(){
             var id = $(this).data('id');
             var taskId = $(this).data('task-id');
@@ -2068,5 +2076,20 @@
     visibility: visible;
     opacity: 1;
   }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
