@@ -82,6 +82,7 @@
                             <li><a href="{{ route('pickup-point.index') }}" key="t-products">Cases Settings</a></li>
                             <li><a href="{{ route('settingPayment') }}" key="t-products">Payment & Integration</a></li>
                             <li><a href="{{ route('settingEmail') }}" key="t-products">Email Setting</a></li>
+                            <li><a href="{{ route('translations') }}" key="t-products">Translation</a></li>
 
                             {{-- <li><a href="{{ route('setting.index') }}" key="t-products">General <span class="badge badge-success">Old</span></a></li>
                             <li><a href="{{ route('priority.index') }}" key="t-products">Priority <span class="badge badge-success">Old</span></a></li>

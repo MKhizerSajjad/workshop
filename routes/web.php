@@ -19,6 +19,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PickupPointController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\AccessControlController;
 use App\Http\Controllers\SerivceLocationController;
 use App\Models\Technician;
@@ -66,8 +67,10 @@ Route::middleware(['auth', AccessControls::class])->group(function () {
     Route::resource('notification', NotificationController::class)->names('notification');
     Route::resource('platform', PlatformController::class)->names('platform');
     Route::resource('access', AccessControlController::class)->names('access')->middleware('access.level:1');
-    // Route::get('case', [TaskController::class, 'create'])->name('case.create');
-    // ->except(['create'])
+
+    Route::get('translations', [TranslationController::class, 'index'])->name('translations');
+    Route::post('translations/store', [TranslationController::class, 'store'])->name('translations.store');
+    Route::post('translations/update-multiple', [TranslationController::class, 'updateMultiple'])->name('translations.updateMultiple');
 
     Route::prefix('case')->group(function () {
         Route::get('/', [TaskController::class, 'index'])->name('case.index');
