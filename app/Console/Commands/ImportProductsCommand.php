@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\Category;
 // use App\Models\Image;
 // use App\Models\ProductMeta;
@@ -44,12 +45,17 @@ class ImportProductsCommand extends Command
             // Create cURL resource
             $ch = curl_init();
 
-            $baseUrl = config('app.base_url');
-            $consumerKey = config('app.consumer_key');
-            $consumerSecret = config('app.consumer_secret');
+            $wcInformation = Setting::where('type', 'woocommerece')->first();
+            $wcData = json_decode($wcInformation->data);
+
+            $baseUrl = $wcData->base_url;
+            $consumerKey = $wcData->consumer_key;
+            $consumerSecret = $wcData->consumer_secret;
 
             if(!$baseUrl || !$consumerKey || !$consumerSecret) {
-                logger('WooCommerece details are not set in Settings');
+                $error = 'WooCommerece details are not set in Settings';
+                logger($error);
+                $this->info($error);
                 exit();
             }
 

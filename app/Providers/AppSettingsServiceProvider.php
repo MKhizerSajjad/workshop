@@ -24,7 +24,7 @@ class AppSettingsServiceProvider extends ServiceProvider
         $generalSettings = Setting::where('type', 'general')->first();
         $emailSettings = Setting::where('type', 'email')->first();
         $businessInformation = Setting::where('type', 'business_information')->first();
-        $wcInformation = Setting::where('type', 'woocommerece')->first();
+        // $wcInformation = Setting::where('type', 'woocommerece')->first();
         $inspectionInformation = Setting::where('type', 'task_additional_price')->first();
         $languageInformation = Setting::where('type', 'language')->first();
         $caseInformation = Setting::where('type', 'case')->first();
@@ -157,25 +157,25 @@ class AppSettingsServiceProvider extends ServiceProvider
             \Log::warning('Email settings not found or malformed in the database');
         }
 
-        if ($wcInformation) {
-            // Woocommerce
-            $wcData = json_decode($wcInformation->data, true);
+        // if ($wcInformation) {
+        //     // Woocommerce
+        //     $wcData = json_decode($wcInformation->data, true);
 
-            if (isset($wcData['website'])) {
-                $website = $wcData['website'];
-                config(['app.wc_website' => $website]);
-            }
+        //     if (isset($wcData['base_url'])) {
+        //         $base_url = $wcData['base_url'];
+        //         config(['app.base_url' => $base_url]);
+        //     }
 
-            if (isset($wcData['consumer_key'])) {
-                $wc_consumer_key = $wcData['consumer_key'];
-                config(['app.consumer_key' => $wc_consumer_key]);
-            }
+        //     if (isset($wcData['consumer_key'])) {
+        //         $wc_consumer_key = $wcData['consumer_key'];
+        //         config(['app.consumer_key' => $wc_consumer_key]);
+        //     }
 
-            if (isset($wcData['consumer_secret'])) {
-                $wc_consumer_secret = $wcData['consumer_secret'];
-                config(['app.consumer_secret' => $wc_consumer_secret]);
-            }
-        }
+        //     if (isset($wcData['consumer_secret'])) {
+        //         $wc_consumer_secret = $wcData['consumer_secret'];
+        //         config(['app.consumer_secret' => $wc_consumer_secret]);
+        //     }
+        // }
 
         if($inspectionInformation) {
             $inspectionData = json_decode($inspectionInformation->data, true);
