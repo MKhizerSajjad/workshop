@@ -893,7 +893,7 @@
                                                     Add Comment</a>
                                             @endif
                                         </div>
-                                        <div data-simplebar="init" class="simplebar-scrollable-y" style="max-height: 280px; overflow: hidden; overflow-y: auto;">
+                                        <div data-simplebar="init" class="simplebar-scrollable-y"> {{--  style="max-height: 280px; overflow: hidden; overflow-y: auto;" --}}
                                             <div>
                                                 @if (count($data->comments) > 0)
                                                     @foreach ($data->comments as $key => $comment)
@@ -919,7 +919,7 @@
                                                                         </div>
                                                                     </div>
                                                                 @else
-                                                                    {!! getGenStatus('visibility', $comment->type, 'badge') !!}
+                                                                    {!! getGenStatus('visibility', $comment->visibility, 'badge') !!}
                                                                     <div class="row text-center d-flex justify-content-center mt-2">
                                                                         <div class="col-md-6">
                                                                             <span class="btn btn-warning font-weight-bold p-1" data-bs-toggle="modal" data-bs-target="#editCommentModal-{{ $comment->id }}">
@@ -2078,20 +2078,5 @@
     visibility: visible;
     opacity: 1;
   }
-}
-
-::-webkit-scrollbar {
-  width: 7px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 </style>
