@@ -310,13 +310,13 @@
                                             @endforeach
                                         </div>
                                         <div class="col-sm-12 px-3">
-                                            <label for="platform_id">Where Customer Found Us? {{old('platform_id')}}</label>
-                                            <select id="platform_id" name="platform_id" class="select2 form-control @error('platform_id') is-invalid @enderror">
-                                                <option value="">Select Platform </option>
+                                            <label for="found_us">Where Customer Found Us? </label>
+                                            <select id="found_us" name="found_us" class="select2 form-control @error('found_us') is-invalid @enderror">
+                                                <option value="">Select Option </option>
                                                 @foreach (getPlatforms() as $platform)
-                                                    <option value="{{ $platform->id }}" {{ old('platform_id') == $platform->id ? 'selected' : '' }}>{{ $platform->name }}</option>
+                                                    <option value="{{ $platform->id }}" {{ old('found_us') == $platform->id ? 'selected' : '' }}>{{ $platform->name }}</option>
                                                 @endforeach
-                                                @error('platform_id')
+                                                @error('found_us')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>

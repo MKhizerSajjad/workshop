@@ -182,7 +182,9 @@
                                                                     </div>
                                                                 @endif
                                                             @endforeach
-                                                            <b>Where Customer Found Us : </b> {{ $data->task->customer->platform->name }} <br>
+                                                            @if ($data->task->customer->platform_id)
+                                                                <b>Where Customer Found Us : </b> {{ $data->task->customer->platform->name }} <br>
+                                                            @endif
                                                             <b>Customer status : </b> {!! getGenStatus('user', $data->task->customer->status, 'badge') !!}
                                                             {{-- <span>{{ $data->task->customer->status_detail }}</span> --}}
                                                         </div>
@@ -292,8 +294,8 @@
                                                                         <label class="form-check-label font-size-13" for="withoutinspection2">
                                                                             <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
                                                                             Without Diagnostics - <b class="font-size-16">0{{config('app.currency')}}</b>
-                                                                            <br><span class="text text-danger">Repair, according to the problem named
-                                                                                and described by the customer</span>
+                                                                            {{-- <br><span class="text text-danger">Repair, according to the problem named
+                                                                                and described by the customer</span> --}}
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -1221,13 +1223,13 @@
                         @endforeach
 
                         <div class="col-sm-12">
-                            <label for="platform_id">Where Customer Found Us? </label>
-                            <select id="platform_id" name="platform_id" class="select2 form-control @error('platform_id') is-invalid @enderror">
-                                <option value="">Select Platform </option>
+                            <label for="found_us">Where Customer Found Us? </label>
+                            <select id="found_us" name="found_us" class="select2 form-control @error('found_us') is-invalid @enderror">
+                                <option value="">Select Option </option>
                                 @foreach (getPlatforms() as $platform)
-                                    <option value="{{ $platform->id }}" {{ old('platform_id', $data->task->customer->platform_id ) == $platform->id ? 'selected' : '' }}>{{ $platform->name }}</option>
+                                    <option value="{{ $platform->id }}" {{ old('found_us', $data->task->customer->platform_id ) == $platform->id ? 'selected' : '' }}>{{ $platform->name }}</option>
                                 @endforeach
-                                @error('platform_id')
+                                @error('found_us')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

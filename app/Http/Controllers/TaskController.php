@@ -163,7 +163,7 @@ class TaskController extends Controller
         $fieldsArray = json_decode($serviceLocationFields);
 
         $additionalRules = [
-            'platform_id' => 'required',
+            'found_us' => 'nullable|exists:platforms,id',
             'item' => 'required',
             'manufacturer' => 'required',
             'model' => 'required',
@@ -196,7 +196,7 @@ class TaskController extends Controller
             $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
         }
 
-        $customer['platform_id'] = $request->platform_id;
+        $customer['platform_id'] = $request->found_us;
         $customer['receive_newsletter'] = $request->receive_newsletter ?? 0;
 
         $customerAdd = Customer::updateOrCreate(
@@ -650,6 +650,7 @@ class TaskController extends Controller
     {
 
         $additionalRules = [
+            'found_us' => 'nullable|exists:platforms,id',
             // 'item' => 'required',
             // 'manufacturer' => 'required',
             // 'model' => 'required',
@@ -697,6 +698,8 @@ class TaskController extends Controller
                 }
                 $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
             }
+
+            $customer['platform_id'] = $request->found_us;
             $customerAdd = Customer::updateOrCreate(
                 ['phone' => $phone],
                 $customer
@@ -1115,7 +1118,9 @@ class TaskController extends Controller
 
     public function customerInfoUpdate(Request $request, Task $task)
     {
-        $additionalRules = [];
+        $additionalRules = [
+            'found_us' => 'nullable|exists:platforms,id'
+        ];
         $rules = $additionalRules;
         $serviceLocationID = $request->input('services_location');
         if($serviceLocationID) {
@@ -1144,6 +1149,7 @@ class TaskController extends Controller
                 }
                 $customer[$field->name] = $request->input($serviceLocationID.'-'.$field->name) ?? '';
             }
+            $customer['platform_id'] = $request->input('found_us') ?? null;
             $customer['status'] = $request->input('status') ?? null;
             $customer['status_detail'] = $request->input('status_detail') ?? null;
             $customerAdd = Customer::updateOrCreate(
