@@ -804,43 +804,46 @@ class TaskController extends Controller
         TaskItemProduct::where('task_id', $taskId)->delete();
         TaskProduct::where('task_id', $taskId)->delete();
         foreach ($product as $key => $productData) {
-            $data = [
-                'task_id' => $taskId,
-                'name' => $productData['name'],
-                'total' => $productData['total'],
-            ];
-            $parentProduct = TaskProduct::updateOrCreate(
-                [
+            if($productData['name'] && isset($productData['child']) && count($productData['child']) > 0) {
+                $data = [
                     'task_id' => $taskId,
-                    'name' => $productData['name']
-                ],
-                $data
-            );
+                    'name' => $productData['name'],
+                    'total' => $productData['total'],
+                ];
+                $parentProduct = TaskProduct::updateOrCreate(
+                    [
+                        'task_id' => $taskId,
+                        'name' => $productData['name']
+                    ],
+                    $data
+                );
 
-            // Child if available
-            if (isset($productData['child'])) {
-                foreach ($productData['child'] as $childData) {
-                    $productInfo = Product::whereId($childData['id'])->first();
-                    if(!isset($productInfo->id)){
-                        continue;
-                    }
-                    $data = [
-                        'product_id' => $childData['id'],
-                        'qty' => $childData['qty'],
-                        'unit_price' => $childData['price'],
-                        'total' => $childData['total'],
-                        'tax_perc' => $childData['tax'],
-                    ];
-
-                    TaskItemProduct::updateOrCreate(
-                        [
-                            'task_id' => $taskId,
+                // Child if available
+                if (isset($productData['child'])) {
+                    foreach ($productData['child'] as $childData) {
+                        $productInfo = Product::whereId($childData['id'])->first();
+                        if(!isset($productInfo->id)){
+                            continue;
+                        }
+                        $data = [
                             'product_id' => $childData['id'],
-                            'task_products_id' => $parentProduct->id
-                        ],
-                        $data
-                    );
+                            'qty' => $childData['qty'],
+                            'unit_price' => $childData['price'],
+                            'total' => $childData['total'],
+                            'tax_perc' => $childData['tax'],
+                        ];
+
+                        TaskItemProduct::updateOrCreate(
+                            [
+                                'task_id' => $taskId,
+                                'product_id' => $childData['id'],
+                                'task_products_id' => $parentProduct->id
+                            ],
+                            $data
+                        );
+                    }
                 }
+
             }
         }
 
@@ -889,23 +892,24 @@ class TaskController extends Controller
         $product = [];
         $totalServiceAmount = 0;
         for ($count=1; $count <= $services_row_count; $count++) {
+            if($request->input("service_$count") && $request->input("service_price_$count") && $request->input("service_tax_$count")) {
+                $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
+                $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
+                $serviceWithTax = $servicePrice + $serviceTaxAmount;
+                $totalServiceAmount += $servicePrice;
 
-            $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
-            $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
-            $serviceWithTax = $servicePrice + $serviceTaxAmount;
-            $totalServiceAmount += $servicePrice;
-
-            TaskService::updateOrCreate(
-                [
-                    'task_id' => $taskId,
-                    'service_id' => $request->input("service_$count"),
-                ], [
-                    'customer_choice' => $isCustomerChoice,
-                    'qty' => $request->input("service_qty_$count"),
-                    'unit_price' => $request->input("service_price_$count"),
-                    'tax_perc' => $request->input("service_tax_$count"),
-                ]
-            );
+                TaskService::updateOrCreate(
+                    [
+                        'task_id' => $taskId,
+                        'service_id' => $request->input("service_$count"),
+                    ], [
+                        'customer_choice' => $isCustomerChoice,
+                        'qty' => $request->input("service_qty_$count") ?? 1,
+                        'unit_price' => $request->input("service_price_$count"),
+                        'tax_perc' => $request->input("service_tax_$count"),
+                    ]
+                );
+            }
         }
 
 
