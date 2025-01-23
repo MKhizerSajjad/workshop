@@ -281,8 +281,13 @@
                                                                             {{ $data->task->inspection_diagnose == 1 ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13" for="inspection">
                                                                             <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
-                                                                            Inspection and Diagnostics - <b class="font-size-16">{{$data->task->inspection_diagnose_amount}} {{config('app.currency')}}</b>
-                                                                            <br><span class="text text-danger">{{config('app.insp_diag_amount')}} {{config('app.currency')}} would extra add on</span>
+                                                                            Inspection and Diagnostics -
+                                                                            <b class="font-size-16">
+                                                                                {{-- {{$data->task->inspection_diagnose_amount}} --}}
+                                                                                {{config('app.currency')}}
+                                                                            </b>
+                                                                            <input type="number" value="{{$data->task->inspection_diagnose_amount}}" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" name="insp_diag_amount">
+                                                                            {{-- <br><span class="text text-danger">{{data->task->inspection_diagnose_amount}} {{config('app.currency')}} would extra add on</span> --}}
                                                                         </label>
                                                                     </div>
                                                                 </div>

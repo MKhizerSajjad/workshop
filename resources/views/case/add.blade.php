@@ -197,7 +197,7 @@
                                                         <label class="form-check-label font-size-13" for="inspection">
                                                             <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
                                                             Inspection and diagnostics - <b class="font-size-16">{{ config('app.insp_diag_amount') }}{{ config('app.currency') }}</b>
-                                                            <br><span class="text text-danger">{{ config('app.insp_diag_amount') }}{{ config('app.currency') }} would extra add on</span>
+                                                            {{-- <br><span class="text text-danger">{{ config('app.insp_diag_amount') }}{{ config('app.currency') }} would extra add on</span> --}}
                                                         </label>
                                                     </div>
                                                 </div>
@@ -207,7 +207,7 @@
                                                         <label class="form-check-label font-size-13" for="withoutinspection2">
                                                             <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
                                                             Without diagnostics - <b class="font-size-16">0{{ config('app.currency') }}</b>
-                                                            <br><span class="text text-danger">Repair, according to the problem named and described by the customer</span>
+                                                            {{-- <br><span class="text text-danger">Repair, according to the problem named and described by the customer</span> --}}
                                                         </label>
                                                     </div>
                                                 </div>
