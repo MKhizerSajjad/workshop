@@ -1354,14 +1354,12 @@ class TaskController extends Controller
             'pickup_point' => 'required|integer',
             'is_servised' => 'required',
             'is_satisfied' => 'required',
-            'response_message' => 'nullable'
         ]);
 
         $data = [
             'pickup_point_id' => $request->input('pickup_point'),
             'is_servised' => $request->input('is_servised'),
             'is_satisfied' => $request->input('is_satisfied'),
-            'customer_response' => $request->input('response_message'),
         ];
 
         $taskId = $id;
@@ -1432,8 +1430,8 @@ class TaskController extends Controller
         return redirect()->route('takeBackDetails', [
             '_token' => csrf_token(),
             'case_number' => $task->code,
-            'phone' => $task->phone
-        ])->with('success', 'Take back submitted successfully.');
+            'phone' => $task->customer->phone,
+        ])->with('success', $task->pickupPoint->response_msg);
     }
 
     public function generateInvoiceCode() {

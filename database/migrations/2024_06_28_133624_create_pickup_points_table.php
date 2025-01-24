@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
+            $table->text('response_msg')->nullable();
             $table->text('detail')->nullable();
             $table->timestamps();
         });

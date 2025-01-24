@@ -55,9 +55,9 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="mb-3">
-                                            <label for="detail">Detail </label>
-                                            <textarea id="detail" name="detail" rows="4" class="form-control @error('detail') is-invalid @enderror" placeholder="Detail">{{ $pickupPoint->detail }}</textarea>
-                                            @error('detail')
+                                            <label for="response_msg">Response Message </label>
+                                            <textarea id="response_msg" name="response_msg" rows="4" class="form-control @error('response_msg') is-invalid @enderror" placeholder="Response Message">{{ $pickupPoint->response_msg }}</textarea>
+                                            @error('response_msg')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>

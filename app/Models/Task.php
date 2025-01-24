@@ -75,4 +75,9 @@ class Task extends Model
         return $this->belongsToMany(TaskProduct::class, 'task_products', 'task_id', 'product_id');
     }
 
+    public function pickupPoint()
+    {
+        return $this->belongsTo(PickupPoint::class);
+    }
+
 }

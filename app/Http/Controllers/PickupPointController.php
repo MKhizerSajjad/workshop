@@ -30,7 +30,7 @@ class PickupPointController extends Controller
         $data = [
             'status' => $request->status ?? 1,
             'name' => $request->name,
-            'detail' => $request->detail,
+            'response_msg' => $request->response_msg,
         ];
 
         PickupPoint::create($data);
@@ -58,7 +58,7 @@ class PickupPointController extends Controller
         $data = [
             'status' => $request->status ?? 1,
             'name' => $request->name,
-            'detail' => $request->detail,
+            'response_msg' => $request->response_msg,
         ];
 
         PickupPoint::find($pickupPoint->id)->update($data);

@@ -69,8 +69,8 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="mb-3">
-                                            <label for="detail">Detail </label>
-                                            <textarea id="detail" name="detail" rows="4" class="form-control" placeholder="Detail">{{ old('detail') }}</textarea>
+                                            <label for="response_msg">Response Message </label>
+                                            <textarea id="response_msg" name="response_msg" rows="4" class="form-control" placeholder="Response Message">{{ old('response_msg') }}</textarea>
                                         </div>
                                     </div>
 

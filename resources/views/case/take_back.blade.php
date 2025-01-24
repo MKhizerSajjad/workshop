@@ -93,8 +93,8 @@
 
                             <div class="card">
                                 <div class="card-body text-center">
-                                    <h3 class="text text-danger">Your case is servised.</h3>
-                                    <span class="font-size-14">You has been taken back</span>
+                                    <h3 class="text text-success">Your case is servised.</h3>
+                                    <span class="font-size-14">You have been taken back</span>
                                 </div>
                             </div>
                         </div>
@@ -126,11 +126,11 @@
                                     <div class="tab-content" id="v-pills-tabContent">
                                         <div class="col-md-12 text-center">
                                             @if ($data->task->payment_status == 1)
-                                                <h3>Great! Your invoice has been fully paid</h3>
+                                                <h3 class="text text-success">Great! Your invoice has been fully paid</h3>
                                             @elseif ($data->task->payment_status == 2)
-                                                <h3>Oops! Your invoice is not fully paid, please complete your payment.</h3>
+                                                <h3 class="text text-warning">Oops! Your invoice is not fully paid, please complete your payment.</h3>
                                             @elseif ($data->task->payment_status == 3 || $data->task->payment_status == 4)
-                                                <h3>Oops! Your invoice is not paid, please complete your payment.</h3>
+                                                <h3 class="text text-warning">Oops! Your invoice is not paid, please complete your payment.</h3>
                                             @endif
 
                                             <div class="d-flex justify-content-center align-items-center flex-wrap mb-2 fw-bold text-center">
@@ -259,13 +259,6 @@
                                                         </div>
 
                                                         @if ($data->task->payment_status == 1)
-
-                                                            <div class="col-md-12 mb-3">
-                                                                <label for="response_message" class="form-label">Additional Information</label>
-                                                                <div class="col-md-12">
-                                                                    <textarea class="form-control" name="response_message" id="response_message" placeholder="Enter Response Message">{{ old('response_message') }}</textarea>
-                                                                </div>
-                                                            </div>
                                                             <div class="d-grid gap-2 mt-3">
                                                                 <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light">SUBMIT</button>
                                                             </div>
