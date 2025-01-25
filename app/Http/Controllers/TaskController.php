@@ -950,7 +950,15 @@ class TaskController extends Controller
         $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount + $priorityAmount;
         $pending = $totalAmount - $task->paid;
 
-        $task->update(['total' => $totalAmount, 'pending' => $pending]);
+        if(($totalAmount != $task->paid || $pending > 0) && $task->paid == 0) {
+            $amountData = ['payment_status' => 3, 'total' => $totalAmount, 'pending' => $pending];
+        } else if(($totalAmount != $task->paid || $pending > 0) && $task->paid > 0) {
+            $amountData = ['payment_status' => 2, 'total' => $totalAmount, 'pending' => $pending];
+        } else {
+            $amountData = ['total' => $totalAmount, 'pending' => $pending];
+        }
+
+        $task->update($amountData);
 
         $task->leaveParts()->sync($request->input('parts', []));
         // $task->services()->sync($request->input('services', []));
