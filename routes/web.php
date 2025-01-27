@@ -44,6 +44,7 @@ use App\Http\Middleware\AccessControls;
 Auth::routes();
 
 Route::get('/booking0', [TaskController::class, 'create0'])->name('bookingCreate0');
+Route::get('/', [TaskController::class, 'create'])->name('index');
 Route::get('/booking', [TaskController::class, 'create'])->name('bookingCreate');
 Route::post('/save-booking', [TaskController::class, 'store'])->name('bookingSave');
 Route::get('/booking/status', [TaskController::class, 'status'])->name('bookingStatus');
@@ -58,7 +59,7 @@ Route::get('products', [ProductController::class, 'list'])->name('productsList')
 Route::get('services', [ServiceController::class, 'list'])->name('servicesList');
 
 Route::middleware(['auth', AccessControls::class])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('index');
+    // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('log', [LogController::class, 'index'])->name('log.index')->middleware('access.level:1');
