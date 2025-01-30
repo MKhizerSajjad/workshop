@@ -126,17 +126,22 @@
                             </div>
 
                             @php
-                                $priorityAmount = 0;
-                                $inspecDiagAmount = 0;
                                 $totalAddOns = 0;
                                 $settingTax = getTax();
                                 $totalServiceTax = 0;
                                 $totalServicePrice = 0;
                                 $totalProductTax = 0;
                                 $totalProductPrice = 0;
+
+                                $priorityAmount = $task->priority_amount ?? 0;
+                                $priorityTax = ($settingTax * $priorityAmount) / 100;
+                                $priorityTotal = $priorityAmount + $priorityTax;
+                                $inspecDiagAmount = $task->inspection_diagnose == 1 ? $task->inspection_diagnose_amount : 0;
+                                $inspecDiagTax = ($settingTax * $inspecDiagAmount) / 100;
+                                $inspecDiagTotal = $inspecDiagAmount + $inspecDiagTax;
                             @endphp
 
-                            <div class="py-2 mt-1">
+                            {{-- <div class="py-2 mt-1">
                                 <h3 class="font-size-15 fw-bold">Add Ons </h3>
                             </div>
                             <div class="table-responsive">
@@ -167,7 +172,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> --}}
 
                             @if (count($task->taskServices) > 0)
                                 <div class="py-2 mt-1">
@@ -204,10 +209,29 @@
                                                     <td class="text-end">{{ numberFormat($service_price) }}</td>
                                                 </tr>
                                             @endforeach
-
+                                            @if ($priorityAmount > 0)
+                                                <tr>
+                                                    <td>Priority</td>
+                                                    <td></td>
+                                                    <td>1</td>
+                                                    <td>{{ numberFormat($priorityAmount) }}</td>
+                                                    <td>{{ numberFormat($settingTax, 'percentage') }}</td>
+                                                    <td class="text-end">{{ numberFormat($priorityTotal) }}</td>
+                                                </tr>
+                                            @endif
+                                            @if ($inspecDiagAmount > 0)
+                                                <tr>
+                                                    <td>Inspection and diagnostics</td>
+                                                    <td></td>
+                                                    <td>1</td>
+                                                    <td>{{ numberFormat($inspecDiagAmount) }}</td>
+                                                    <td>{{ numberFormat($settingTax, 'percentage') }}</td>
+                                                    <td class="text-end">{{ numberFormat($inspecDiagTotal) }}</td>
+                                                </tr>
+                                            @endif
                                             <tr>
                                                 <td colspan="5" class="text-end">Services Total</td>
-                                                <td class="text-end">{{ numberFormat($totalServicePrice) }}</td>
+                                                <td class="text-end">{{ numberFormat($totalServicePrice + $priorityTotal + $inspecDiagTotal) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -266,7 +290,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="border-0 text-end"><strong>Grand Total</strong></td>
-                                                <td class="border-0 text-end"><h4 class="m-0">{{ numberFormat($totalServicePrice + $totalProductPrice + $totalAddOns) . config('app.currency') }}</h4></td>
+                                                <td class="border-0 text-end"><h4 class="m-0">{{ numberFormat($totalServicePrice + $totalProductPrice + $priorityTotal + $inspecDiagTotal) . config('app.currency') }}</h4></td>
                                             </tr>
                                         </tbody>
                                     </table>
