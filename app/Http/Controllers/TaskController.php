@@ -176,9 +176,13 @@ class TaskController extends Controller
             'priority' => 'required',
             'service.*' => 'required',
             'parts.*' => 'required',
-            'customer_signature' => 'required',
             'files.*' => 'nullable|file|mimes:jpeg,png,pdf,docx|max:10240000',
         ];
+
+        // Conditionally add customer_signature validation based on loginType
+        if (!auth()->check() || Auth::user()->user_type == 4) {
+            $additionalRules['customer_signature'] = 'required';
+        }
 
         // Merge dynamic field validation with additional rules
         $rules = [];
@@ -383,10 +387,10 @@ class TaskController extends Controller
         if($services_row_count > 0) {
             for ($count=1; $count <= $services_row_count; $count++) {
 
-                $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
+                $servicePrice = $request->input("service_price_$count");
                 $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
-                $serviceWithTax = $servicePrice + $serviceTaxAmount;
-                $totalServiceAmount += $servicePrice;
+                $serviceWithTax = ($servicePrice + $serviceTaxAmount) * $request->input("service_qty_$count");
+                $totalServiceAmount += $serviceWithTax;
 
                 TaskService::create([
                     'task_id' => $taskId,
@@ -402,9 +406,9 @@ class TaskController extends Controller
             $qty = 1;
             foreach ($request->services as $key => $serviceId) {
                 // $servicePrice = $request->input("serviceprices")[$key];
-                $servicePrice = $request->input("serviceprices")[$key] * $qty;
+                $servicePrice = $request->input("serviceprices")[$key];
                 $serviceTaxAmount = ($taxPercentage * $servicePrice) / 100;
-                $serviceWithTax = $servicePrice + $serviceTaxAmount;
+                $serviceWithTax = ($servicePrice + $serviceTaxAmount) * $qty;
                 $totalServiceAmount += $serviceWithTax;
 
                 TaskService::create([
@@ -476,8 +480,10 @@ class TaskController extends Controller
 
         $totalAmount = 0;
         $inspDiagAmount = $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0;
-        $inspDiagTotalAmount = ($inspDiagAmount * $taxPercentage) / 100;
-        $priorityTotalAmount = ($priorityAmount * $taxPercentage) / 100;
+        $inspDiagTaxAmount = ($inspDiagAmount * $taxPercentage) / 100;
+        $inspDiagTotalAmount = $inspDiagAmount + $inspDiagTaxAmount;
+        $priorityTaxAmount = ($priorityAmount * $taxPercentage) / 100;
+        $priorityTotalAmount = $priorityAmount + $priorityTaxAmount;
         $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagTotalAmount + $priorityTotalAmount;
 
         $updateData = [
