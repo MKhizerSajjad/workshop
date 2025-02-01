@@ -223,7 +223,7 @@
                                                     @foreach ($data->services->where('status', 1) as $service)
                                                         <div class="mb-2 form-check form-check-inline font-size-16">
                                                             <input class="form-check-input" type="checkbox" name="services[]" service-price="{{ $service->price }}" value="{{ $service->id }}" name="services[]" id="service-{{ $service->id }}" {{ in_array($service->id, old('services', [])) ? 'checked' : '' }} onchange="updateServiceTotal()">
-                                                            <input class="form-check-input" type="hidden" name="serviceprices[]" value="{{ $service->id }}" name="serviceprices[]" id="serviceprices{{ $service->id }}">
+                                                            <input class="form-check-input" type="hidden" name="serviceprices[]" value="{{ $service->price }}" name="serviceprices[]" id="serviceprices{{ $service->id }}">
                                                             <label class="form-check-label" for="service-{{ $service->id }}">
                                                                 <h5>
                                                                     {{ $service->name }}
@@ -367,13 +367,18 @@
                                                                         </label>
                                                                     </div>
                                                                 @endforeach
-                                                                <div class="mb-2 form-check form-check-inline font-size-16">
-                                                                    <input class="form-check-input" type="checkbox" value="1" name="receive_newsletter" id="receive_newsletter" checked {{ old("terms[{$sanitizedTitle}][status]", '0') == '1' ? 'checked' : '' }}>
-                                                                    <label class="form-check-label" for="receive_newsletter">
-                                                                        <h5>I agree to receive newsletter</h5>
-                                                                    </label>
-                                                                </div>
                                                             @endif
+
+                                                            <div class="mb-2 form-check form-check-inline font-size-16">
+                                                                <input class="form-check-input" type="checkbox" value="1" name="receive_newsletter" id="receive_newsletter" checked {{ old("terms[{$sanitizedTitle}][status]", '0') == '1' ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="receive_newsletter">
+                                                                    <h5>I agree to receive newsletter</h5>
+                                                                </label>
+                                                            </div>
+
+
+                                                            <!-- Additional Sections -->
+                                                            @include('partials.signatiure-pad', ['data' => $data])
                                                         </div>
                                                     </div>
                                                 </div>

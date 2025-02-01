@@ -133,11 +133,11 @@
                                 $totalProductTax = 0;
                                 $totalProductPrice = 0;
 
-                                $priorityAmount = $task->priority_amount ?? 0;
-                                $priorityTax = ($settingTax * $priorityAmount) / 100;
+                                $priorityAmount = $task->taskAddonsPriority->unit_price ?? 0;
+                                $priorityTax = ($task->taskAddonsPriority->tax_perc * $priorityAmount) / 100;
                                 $priorityTotal = $priorityAmount + $priorityTax;
-                                $inspecDiagAmount = $task->inspection_diagnose == 1 ? $task->inspection_diagnose_amount : 0;
-                                $inspecDiagTax = ($settingTax * $inspecDiagAmount) / 100;
+                                $inspecDiagAmount = $task->taskAddonsInspection->status == 1 ? $task->taskAddonsInspection->unit_price : 0;
+                                $inspecDiagTax = ($task->taskAddonsInspection->tax_perc * $inspecDiagAmount) / 100;
                                 $inspecDiagTotal = $inspecDiagAmount + $inspecDiagTax;
                             @endphp
 

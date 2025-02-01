@@ -27,6 +27,7 @@ use App\Models\TaskProduct;
 use App\Models\TaskPayment;
 use App\Models\SerivceLocation;
 use App\Models\Setting;
+use App\Models\TaskAddons;
 use App\Models\TaskComment;
 use App\Models\TaskLog;
 use App\Models\TaskLeavePart;
@@ -175,6 +176,7 @@ class TaskController extends Controller
             'priority' => 'required',
             'service.*' => 'required',
             'parts.*' => 'required',
+            'customer_signature' => 'required',
             'files.*' => 'nullable|file|mimes:jpeg,png,pdf,docx|max:10240000',
         ];
 
@@ -218,8 +220,7 @@ class TaskController extends Controller
         $confirmation = json_encode($terms);
 
 
-        $priorityAmount = Priority::where('id', $request->input('priority'))->pluck('price')->first();
-
+        // $priorityAmount = Priority::where('id', $request->input('priority'))->pluck('price')->first();
         $invoce = $request->input('case_number') ??$this->generateInvoiceCode();
         $data = [
             'code' => $invoce,
@@ -234,10 +235,10 @@ class TaskController extends Controller
             'color' => $request->input('color'),
             'additional_info' => $request->input('additional_info'),
             'problem_description' => $request->input('problem_description'),
-            'priority_id' => $request->input('priority'),
-            'priority_amount' => $priorityAmount,
-            'inspection_diagnose' => $request->input('inspection'),
-            'inspection_diagnose_amount' => config('app.insp_diag_amount') ?? 0,
+            // 'priority_id' => $request->input('priority'),
+            // 'priority_amount' => $priorityAmount,
+            // 'inspection_diagnose' => $request->input('inspection'),
+            // 'inspection_diagnose_amount' => config('app.insp_diag_amount') ?? 0,
             'services_location' => $request->input('services_location'),
             'service_desired_total' => $request->input('service_desired_total') ?? null,
         ];
@@ -377,25 +378,77 @@ class TaskController extends Controller
         }
 
         // Services
-        $services_row_count = $request->input("services_row_count");
-        $product = [];
         $totalServiceAmount = 0;
-        for ($count=1; $count <= $services_row_count; $count++) {
+        $services_row_count = $request->input("services_row_count");
+        if($services_row_count > 0) {
+            for ($count=1; $count <= $services_row_count; $count++) {
 
-            $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
-            $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
-            $serviceWithTax = $servicePrice + $serviceTaxAmount;
-            $totalServiceAmount += $servicePrice;
+                $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
+                $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
+                $serviceWithTax = $servicePrice + $serviceTaxAmount;
+                $totalServiceAmount += $servicePrice;
 
-            TaskService::create([
-                'task_id' => $taskId,
-                'service_id' => $request->input("service_$count"),
-                'customer_choice' => $isCustomerChoice,
-                'qty' => $request->input("service_qty_$count"),
-                'unit_price' => $request->input("service_price_$count"),
-                'tax_perc' => $request->input("service_tax_$count") ?? 0,
-            ]);
+                TaskService::create([
+                    'task_id' => $taskId,
+                    'service_id' => $request->input("service_$count"),
+                    'customer_choice' => $isCustomerChoice,
+                    'qty' => $request->input("service_qty_$count"),
+                    'unit_price' => $request->input("service_price_$count"),
+                    'tax_perc' => $request->input("service_tax_$count") ?? 0,
+                    'customer_choice' => $isCustomerChoice,
+                ]);
+            }
+        } else {
+            $qty = 1;
+            foreach ($request->services as $key => $serviceId) {
+                // $servicePrice = $request->input("serviceprices")[$key];
+                $servicePrice = $request->input("serviceprices")[$key] * $qty;
+                $serviceTaxAmount = ($taxPercentage * $servicePrice) / 100;
+                $serviceWithTax = $servicePrice + $serviceTaxAmount;
+                $totalServiceAmount += $serviceWithTax;
+
+                TaskService::create([
+                    'task_id' => $taskId,
+                    'service_id' => $serviceId,
+                    'qty' => $qty,
+                    'unit_price' => $servicePrice,
+                    'tax_perc' => $taxPercentage,
+                    'customer_choice' => $isCustomerChoice,
+                ]);
+            }
         }
+
+        $priorityAmount = Priority::where('id', $request->input('priority'))->pluck('price')->first();
+        $addons = [
+            [   // priority
+                'task_id' => $taskId,
+                'status' => 1,
+                'type' => 1,
+                'priority_id' => $request->input('priority'),
+                'qty' => 1,
+                'unit_price' => $priorityAmount,
+                'tax_perc' => $taxPercentage,
+                'customer_choice' => $isCustomerChoice,
+                'comment' => '',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [   // inspec & diag
+                'task_id' => $taskId,
+                'status' => $request->input('inspection'),
+                'type' => 2,
+                'priority_id' => null,
+                'qty' => 1,
+                'unit_price' => config('app.insp_diag_amount'),
+                'tax_perc' => $taxPercentage,
+                'customer_choice' => $isCustomerChoice,
+                'comment' => '',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        ];
+
+        TaskAddons::insert($addons);
 
         // if(isset($request->services)) {
         //     foreach ($request->input('services') as $key => $service_id) {
@@ -423,9 +476,26 @@ class TaskController extends Controller
 
         $totalAmount = 0;
         $inspDiagAmount = $request->input('inspection') == 1 ? config('app.insp_diag_amount') : 0;
-        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount + $priorityAmount;
+        $inspDiagTotalAmount = ($inspDiagAmount * $taxPercentage) / 100;
+        $priorityTotalAmount = ($priorityAmount * $taxPercentage) / 100;
+        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagTotalAmount + $priorityTotalAmount;
 
-        $task->update(['total' => $totalAmount, 'pending' => $totalAmount]);
+        $updateData = [
+            'total' => $totalAmount,
+            'pending' => $totalAmount,
+        ];
+
+        // upload signatures
+        if (isset($request->signed)) {
+            $signatureFileName = $this->uploadSignature($request, $task->id, $customerAdd->id);
+
+            if ($signatureFileName) {
+                $updateData['signature'] = $signatureFileName;
+            }
+        }
+
+        $task->update($updateData);
+
         // Get extra-parts from request and process them
         $extraParts = $request->input('extra-parts', '');
         $extraPartsArray = array_map('trim', explode(',', $extraParts));
@@ -723,8 +793,54 @@ class TaskController extends Controller
         }
         $confirmation = json_encode($terms);
 
-        $priorityId = $request->input('priority') ?? $task->priority;
+        $taxPercentage = getTax();
+        $taskId = $task->id;
+        $priorityId = $request->input('priority') ?? $task->taskAddonsPriority->priority_id;
         $priorityAmount = Priority::where('id', $priorityId)->pluck('price')->first();
+        $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
+        $inspectionStatus = $request->input('inspection') ?? $task->inspection;
+        $inspectionDiagnoseAmount = $request->input('insp_diag_amount') ?? $task->inspection_diagnose_amount;
+
+        TaskAddons::updateOrCreate(
+            [
+                'task_id' => $taskId,
+                'type' => 1,
+            ],
+            [   // priority
+                // 'task_id' => $taskId,
+                'status' => 1,
+                // 'type' => 1,
+                'priority_id' => $priorityId,
+                'qty' => 1,
+                'unit_price' => $priorityAmount,
+                'tax_perc' => $taxPercentage,
+                'customer_choice' => $isCustomerChoice,
+                'comment' => '',
+            ]
+        );
+
+        TaskAddons::updateOrCreate(
+            [
+                'task_id' => $taskId,
+                'type' => 2,
+            ],
+            [   // inspec & diag
+                'status' => $inspectionStatus,
+                'priority_id' => null,
+                'qty' => 1,
+                'unit_price' => $inspectionDiagnoseAmount,
+                'tax_perc' => $taxPercentage,
+                'customer_choice' => $isCustomerChoice,
+                'comment' => '',
+            ]
+        );
+
+        $totalAmount = 0;
+        $inspDiagTaxAmount = ($inspectionDiagnoseAmount * $taxPercentage) / 100;
+        $inspDiagTotalAmount = $inspDiagTaxAmount + $inspectionDiagnoseAmount;
+        $priorityTaxAmount = ($priorityAmount * $taxPercentage) / 100;
+        $priorityTotalAmount = $priorityAmount + $priorityTaxAmount;
+        // $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagTotalAmount + $priorityTotalAmount;
 
         $data = [
             // 'payment_status' => $request->input('payment_status'),
@@ -743,19 +859,15 @@ class TaskController extends Controller
             'color' => $request->input('color') ?? $task->color,
             'additional_info' => $request->input('additional_info') ?? $task->additional_info,
             'problem_description' => $request->input('problem_description') ?? $task->problem_description,
-            'priority_id' => $priorityId,
-            'priority_amount' => $priorityAmount,
-            'inspection_diagnose' => $request->input('inspection') ?? $task->inspection,
-            'inspection_diagnose_amount' => $request->input('insp_diag_amount') ?? $task->inspection_diagnose_amount,
+            // 'priority_id' => $priorityId,
+            // 'priority_amount' => $priorityAmount,
+            // 'inspection_diagnose' => $request->input('inspection') ?? $task->inspection,
+            // 'inspection_diagnose_amount' => $request->input('insp_diag_amount') ?? $task->inspection_diagnose_amount,
             // 'inspection_diagnose_amount' => $request->input('inspection') == 1 ? config('app.insp_diag_amount') : $task->inspection_diagnose_amount,
             'services_location' => $request->input('services_location') ?? $task->services_location,
             'service_desired_total' => $request->input('service_desired_total') ?? $task->service_desired_total,
         ];
-
-        $taskId = $task->id;
         $task = Task::updateOrCreate(['id' => $taskId], $data);
-
-        $taxPercentage = getTax();
 
         // Merge Product Scenario
         $row_count = $request->input("row_count");
@@ -848,7 +960,6 @@ class TaskController extends Controller
             }
         }
 
-        $isCustomerChoice = (!auth()->check() || Auth::user()->user_type == 4) ? 1 : 2;
         if ($request->hasFile('files')) {
 
             $index = 0; // Initialize the index variable
@@ -887,7 +998,6 @@ class TaskController extends Controller
             }
         }
 
-
         // Services
         $services_row_count = $request->input("services_row_count");
         $product = [];
@@ -897,7 +1007,7 @@ class TaskController extends Controller
                 $servicePrice = $request->input("service_price_$count") * $request->input("service_qty_$count");
                 $serviceTaxAmount = $request->input("service_tax_$count") * $servicePrice / 100;
                 $serviceWithTax = $servicePrice + $serviceTaxAmount;
-                $totalServiceAmount += $servicePrice;
+                $totalServiceAmount += $serviceWithTax;
 
                 TaskService::updateOrCreate(
                     [
@@ -945,9 +1055,7 @@ class TaskController extends Controller
         // }
 
         $totalAmount = 0;
-
-        $inspDiagAmount = $request->input('inspection') == 1 ? $task->inspection_diagnose_amount : 0;
-        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagAmount + $priorityAmount;
+        $totalAmount = $totalServiceAmount + $totalProductAmount + $inspDiagTotalAmount + $priorityTotalAmount;
         $pending = $totalAmount - $task->paid;
 
         if(($totalAmount != $task->paid || $pending > 0) && $task->paid == 0) {
@@ -1484,5 +1592,20 @@ class TaskController extends Controller
             ->first();
 
         return $emailOrPhoneExist ?? '';
+    }
+
+    public function uploadSignature($request, $taskId, $customerId) {
+        $folderPath = public_path('images/signatures/');
+        if (!is_dir($folderPath)) {   // Create directory with proper permissions
+            mkdir($folderPath, 0777, true);
+        }
+        $fileName = uniqid() .'-'. $taskId .'-'. $customerId;
+        $image_parts = explode(";base64,", $request->customer_signature);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1];
+        $image_base64 = base64_decode($image_parts[1]);
+        $file = $folderPath . $fileName . '.'.$image_type;
+        file_put_contents($file, $image_base64);
+        return $fileName . '.'.$image_type;
     }
 }

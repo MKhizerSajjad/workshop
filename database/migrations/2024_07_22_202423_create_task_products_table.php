@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('qty')->default(0);
             $table->decimal('unit_price', 15, 2)->default(0);
             $table->decimal('tax_perc', 15, 2)->default(0);
+            $table->boolean('customer_choice')->default(2);
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('date_opened');
             $table->dateTime('date_service')->nullable();
             $table->dateTime('date_closed')->nullable();
+            $table->string('signature')->nullable();
             $table->bigInteger('technician_id')->unsigned()->nullable();
             $table->bigInteger('customer_id')->unsigned()->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
@@ -30,11 +31,11 @@ return new class extends Migration
             $table->string('color')->nullable();
             $table->longText('additional_info')->nullable()->comment('additional information about item');
             $table->longText('problem_description')->nullable()->comment('Description of the problem / failure');
-            $table->bigInteger('priority_id')->unsigned()->nullable();
-            $table->decimal('priority_amount', 10, 2)->nullable();
+            // $table->bigInteger('priority_id')->unsigned()->nullable();
+            // $table->decimal('priority_amount', 10, 2)->nullable();
             $table->boolean('services_location')->default(1)->comment('where from service get');
-            $table->boolean('inspection_diagnose')->default(1)->comment('Inspection and diagnostics fix charges i.e: 35Eur');
-            $table->decimal('inspection_diagnose_amount', 10, 2)->nullable();
+            // $table->boolean('inspection_diagnose')->default(1)->comment('Inspection and diagnostics fix charges i.e: 35Eur');
+            // $table->decimal('inspection_diagnose_amount', 10, 2)->nullable();
             $table->decimal('total', 10, 2)->nullable();
             $table->decimal('paid', 10, 2)->nullable();
             $table->decimal('pending', 10, 2)->nullable();
@@ -56,7 +57,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('item_id')->references('id')->on('items')->onUpdate('CASCADE')->onDelete('CASCADE');
-            $table->foreign('priority_id')->references('id')->on('priorities')->onUpdate('CASCADE')->onDelete('CASCADE');
+            // $table->foreign('priority_id')->references('id')->on('priorities')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('pickup_point_id')->references('id')->on('pickup_points')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }

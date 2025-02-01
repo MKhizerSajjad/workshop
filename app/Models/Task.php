@@ -35,6 +35,16 @@ class Task extends Model
         return $this->hasMany(TaskService::class);
     }
 
+    public function taskAddonsPriority()
+    {
+        return $this->hasOne(TaskAddons::class)->where('type', 1);
+    }
+
+    public function taskAddonsInspection()
+    {
+        return $this->hasOne(TaskAddons::class)->where('type', 2);
+    }
+
     public function taskPayments()
     {
         return $this->hasMany(TaskPayment::class);

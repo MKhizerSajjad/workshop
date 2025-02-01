@@ -231,7 +231,7 @@
                                                             <h4 class="card-title">Priority of Case</h4>
                                                             <p class="card-title-desc">How fast you wants get back?</p>
                                                             @php
-                                                                $taskPriority = $data->task->priority_id;
+                                                                $taskPriority = $data->task->taskAddonsPriority->priority_id;
                                                                 $selectedPriority = $data->priorities->where('id', $taskPriority)->first();
                                                             @endphp
                                                             <span class="btn btn-info" id="currentPriority">{{ $selectedPriority->name }} - <b
@@ -244,7 +244,7 @@
                                                                     <div class="form-check form-check-inline font-size-16">
                                                                         <input class="form-check-input" type="radio" name="priority"
                                                                             value="{{ $priority->id }}" id="priority-{{ $priority->id }}"
-                                                                            {{ $priority->id == $data->task->priority_id ? 'checked' : '' }}>
+                                                                            {{ $priority->id == $taskPriority ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13"
                                                                             for="priority-{{ $priority->id }}">
                                                                             {{ $priority->name }} - {{ number_format($priority->price, 0) }}{{config('app.currency')}}
@@ -259,8 +259,8 @@
                                                             <p class="card-title-desc">Do you want to avail professional diagniostic serves?</p>
 
                                                             <span class="btn btn-info" id="currentInspection">
-                                                                @if ($data->task->inspection_diagnose == 1)
-                                                                    Inspection & Diagnostics - <b class="font-size-16">{{$data->task->inspection_diagnose_amount}} {{config('app.currency')}}</b>
+                                                                @if ($data->task->taskAddonsInspection->status == 1)
+                                                                    Inspection & Diagnostics - <b class="font-size-16">{{$data->task->taskAddonsInspection->unit_price}} {{config('app.currency')}}</b>
                                                                 @else
                                                                     Without Diagnostics - <b class="font-size-16">0{{config('app.currency')}}</b>
                                                                 @endif
@@ -278,7 +278,7 @@
                                                                     <div class="form-check form-check-inline font-size-16">
                                                                         <input class="form-check-input" type="radio" value="1"
                                                                             name="inspection" id="inspection"
-                                                                            {{ $data->task->inspection_diagnose == 1 ? 'checked' : '' }}>
+                                                                            {{ $data->task->taskAddonsInspection->status == 1 ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13" for="inspection">
                                                                             <i class="fa fa-search-plus me-1 font-size-20 align-top"></i>
                                                                             Inspection and Diagnostics -
@@ -286,8 +286,8 @@
                                                                                 {{-- {{$data->task->inspection_diagnose_amount}} --}}
                                                                                 {{config('app.currency')}}
                                                                             </b>
-                                                                            <input type="number" value="{{$data->task->inspection_diagnose_amount}}" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" name="insp_diag_amount">
-                                                                            {{-- <br><span class="text text-danger">{{data->task->inspection_diagnose_amount}} {{config('app.currency')}} would extra add on</span> --}}
+                                                                            <input type="number" value="{{$data->task->taskAddonsInspection->unit_price}}" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" name="insp_diag_amount">
+                                                                            {{-- <br><span class="text text-danger">{{data->task->taskAddonsInspection->unit_price}} {{config('app.currency')}} would extra add on</span> --}}
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -295,7 +295,7 @@
                                                                     <div class="form-check form-check-inline font-size-16">
                                                                         <input class="form-check-input" type="radio" value="2"
                                                                             name="inspection" id="withoutinspection2"
-                                                                            {{ $data->task->inspection_diagnose != 1 ? 'checked' : '' }}>
+                                                                            {{ $data->task->taskAddonsInspection->status != 1 ? 'checked' : '' }}>
                                                                         <label class="form-check-label font-size-13" for="withoutinspection2">
                                                                             <i class="fa fa-search-minus me-1 font-size-20 align-top"></i>
                                                                             Without Diagnostics - <b class="font-size-16">0{{config('app.currency')}}</b>
